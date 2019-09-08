@@ -5,10 +5,11 @@
     "plugin:react/recommended",
     "plugin:prettier/recommended"
   ],
+  "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": { "jsx": true },
-    "ecmaVersion": 6
+    "ecmaVersion": 2020
   },
   "plugins": ["react", "react-hooks"],
   "rules": {

@@ -22,39 +22,12 @@ function App() {
   const [roundsLeft, setRoundsLeft] = React.useState(rounds);
   const [workInterval, setWorkInterval] = React.useState(new Date(0));
   const [breakInterval, setBreakInterval] = React.useState(new Date(0));
-  let interval = React.useRef(null);
   let statusRef = React.useRef(status);
   statusRef.current = status;
   let roundsLeftRef = React.useRef(roundsLeft);
   roundsLeftRef.current = roundsLeft;
   let timeLeftRef = React.useRef(timeLeft);
   timeLeftRef.current = timeLeft;
-  const countDown = React.useCallback(() => {
-    if (getSeconds(timeLeftRef.current) > 0) {
-      setTimeLeft(previousTimeLeft => subSeconds(previousTimeLeft, 1));
-    } else {
-      if (
-        (statusRef.current === Status.prework ||
-          statusRef.current === Status.break) &&
-        roundsLeftRef.current > 0
-      ) {
-        setStatus(Status.work);
-        setTimeLeft(workInterval);
-        if (roundsLeftRef.current === 1) {
-          setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
-        }
-      } else if (
-        statusRef.current === Status.work &&
-        roundsLeftRef.current > 0
-      ) {
-        setStatus(Status.break);
-        setTimeLeft(breakInterval);
-        setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
-      } else {
-        setStatus(Status.stopped);
-      }
-    }
-  }, [roundsLeftRef, workInterval, breakInterval]);
   const handleRoundsChange = e => {
     setRounds(e.target.value);
   };
@@ -76,19 +49,47 @@ function App() {
     } else {
       setStatus(Status.stopped);
     }
-  }, [status, rounds]);
+  }, [rounds, status]);
   React.useEffect(() => {
-    if (status !== Status.stopped) {
-      interval.current = setInterval(countDown, 1000);
-    } else {
-      clearInterval(interval.current);
+    let interval = null;
+    if (status !== Status.stopped && interval === null) {
+      interval = setInterval(function countDown() {
+        if (getSeconds(timeLeftRef.current) > 0) {
+          setTimeLeft(previousTimeLeft => subSeconds(previousTimeLeft, 1));
+        } else {
+          if (
+            (statusRef.current === Status.prework ||
+              statusRef.current === Status.break) &&
+            roundsLeftRef.current > 0
+          ) {
+            setStatus(Status.work);
+            setTimeLeft(workInterval);
+            if (roundsLeftRef.current === 1) {
+              setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
+            }
+          } else if (
+            statusRef.current === Status.work &&
+            roundsLeftRef.current > 0
+          ) {
+            setStatus(Status.break);
+            setTimeLeft(breakInterval);
+            setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
+          } else {
+            setStatus(Status.stopped);
+            clearInterval(interval);
+          }
+        }
+      }, 1000);
     }
-    return () => clearInterval(interval.current);
-  }, [status, countDown]);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [breakInterval, rounds, status, workInterval]);
   return (
     <div className="App">
       <label>Rounds</label>
       <input
+        data-testid={'rounds-input'}
         type="number"
         value={rounds}
         onChange={handleRoundsChange}
@@ -96,21 +97,23 @@ function App() {
       />
       <label>Work interval</label>
       <input
+        data-testid={'work-interval-input'}
         type="time"
         value={format(workInterval, 'mm:ss')}
         onChange={handleWorkIntervalChange}
       />
       <label>Break interval</label>
       <input
+        data-testid={'break-interval-input'}
         type="time"
         value={format(breakInterval, 'mm:ss')}
         onChange={handleBreakIntervalChange}
       />
-      <Button onClick={start}>
+      <Button onClick={start} data-testid={'start-button'}>
         {status === Status.stopped ? 'Start' : 'x'}
       </Button>
       {status !== Status.stopped ? (
-        <span>{format(timeLeft, 'mm:ss')}</span>
+        <span data-testid={'time-left'}>{format(timeLeft, 'mm:ss')}</span>
       ) : null}
     </div>
   );

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@testing-library/react": "^9.1.4",
     "date-fns": "^2.1.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
@@ -12,6 +13,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
     "eject": "react-scripts eject",
     "lint:fix": "eslint src/**.{js,jsx} --fix"
   },

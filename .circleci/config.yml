@@ -33,5 +33,5 @@ jobs:
 
       # run tests!
       - run: yarn test --coverage
-      - codecov/upload
+      - codecov/upload:
         file: coverage/*.json

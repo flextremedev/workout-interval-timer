@@ -2,7 +2,7 @@ import React from 'react';
 import { format, getSeconds, subSeconds, addSeconds } from 'date-fns';
 import { Button } from './components/Button/Button';
 import { DurationInput } from './components/DurationInput/DurationInput';
-
+import styles from './App.module.css';
 const Status = {
   stopped: 'stopped',
   prework: 'prework',
@@ -71,7 +71,7 @@ function App() {
     };
   }, [breakInterval, rounds, status, workInterval]);
   return (
-    <div className="App">
+    <div className={styles.background}>
       <label>Rounds</label>
       <input
         data-testid={'rounds-input'}

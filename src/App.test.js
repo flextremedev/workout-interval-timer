@@ -9,22 +9,30 @@ describe('App', () => {
   it('should run intervals correctly', () => {
     const { getByTestId, queryByTestId } = render(<App />);
     const roundInput = getByTestId('rounds-input');
-    const workIntervalInput = getByTestId('work-interval-input');
-    const breakIntervalInput = getByTestId('break-interval-input');
+    const workIntervalMinuteInput = getByTestId('work-interval-input-minutes');
+    const workIntervalSecondInput = getByTestId('work-interval-input-seconds');
+    const breakIntervalMinuteInput = getByTestId(
+      'break-interval-input-minutes'
+    );
+    const breakIntervalSecondInput = getByTestId(
+      'break-interval-input-seconds'
+    );
     const startButton = getByTestId('start-button');
     expect(queryByTestId('time-left')).toBeFalsy();
     expect(roundInput).toBeTruthy();
-    expect(workIntervalInput).toBeTruthy();
-    expect(breakIntervalInput).toBeTruthy();
+    expect(workIntervalMinuteInput).toBeTruthy();
+    expect(workIntervalSecondInput).toBeTruthy();
+    expect(breakIntervalMinuteInput).toBeTruthy();
+    expect(breakIntervalSecondInput).toBeTruthy();
     expect(startButton).toBeTruthy();
     act(() => {
       fireEvent.change(roundInput, { target: { value: 2 } });
     });
     act(() => {
-      fireEvent.change(workIntervalInput, { target: { value: '00:02' } });
+      fireEvent.change(workIntervalSecondInput, { target: { value: '2' } });
     });
     act(() => {
-      fireEvent.change(breakIntervalInput, { target: { value: '00:01' } });
+      fireEvent.change(breakIntervalSecondInput, { target: { value: '1' } });
     });
     act(() => {
       fireEvent.click(startButton);
@@ -59,22 +67,30 @@ describe('App', () => {
   it('should stop interval when clicking button again', () => {
     const { getByTestId, queryByTestId } = render(<App />);
     const roundInput = getByTestId('rounds-input');
-    const workIntervalInput = getByTestId('work-interval-input');
-    const breakIntervalInput = getByTestId('break-interval-input');
+    const workIntervalMinuteInput = getByTestId('work-interval-input-minutes');
+    const workIntervalSecondInput = getByTestId('work-interval-input-seconds');
+    const breakIntervalMinuteInput = getByTestId(
+      'break-interval-input-minutes'
+    );
+    const breakIntervalSecondInput = getByTestId(
+      'break-interval-input-seconds'
+    );
     const startButton = getByTestId('start-button');
     expect(queryByTestId('time-left')).toBeFalsy();
     expect(roundInput).toBeTruthy();
-    expect(workIntervalInput).toBeTruthy();
-    expect(breakIntervalInput).toBeTruthy();
+    expect(workIntervalMinuteInput).toBeTruthy();
+    expect(workIntervalSecondInput).toBeTruthy();
+    expect(breakIntervalMinuteInput).toBeTruthy();
+    expect(breakIntervalSecondInput).toBeTruthy();
     expect(startButton).toBeTruthy();
     act(() => {
       fireEvent.change(roundInput, { target: { value: 2 } });
     });
     act(() => {
-      fireEvent.change(workIntervalInput, { target: { value: '00:02' } });
+      fireEvent.change(workIntervalSecondInput, { target: { value: '2' } });
     });
     act(() => {
-      fireEvent.change(breakIntervalInput, { target: { value: '00:01' } });
+      fireEvent.change(breakIntervalSecondInput, { target: { value: '1' } });
     });
     act(() => {
       fireEvent.click(startButton);

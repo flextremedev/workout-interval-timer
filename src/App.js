@@ -1,12 +1,7 @@
 import React from 'react';
-import {
-  format,
-  getSeconds,
-  subSeconds,
-  addSeconds,
-  addMinutes,
-} from 'date-fns';
+import { format, getSeconds, subSeconds, addSeconds } from 'date-fns';
 import { Button } from './components/Button/Button';
+import { DurationInput } from './components/DurationInput/DurationInput';
 
 const Status = {
   stopped: 'stopped',
@@ -30,16 +25,6 @@ function App() {
   timeLeftRef.current = timeLeft;
   const handleRoundsChange = e => {
     setRounds(e.target.value);
-  };
-  const handleWorkIntervalChange = e => {
-    const { value } = e.target;
-    const [minutes, seconds] = value.split(':');
-    setWorkInterval(addSeconds(addMinutes(new Date(0), minutes), seconds));
-  };
-  const handleBreakIntervalChange = e => {
-    const { value } = e.target;
-    const [minutes, seconds] = value.split(':');
-    setBreakInterval(addSeconds(addMinutes(new Date(0), minutes), seconds));
   };
   const start = React.useCallback(() => {
     if (status === Status.stopped) {
@@ -96,18 +81,16 @@ function App() {
         min={1}
       />
       <label>Work interval</label>
-      <input
-        data-testid={'work-interval-input'}
-        type="time"
-        value={format(workInterval, 'mm:ss')}
-        onChange={handleWorkIntervalChange}
+      <DurationInput
+        value={workInterval}
+        onChange={setWorkInterval}
+        dataTestId={'work-interval-input'}
       />
       <label>Break interval</label>
-      <input
-        data-testid={'break-interval-input'}
-        type="time"
-        value={format(breakInterval, 'mm:ss')}
-        onChange={handleBreakIntervalChange}
+      <DurationInput
+        value={breakInterval}
+        onChange={setBreakInterval}
+        dataTestId={'break-interval-input'}
       />
       <Button onClick={start} data-testid={'start-button'}>
         {status === Status.stopped ? 'Start' : 'x'}

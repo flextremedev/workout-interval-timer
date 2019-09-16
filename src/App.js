@@ -3,6 +3,7 @@ import { format, getSeconds, subSeconds, addSeconds } from 'date-fns';
 import { Button } from './components/Button/Button';
 import { DurationInput } from './components/DurationInput/DurationInput';
 import styles from './App.module.css';
+import { Input } from './components/Input/Input';
 const Status = {
   stopped: 'stopped',
   prework: 'prework',
@@ -71,27 +72,30 @@ function App() {
     };
   }, [breakInterval, rounds, status, workInterval]);
   return (
-    <div className={styles.background}>
-      <label>Rounds</label>
-      <input
-        data-testid={'rounds-input'}
-        type="number"
-        value={rounds}
-        onChange={handleRoundsChange}
-        min={1}
-      />
-      <label>Work interval</label>
-      <DurationInput
-        value={workInterval}
-        onChange={setWorkInterval}
-        dataTestId={'work-interval-input'}
-      />
-      <label>Break interval</label>
-      <DurationInput
-        value={breakInterval}
-        onChange={setBreakInterval}
-        dataTestId={'break-interval-input'}
-      />
+    <div className={styles.content}>
+      <div />
+      <div className={styles.inputFields}>
+        <Input
+          label={'Rounds'}
+          type={'number'}
+          value={rounds}
+          onChange={handleRoundsChange}
+          dataTestId={'rounds-input'}
+          min={'1'}
+        />
+        <DurationInput
+          value={workInterval}
+          onChange={setWorkInterval}
+          dataTestId={'work-interval-input'}
+          label={'Work interval'}
+        />
+        <DurationInput
+          value={breakInterval}
+          onChange={setBreakInterval}
+          dataTestId={'break-interval-input'}
+          label={'Break interval'}
+        />
+      </div>
       <Button onClick={start} data-testid={'start-button'}>
         {status === Status.stopped ? 'Start' : 'x'}
       </Button>

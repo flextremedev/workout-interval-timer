@@ -26,7 +26,7 @@ describe('App', () => {
     expect(breakIntervalSecondInput).toBeTruthy();
     expect(startButton).toBeTruthy();
     act(() => {
-      fireEvent.change(roundInput, { target: { value: 2 } });
+      fireEvent.change(roundInput, { target: { value: '2' } });
     });
     act(() => {
       fireEvent.change(workIntervalSecondInput, { target: { value: '2' } });
@@ -84,7 +84,7 @@ describe('App', () => {
     expect(breakIntervalSecondInput).toBeTruthy();
     expect(startButton).toBeTruthy();
     act(() => {
-      fireEvent.change(roundInput, { target: { value: 2 } });
+      fireEvent.change(roundInput, { target: { value: '2' } });
     });
     act(() => {
       fireEvent.change(workIntervalSecondInput, { target: { value: '2' } });

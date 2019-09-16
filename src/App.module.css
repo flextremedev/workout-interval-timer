@@ -1,0 +1,8 @@
+.content {
+  box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  padding: 32px;
+  justify-content: space-between;
+}

@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin-top: 16px;
+}
+.input {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  width: 100%;
+  border-radius: 40px;
+  background: white;
+  color: #3d3d3f;
+  font-size: 24px;
+  font-family: 'Lato', sans-serif;
+  border: 2px solid white;
+  box-sizing: border-box;
+}
+.input:focus-within {
+  border: 2px solid #1dcbf2;
+}
+.label {
+  color: white;
+  font-size: 16px;
+  font-family: 'Lato', sans-serif;
+  margin-bottom: 8px;
+}
+.textInput {
+  border: none;
+  outline: none;
+  max-width: 40px;
+  font-size: 24px;
+  font-family: 'Lato', sans-serif;
+  width: auto;
+  text-align: center;
+  cursor: default;
+  color: transparent;
+  text-shadow: 0 0 0 #3d3d3f;
+}

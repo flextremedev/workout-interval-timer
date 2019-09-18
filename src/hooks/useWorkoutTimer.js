@@ -1,5 +1,6 @@
 import React from 'react';
-import { subSeconds, getSeconds, addSeconds } from 'date-fns';
+import { subSeconds, getSeconds, addSeconds, getMinutes } from 'date-fns';
+const SECONDS_PER_MINUTE = 60;
 const Status = {
   stopped: 'stopped',
   prework: 'prework',
@@ -35,7 +36,11 @@ export function useWorkoutTimer() {
     let interval = null;
     if (status !== Status.stopped && interval === null) {
       interval = setInterval(function countDown() {
-        if (getSeconds(timeLeftRef.current) > 0) {
+        if (
+          getMinutes(timeLeftRef.current) * SECONDS_PER_MINUTE +
+            getSeconds(timeLeftRef.current) >
+          0
+        ) {
           setTimeLeft(previousTimeLeft => subSeconds(previousTimeLeft, 1));
         } else {
           if (

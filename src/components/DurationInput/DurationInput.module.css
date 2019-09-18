@@ -3,6 +3,7 @@
   flex-flow: column;
   align-items: center;
   margin-top: 16px;
+  height: 68px;
 }
 .input {
   display: flex;

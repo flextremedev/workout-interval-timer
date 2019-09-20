@@ -36,6 +36,7 @@ export function useWorkoutTimer() {
     let interval = null;
     if (status !== Status.stopped && interval === null) {
       interval = setInterval(function countDown() {
+        console.log('tick');
         if (
           getMinutes(timeLeftRef.current) * SECONDS_PER_MINUTE +
             getSeconds(timeLeftRef.current) >
@@ -46,7 +47,8 @@ export function useWorkoutTimer() {
           if (
             (statusRef.current === Status.prework ||
               statusRef.current === Status.break) &&
-            roundsLeftRef.current > 0
+            roundsLeftRef.current > 0 &&
+            workInterval.valueOf() !== 0
           ) {
             setStatus(Status.work);
             setTimeLeft(workInterval);

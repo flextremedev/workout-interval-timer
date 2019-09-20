@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { format, setSeconds, setMinutes } from 'date-fns';
 import styles from './DurationInput.module.css';
 import { addNumberAtEndShifting } from './addNumberAtEndShifting';
-import { formatStringAsDoubleDigit } from './formatStringAsDoubleDigit';
 export function DurationInput({ dataTestId, value, onChange, label }) {
   const formattedMinutes = format(value, 'mm');
   const formattedSeconds = format(value, 'ss');
@@ -15,8 +14,11 @@ export function DurationInput({ dataTestId, value, onChange, label }) {
       const { value: targetValue, name } = e.target;
       if (targetValue.match(/^[0-9]*$/)) {
         if (name === 'minutes') {
-          const formattedValue = formatStringAsDoubleDigit(targetValue);
-          onChange(setMinutes(new Date(value.valueOf()), formattedValue));
+          const formattedTargetValue = addNumberAtEndShifting(
+            formattedMinutes,
+            targetValue
+          );
+          onChange(setMinutes(new Date(value.valueOf()), formattedTargetValue));
         } else if (name === 'seconds') {
           const formattedTargetValue = addNumberAtEndShifting(
             formattedSeconds,

@@ -7,7 +7,7 @@ describe('App', () => {
     cleanup();
   });
   it('should run intervals correctly', () => {
-    const { getByTestId, queryByTestId } = render(<App />);
+    const { getByTestId } = render(<App />);
     const roundInput = getByTestId('rounds-input');
     const workIntervalMinuteInput = getByTestId('work-interval-input-minutes');
     const workIntervalSecondInput = getByTestId('work-interval-input-seconds');
@@ -18,7 +18,6 @@ describe('App', () => {
       'break-interval-input-seconds'
     );
     const startButton = getByTestId('start-button');
-    expect(queryByTestId('time-left')).toBeFalsy();
     expect(roundInput).toBeTruthy();
     expect(workIntervalMinuteInput).toBeTruthy();
     expect(workIntervalSecondInput).toBeTruthy();
@@ -62,10 +61,9 @@ describe('App', () => {
     act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.textContent).toBe('00 : 00');
     act(() => jest.advanceTimersByTime(1000));
-    expect(queryByTestId('time-left')).toBeFalsy();
   });
   it('should stop interval when clicking button again', () => {
-    const { getByTestId, queryByTestId } = render(<App />);
+    const { getByTestId } = render(<App />);
     const roundInput = getByTestId('rounds-input');
     const workIntervalMinuteInput = getByTestId('work-interval-input-minutes');
     const workIntervalSecondInput = getByTestId('work-interval-input-seconds');
@@ -76,7 +74,6 @@ describe('App', () => {
       'break-interval-input-seconds'
     );
     const startButton = getByTestId('start-button');
-    expect(queryByTestId('time-left')).toBeFalsy();
     expect(roundInput).toBeTruthy();
     expect(workIntervalMinuteInput).toBeTruthy();
     expect(workIntervalSecondInput).toBeTruthy();
@@ -102,6 +99,5 @@ describe('App', () => {
     act(() => {
       fireEvent.click(startButton);
     });
-    expect(queryByTestId('time-left')).toBeFalsy();
   });
 });

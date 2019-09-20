@@ -6,32 +6,34 @@ import styles from './DurationInput.module.css';
 export function DurationInput({ dataTestId, value, onChange, label }) {
   const minutesRef = React.useRef(null);
   const secondsRef = React.useRef(null);
-  const handleMinutesChange = e => {
+  const handleChange = e => {
     e.stopPropagation();
-    if (e.target.value) {
-      const { value: targetValue } = e.target;
+    if (e.target.value && e.target.name) {
+      const { value: targetValue, name } = e.target;
       if (targetValue.match(/^[0-9]*$/)) {
+        // TODO: adjust formatting function to current input method (one digit a time)
         const formattedValue = formatStringAsDoubleDigit(targetValue);
-        onChange(setMinutes(new Date(value.valueOf()), formattedValue));
+        if (name === 'minutes') {
+          onChange(setMinutes(new Date(value.valueOf()), formattedValue));
+        } else if (name === 'seconds') {
+          onChange(setSeconds(new Date(value.valueOf()), formattedValue));
+        }
       }
     }
   };
-  const handleSecondsChange = e => {
-    secondsRef.current.select();
-    e.stopPropagation();
-    if (e.target.value) {
-      const { value: targetValue } = e.target;
-      if (targetValue.match(/^[0-9]*$/)) {
-        const formattedValue = formatStringAsDoubleDigit(targetValue);
-        onChange(setSeconds(new Date(value.valueOf()), formattedValue));
-      }
-    }
-  };
-  const handleMinutesFocus = () => {
+  const handleMinutesSelect = e => {
+    e.preventDefault();
     minutesRef.current.select();
   };
-  const handleSecondsFocus = () => {
+  const handleMinutesBlur = () => {
+    minutesRef.current.selectionEnd = minutesRef.current.selectionStart;
+  };
+  const handleSecondsSelect = e => {
+    e.preventDefault();
     secondsRef.current.select();
+  };
+  const handleSecondsBlur = () => {
+    secondsRef.current.selectionEnd = secondsRef.current.selectionStart;
   };
   const handlePaste = e => {
     e.preventDefault();
@@ -42,24 +44,32 @@ export function DurationInput({ dataTestId, value, onChange, label }) {
       <div className={styles.input}>
         <input
           type="text"
+          name="minutes"
           value={format(value, 'mm')}
-          onChange={handleMinutesChange}
+          onChange={handleChange}
           onPaste={handlePaste}
+          onMouseDown={handleMinutesSelect}
+          onBlur={handleMinutesBlur}
+          onFocus={handleMinutesSelect}
+          onSelect={handleMinutesSelect}
           data-testid={dataTestId && `${dataTestId}-minutes`}
           className={styles.textInput}
           ref={minutesRef}
-          onFocus={handleMinutesFocus}
         />
         :
         <input
           type="text"
+          name="seconds"
           value={format(value, 'ss')}
-          onChange={handleSecondsChange}
+          onChange={handleChange}
           onPaste={handlePaste}
+          onBlur={handleSecondsBlur}
+          onMouseDown={handleSecondsSelect}
+          onFocus={handleSecondsSelect}
+          onSelect={handleSecondsSelect}
           data-testid={dataTestId && `${dataTestId}-seconds`}
           className={styles.textInput}
           ref={secondsRef}
-          onFocus={handleSecondsFocus}
         />
       </div>
     </div>

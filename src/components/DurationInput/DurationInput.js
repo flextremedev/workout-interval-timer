@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { format, setSeconds, setMinutes } from 'date-fns';
-import { formatStringAsDoubleDigit } from './formatStringAsDoubleDigit';
 import styles from './DurationInput.module.css';
+import { addNumberAtEndShifting } from './addNumberAtEndShifting';
+import { formatStringAsDoubleDigit } from './formatStringAsDoubleDigit';
 export function DurationInput({ dataTestId, value, onChange, label }) {
+  const formattedMinutes = format(value, 'mm');
+  const formattedSeconds = format(value, 'ss');
   const minutesRef = React.useRef(null);
   const secondsRef = React.useRef(null);
   const handleChange = e => {
@@ -11,12 +14,15 @@ export function DurationInput({ dataTestId, value, onChange, label }) {
     if (e.target.value && e.target.name) {
       const { value: targetValue, name } = e.target;
       if (targetValue.match(/^[0-9]*$/)) {
-        // TODO: adjust formatting function to current input method (one digit a time)
-        const formattedValue = formatStringAsDoubleDigit(targetValue);
         if (name === 'minutes') {
+          const formattedValue = formatStringAsDoubleDigit(targetValue);
           onChange(setMinutes(new Date(value.valueOf()), formattedValue));
         } else if (name === 'seconds') {
-          onChange(setSeconds(new Date(value.valueOf()), formattedValue));
+          const formattedTargetValue = addNumberAtEndShifting(
+            formattedSeconds,
+            targetValue
+          );
+          onChange(setSeconds(new Date(value.valueOf()), formattedTargetValue));
         }
       }
     }
@@ -45,7 +51,7 @@ export function DurationInput({ dataTestId, value, onChange, label }) {
         <input
           type="text"
           name="minutes"
-          value={format(value, 'mm')}
+          value={formattedMinutes}
           onChange={handleChange}
           onPaste={handlePaste}
           onMouseDown={handleMinutesSelect}
@@ -60,11 +66,11 @@ export function DurationInput({ dataTestId, value, onChange, label }) {
         <input
           type="text"
           name="seconds"
-          value={format(value, 'ss')}
+          value={formattedSeconds}
           onChange={handleChange}
           onPaste={handlePaste}
-          onBlur={handleSecondsBlur}
           onMouseDown={handleSecondsSelect}
+          onBlur={handleSecondsBlur}
           onFocus={handleSecondsSelect}
           onSelect={handleSecondsSelect}
           data-testid={dataTestId && `${dataTestId}-seconds`}

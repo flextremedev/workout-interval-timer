@@ -1,7 +1,7 @@
 .container {
   margin: 0px auto;
   height: 236px;
-  width: 236px;
+  width: 100%;
   background: white;
   border-radius: 416px;
   display: flex;

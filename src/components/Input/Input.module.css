@@ -12,6 +12,7 @@ input[type='number'] {
   flex-flow: column;
   align-items: center;
   height: 68px;
+  width: 100%;
 }
 .input {
   display: flex;

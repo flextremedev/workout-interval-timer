@@ -4,6 +4,7 @@
   align-items: center;
   margin-top: 16px;
   height: 68px;
+  width: 100%;
 }
 .input {
   display: flex;

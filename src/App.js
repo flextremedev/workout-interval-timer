@@ -23,37 +23,43 @@ function App() {
   return (
     <div className={styles.content}>
       <div />
-
       <div className={styles.centerArea}>
-        {status !== Status.stopped ? (
+        <div
+          className={`${styles.counterPositioner} ${
+            status !== Status.stopped ? styles.showCounter : undefined
+          }`}
+        >
           <Counter
             timeLeft={format(timeLeft, 'mm : ss')}
             dataTestId={'time-left'}
           />
-        ) : (
-          <>
-            <Input
-              label={'Rounds'}
-              type={'number'}
-              value={rounds}
-              onChange={handleRoundsChange}
-              dataTestId={'rounds-input'}
-              min={'1'}
-            />
-            <DurationInput
-              value={workInterval}
-              onChange={setWorkInterval}
-              dataTestId={'work-interval-input'}
-              label={'Work interval'}
-            />
-            <DurationInput
-              value={breakInterval}
-              onChange={setBreakInterval}
-              dataTestId={'break-interval-input'}
-              label={'Break interval'}
-            />
-          </>
-        )}
+        </div>
+        <div
+          className={`${styles.formFields} ${
+            status === Status.stopped ? styles.showFormFields : undefined
+          }`}
+        >
+          <Input
+            label={'Rounds'}
+            type={'number'}
+            value={rounds}
+            onChange={handleRoundsChange}
+            dataTestId={'rounds-input'}
+            min={'1'}
+          />
+          <DurationInput
+            value={workInterval}
+            onChange={setWorkInterval}
+            dataTestId={'work-interval-input'}
+            label={'Work interval'}
+          />
+          <DurationInput
+            value={breakInterval}
+            onChange={setBreakInterval}
+            dataTestId={'break-interval-input'}
+            label={'Break interval'}
+          />
+        </div>
       </div>
       <Button
         className={status !== Status.stopped ? styles.counting : undefined}

@@ -55,7 +55,11 @@ function App() {
           </>
         )}
       </div>
-      <Button onClick={start} data-testid={'start-button'}>
+      <Button
+        className={status !== Status.stopped ? styles.counting : undefined}
+        onClick={start}
+        data-testid={'start-button'}
+      >
         {status === Status.stopped ? 'Start' : 'Stop'}
       </Button>
     </div>

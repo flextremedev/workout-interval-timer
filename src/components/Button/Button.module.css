@@ -10,4 +10,5 @@
   font-size: 16px;
   font-family: 'Lato', sans-serif;
   text-transform: uppercase;
+  transition: width 0.25s ease;
 }

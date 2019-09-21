@@ -34,7 +34,7 @@ input[type='number'] {
 }
 .input:focus {
   outline: none;
-  border: 2px solid #1dcbf2;
+  box-shadow: 0px 1px 3px 2px #19383f;
 }
 .label {
   color: white;

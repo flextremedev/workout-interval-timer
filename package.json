@@ -2,9 +2,11 @@
   "name": "workout-interval-timer",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://flextremedev.github.io/workout-interval-timer",
   "dependencies": {
     "@testing-library/react": "^9.1.4",
     "date-fns": "^2.1.0",
+    "gh-pages": "^2.1.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-scripts": "3.1.1"
@@ -16,7 +18,9 @@
     "test:coverage": "yarn test --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
     "eject": "react-scripts eject",
-    "lint:fix": "eslint src/**.{js,jsx} --fix"
+    "lint:fix": "eslint src/**.{js,jsx} --fix",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [

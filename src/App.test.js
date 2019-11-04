@@ -2,9 +2,21 @@ import React from 'react';
 import App from './App';
 import { render, fireEvent, act, cleanup } from '@testing-library/react';
 jest.useFakeTimers();
+const load = jest.fn();
+const play = jest.fn();
+HTMLMediaElement.prototype.load = load;
+HTMLMediaElement.prototype.play = play;
 describe('App', () => {
+  let load;
+  let play;
   afterEach(() => {
     cleanup();
+  });
+  beforeEach(() => {
+    load = jest.fn();
+    play = jest.fn();
+    HTMLMediaElement.prototype.load = load;
+    HTMLMediaElement.prototype.play = play;
   });
   it('should run intervals correctly', () => {
     const { getByTestId } = render(<App />);
@@ -43,24 +55,18 @@ describe('App', () => {
     act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.textContent).toBe('00 : 01');
     act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 00');
+    expect(timeLeft.textContent).toBe('00 : 02');
+    act(() => jest.advanceTimersByTime(1000));
+    expect(timeLeft.textContent).toBe('00 : 01');
+    act(() => jest.advanceTimersByTime(1000));
+    expect(timeLeft.textContent).toBe('00 : 01');
     act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.textContent).toBe('00 : 02');
     act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.textContent).toBe('00 : 01');
     act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 00');
-    act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 01');
-    act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 00');
-    act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 02');
-    act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 01');
-    act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 00');
-    act(() => jest.advanceTimersByTime(1000));
+    expect(load).toHaveBeenCalledTimes(8);
+    expect(play).toHaveBeenCalledTimes(8);
   });
   it('should stop interval when clicking button again', () => {
     const { getByTestId } = render(<App />);
@@ -99,5 +105,7 @@ describe('App', () => {
     act(() => {
       fireEvent.click(startButton);
     });
+    expect(load).toHaveBeenCalledTimes(2);
+    expect(play).toHaveBeenCalledTimes(2);
   });
 });

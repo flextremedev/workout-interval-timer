@@ -9,8 +9,8 @@ const Status = {
   break: 'break',
 };
 export function useWorkoutTimer() {
-  const { audio: beep } = useAudio('./Beep.wav');
-  const { audio: horn } = useAudio('./Horn.wav');
+  const { audio: beepBreak } = useAudio('./BeepBreak.mp3');
+  const { audio: beepWork } = useAudio('./BeepWork.mp3');
   const [status, setStatus] = React.useState(Status.stopped);
   const [timeLeft, setTimeLeft] = React.useState(new Date(0));
   const [rounds, setRounds] = React.useState(1);
@@ -31,12 +31,12 @@ export function useWorkoutTimer() {
       setStatus(Status.prework);
       setTimeLeft(addSeconds(new Date(0), 3));
       setRoundsLeft(rounds);
-      beep.load();
-      beep.play();
+      beepBreak.load();
+      beepBreak.play();
     } else {
       setStatus(Status.stopped);
     }
-  }, [rounds, status, beep]);
+  }, [rounds, status, beepBreak]);
   React.useEffect(() => {
     let interval = null;
     if (status !== Status.stopped && interval === null) {
@@ -46,8 +46,13 @@ export function useWorkoutTimer() {
           getSeconds(timeLeftRef.current);
         if (secondsLeft > 1) {
           if (secondsLeft <= 4 && secondsLeft > 0) {
-            beep.load();
-            beep.play();
+            if (status === Status.prework || status === Status.break) {
+              beepBreak.load();
+              beepBreak.play();
+            } else {
+              beepWork.load();
+              beepWork.play();
+            }
           }
           setTimeLeft(previousTimeLeft => subSeconds(previousTimeLeft, 1));
         } else {
@@ -58,8 +63,6 @@ export function useWorkoutTimer() {
             roundsLeftRef.current > 0 &&
             workInterval.valueOf() !== 0
           ) {
-            horn.load();
-            horn.play();
             setStatus(Status.work);
             setTimeLeft(workInterval);
             // final round
@@ -74,8 +77,8 @@ export function useWorkoutTimer() {
             setTimeLeft(breakInterval);
             setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
             if (secondsLeft <= 4 && secondsLeft > 0) {
-              beep.load();
-              beep.play();
+              beepBreak.load();
+              beepBreak.play();
             }
           } else {
             setStatus(Status.stopped);
@@ -87,7 +90,7 @@ export function useWorkoutTimer() {
     return () => {
       clearInterval(interval);
     };
-  }, [breakInterval, rounds, status, workInterval]);
+  }, [breakInterval, rounds, status, workInterval, beepWork, beepBreak]);
   return {
     rounds,
     handleRoundsChange,

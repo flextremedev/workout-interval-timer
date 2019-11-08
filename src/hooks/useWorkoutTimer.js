@@ -11,6 +11,7 @@ const Status = {
 export function useWorkoutTimer() {
   const { audio: beepBreak } = useAudio('./BeepBreak.mp3');
   const { audio: beepWork } = useAudio('./BeepWork.mp3');
+  const { audio: beepBreakLong } = useAudio('./LongBeepBreak.mp3');
   const [status, setStatus] = React.useState(Status.stopped);
   const [timeLeft, setTimeLeft] = React.useState(new Date(0));
   const [rounds, setRounds] = React.useState(1);
@@ -28,11 +29,11 @@ export function useWorkoutTimer() {
   };
   const start = React.useCallback(() => {
     if (status === Status.stopped) {
+      beepBreak.load();
+      beepBreak.play();
       setStatus(Status.prework);
       setTimeLeft(addSeconds(new Date(0), 3));
       setRoundsLeft(rounds);
-      beepBreak.load();
-      beepBreak.play();
     } else {
       setStatus(Status.stopped);
     }
@@ -63,6 +64,8 @@ export function useWorkoutTimer() {
             roundsLeftRef.current > 0 &&
             workInterval.valueOf() !== 0
           ) {
+            beepBreakLong.load();
+            beepBreakLong.play();
             setStatus(Status.work);
             setTimeLeft(workInterval);
             // final round
@@ -90,7 +93,15 @@ export function useWorkoutTimer() {
     return () => {
       clearInterval(interval);
     };
-  }, [breakInterval, rounds, status, workInterval, beepWork, beepBreak]);
+  }, [
+    breakInterval,
+    rounds,
+    status,
+    workInterval,
+    beepWork,
+    beepBreak,
+    beepBreakLong,
+  ]);
   return {
     rounds,
     handleRoundsChange,

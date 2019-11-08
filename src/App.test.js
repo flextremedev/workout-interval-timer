@@ -65,8 +65,8 @@ describe('App', () => {
     act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.textContent).toBe('00 : 01');
     act(() => jest.advanceTimersByTime(1000));
-    expect(load).toHaveBeenCalledTimes(6);
-    expect(play).toHaveBeenCalledTimes(6);
+    expect(load).toHaveBeenCalledTimes(8);
+    expect(play).toHaveBeenCalledTimes(8);
   });
   it('should stop interval when clicking button again', () => {
     const { getByTestId } = render(<App />);

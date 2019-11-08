@@ -1,3 +1,3 @@
-# workout-interval-timer [![CircleCI](https://circleci.com/gh/flextremedev/workout-interval-timer.svg?style=svg)](https://circleci.com/gh/flextremedev/workout-interval-timer)[![codecov](https://codecov.io/gh/flextremedev/workout-interval-timer/branch/master/graph/badge.svg)](https://codecov.io/gh/flextremedev/workout-interval-timer)
+# workout-interval-timer [![CircleCI](https://circleci.com/gh/flextremedev/workout-interval-timer.svg?style=svg)](https://circleci.com/gh/flextremedev/workout-interval-timer)[![codecov](https://codecov.io/gh/flextremedev/workout-interval-timer/branch/master/graph/badge.svg)](https://codecov.io/gh/flextremedev/workout-interval-timer)[![Netlify Status](https://api.netlify.com/api/v1/badges/72510c14-7a24-4e97-b0fa-93a59879e154/deploy-status)](https://app.netlify.com/sites/workout-interval-timer/deploys)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

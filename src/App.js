@@ -22,7 +22,6 @@ function App() {
   } = useWorkoutTimer();
   return (
     <div className={styles.content}>
-      <div />
       <div className={styles.centerArea}>
         <div
           className={`${styles.counterPositioner} ${
@@ -40,7 +39,7 @@ function App() {
           }`}
         >
           <Input
-            label={'Rounds'}
+            label={'ROUNDS'}
             type={'number'}
             value={rounds}
             onChange={handleRoundsChange}
@@ -51,13 +50,13 @@ function App() {
             value={workInterval}
             onChange={setWorkInterval}
             dataTestId={'work-interval-input'}
-            label={'Work interval'}
+            label={'WORK INTERVAL'}
           />
           <DurationInput
             value={breakInterval}
             onChange={setBreakInterval}
             dataTestId={'break-interval-input'}
-            label={'Break interval'}
+            label={'REST INTERVAL'}
           />
         </div>
       </div>

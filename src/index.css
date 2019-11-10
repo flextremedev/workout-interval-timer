@@ -1,6 +1,8 @@
 body {
   margin: 0;
-  background: #3d3d3f;
+  background-image: linear-gradient(to right bottom, #040fd9, #d100a6);
+  background-image: url('./Background.png');
+  background-size: cover;
 }
 body,
 html,
@@ -11,4 +13,16 @@ html,
   display: flex;
   flex-flow: column;
   align-items: center;
+  justify-content: center;
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  #root {
+    align-items: center;
+  }
+}
+@media only screen and (min-width: 1024px) {
+  #root {
+    align-items: flex-start;
+  }
 }

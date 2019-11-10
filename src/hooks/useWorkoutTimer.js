@@ -1,4 +1,7 @@
 import React from 'react';
+import beepBreakFile from '../BeepBreak.mp3';
+import beepBreakLongFile from '../BeepBreakLong.mp3';
+import beepWorkFile from '../BeepWork.mp3';
 import { subSeconds, getSeconds, addSeconds, getMinutes } from 'date-fns';
 import { useAudio } from './useAudio';
 const SECONDS_PER_MINUTE = 60;
@@ -9,9 +12,9 @@ const Status = {
   break: 'break',
 };
 export function useWorkoutTimer() {
-  const { audio: beepBreak } = useAudio('./BeepBreak.mp3');
-  const { audio: beepWork } = useAudio('./BeepWork.mp3');
-  const { audio: beepBreakLong } = useAudio('./LongBeepBreak.mp3');
+  const { audio: beepBreak } = useAudio(beepBreakFile);
+  const { audio: beepWork } = useAudio(beepWorkFile);
+  const { audio: beepBreakLong } = useAudio(beepBreakLongFile);
   const [status, setStatus] = React.useState(Status.stopped);
   const [timeLeft, setTimeLeft] = React.useState(new Date(0));
   const [rounds, setRounds] = React.useState(1);

@@ -34,6 +34,8 @@
 .formFields {
   opacity: 0;
   transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
 }
 .showFormFields {
   opacity: 1;
@@ -41,7 +43,32 @@
 button {
   margin-top: 40px;
 }
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+@media only screen and (orientation: landscape) {
+  .formFields {
+    flex-flow: row nowrap;
+  }
+}
+@media only screen and (orientation: portrait) {
+  .formFields {
+    flex-flow: column nowrap;
+    align-items: flex-start;
+  }
+}
+@media only screen and (orientation: landscape) and (min-device-height: 640px) {
+  .formFields {
+    flex-flow: column nowrap;
+    align-items: flex-start;
+  }
+}
+@media only screen and (orientation: landscape) and (min-device-width: 1024px) {
+  .content {
+    justify-content: center;
+    width: auto;
+    padding: 0px;
+    margin-left: 25%;
+  }
+}
+/* @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
   .content {
     padding-left: 0px;
     padding-right: 0px;
@@ -55,4 +82,4 @@ button {
     padding: 0px;
     margin-left: 25%;
   }
-}
+} */

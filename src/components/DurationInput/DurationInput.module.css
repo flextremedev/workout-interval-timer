@@ -1,8 +1,8 @@
 .container {
   display: flex;
   flex-flow: column;
-  align-items: flex-start;
-  margin-top: 16px;
+  align-items: center;
+  margin-left: 16px;
 }
 .input {
   display: flex;
@@ -10,26 +10,70 @@
   justify-content: flex-start;
   align-items: center;
   color: #ffffff;
-  font-size: 96px;
+  font-size: 60px;
   font-family: 'Lato', sans-serif;
   box-sizing: border-box;
 }
 .label {
   color: #f9f871;
-  font-size: 18px;
+  font-size: 12px;
   font-family: 'Lato', sans-serif;
   font-weight: 700;
-  text-align: left;
+  text-align: center;
 }
 .textInput {
   border: none;
   outline: none;
-  font-size: 96px;
+  font-size: inherit;
   font-family: 'Lato', sans-serif;
-  width: 112px;
+  width: 1.25em;
   text-align: center;
   cursor: default;
   text-shadow: 0 0 0 #3d3d3f;
   background: transparent;
   color: #ffffff;
+}
+@media only screen and (orientation: landscape) {
+  .formFields {
+    flex-flow: row nowrap;
+  }
+}
+@media only screen and (orientation: portrait) {
+  .container {
+    align-items: flex-start;
+    margin-top: 16px;
+    margin-left: 0px;
+  }
+  .label {
+    text-align: left;
+  }
+}
+@media only screen and (min-height: 240px) and (max-device-width: 540px) {
+  .container {
+    align-items: flex-start;
+    margin-top: 16px;
+    margin-left: 0px;
+  }
+}
+@media only screen and /*(orientation: landscape) and */(min-height: 640px) {
+  .container {
+    align-items: flex-start;
+    margin-top: 16px;
+    margin-left: 0px;
+  }
+  .input {
+    font-size: 72px;
+  }
+  .label {
+    font-size: 16px;
+  }
+}
+@media only screen and (min-height: 768px) and (min-width: 1280px),
+  screen and (min-height: 1024px) {
+  .input {
+    font-size: 96px;
+  }
+  .label {
+    font-size: 18px;
+  }
 }

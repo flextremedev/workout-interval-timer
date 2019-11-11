@@ -10,28 +10,55 @@ input[type='number'] {
 .container {
   display: flex;
   flex-flow: column;
-  align-items: flex-start;
+  /* align-items: flex-start; */
+  align-items: center;
 }
 .input {
-  display: flex;
   padding: 0;
-  flex-flow: row nowrap;
-  justify-content: center;
-  align-items: center;
   color: #ffffff;
-  font-size: 96px;
+  font-size: 60px;
+  width: 1.25em;
   font-family: 'Lato', sans-serif;
   border: none;
   box-sizing: border-box;
-  background: none;
-  width: 250px;
+  background: transparent;
 }
 .input:focus {
   outline: none;
 }
 .label {
   color: #f9f871;
-  font-size: 18px;
+  font-size: 12px;
   font-family: 'Lato', sans-serif;
   font-weight: 700;
+}
+
+@media only screen and (orientation: landscape) {
+}
+@media only screen and (orientation: portrait) {
+  .container {
+    align-items: flex-start;
+  }
+}
+@media only screen and /*(orientation: landscape) and */(min-height: 640px) {
+  .container {
+    align-items: flex-start;
+    margin-top: 16px;
+    margin-left: 0px;
+  }
+  .input {
+    font-size: 72px;
+  }
+  .label {
+    font-size: 16px;
+  }
+}
+@media only screen and (min-height: 768px) and (min-width: 1280px),
+  screen and (min-height: 1024px) {
+  .input {
+    font-size: 96px;
+  }
+  .label {
+    font-size: 18px;
+  }
 }

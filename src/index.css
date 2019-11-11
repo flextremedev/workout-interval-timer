@@ -13,15 +13,14 @@ html,
   display: flex;
   flex-flow: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
-
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+@media only screen and (min-height: 320px) {
   #root {
-    align-items: center;
+    justify-content: center;
   }
 }
-@media only screen and (min-width: 1024px) {
+@media only screen and (orientation: landscape) and (min-device-width: 1024px) {
   #root {
     align-items: flex-start;
   }

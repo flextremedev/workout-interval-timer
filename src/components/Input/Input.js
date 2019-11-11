@@ -8,6 +8,7 @@ export function Input({ label, type, value, onChange, min, max, dataTestId }) {
       <input
         className={styles.input}
         type={type}
+        style={{ width: `${(String(value).length || 1) * 0.625}em` }}
         value={value}
         onChange={onChange}
         min={min}

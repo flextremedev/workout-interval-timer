@@ -40,7 +40,7 @@ input[type='number'] {
     align-items: flex-start;
   }
 }
-@media only screen and /*(orientation: landscape) and */(min-height: 640px) {
+@media only screen and (min-height: 640px) {
   .container {
     align-items: flex-start;
     margin-top: 16px;

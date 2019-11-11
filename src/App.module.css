@@ -68,18 +68,3 @@ button {
     margin-left: 25%;
   }
 }
-/* @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
-  .content {
-    padding-left: 0px;
-    padding-right: 0px;
-    justify-content: center;
-  }
-}
-@media only screen and (min-width: 1024px) {
-  .content {
-    justify-content: center;
-    width: auto;
-    padding: 0px;
-    margin-left: 25%;
-  }
-} */

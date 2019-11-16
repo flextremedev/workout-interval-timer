@@ -1,20 +1,56 @@
 .container {
-  margin: 0px auto;
-  height: 236px;
   width: 100%;
-  background: white;
-  border-radius: 416px;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 5px solid #1dcbf2;
-  box-sizing: border-box;
+  flex-flow: column nowrap;
+  align-items: flex-start;
 }
-.time {
-  font-size: 48px;
+.label {
+  color: #f9f871;
+  font-size: 12px;
   font-family: 'Lato', sans-serif;
-  font-weight: 300;
+  font-weight: 700;
   text-align: center;
-  color: transparent;
-  text-shadow: 0 0 0 #3d3d3f;
+}
+.text {
+  font-size: 96px;
+  color: #ffffff;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  text-align: center;
+}
+.progress {
+  height: 4px;
+  background: #f9f871;
+  width: 100%;
+  margin-top: 16px;
+}
+.status {
+  font-size: 78px;
+  font-family: 'Lato', sans-serif;
+  color: #ffffff;
+  margin-top: 16px;
+}
+@media only screen and (orientation: portrait) {
+  .label {
+    text-align: left;
+  }
+}
+@media only screen and (min-height: 240px) and (max-device-width: 540px) {
+}
+@media only screen and (min-height: 640px) {
+  .input {
+    font-size: 72px;
+  }
+  .label {
+    font-size: 16px;
+  }
+}
+@media only screen and (min-height: 768px) and (min-width: 1280px),
+  screen and (min-height: 1024px) {
+  .input {
+    font-size: 96px;
+  }
+  .label {
+    font-size: 18px;
+  }
 }

@@ -10,7 +10,6 @@ input[type='number'] {
 .container {
   display: flex;
   flex-flow: column;
-  /* align-items: flex-start; */
   align-items: center;
 }
 .input {

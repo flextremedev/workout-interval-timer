@@ -21,8 +21,7 @@ function App() {
   return (
     <div className={styles.content}>
       <div className={styles.centerArea}>
-        {/* {status === Status.stopped ? ( */}
-        {status === Status.work ? (
+        {status === Status.stopped ? (
           <FormFields
             rounds={rounds}
             handleRoundsChange={handleRoundsChange}

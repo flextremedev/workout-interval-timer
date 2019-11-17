@@ -5,18 +5,23 @@ import { DurationInput } from '../DurationInput/DurationInput';
 export function Counter({ timeLeft, dataTestId }) {
   return (
     <div className={styles.container}>
-      <span className={styles.label}>Round</span>
-      <span className={`${styles.text}`}>6/7</span>
-      {/* <span
-        className={`${styles.text} ${styles.timeLeft}`}
-        data-testid={dataTestId}
-      > */}
-      <div className={styles.progress}></div>
-      <DurationInput value={timeLeft} readOnly dataTestId={dataTestId} />
-      {/* {timeLeft} */}
-      {/* </span> */}
-      <div className={styles.progress}></div>
-      <span className={`${styles.status}`}>WORK</span>
+      <div className={styles.round}>
+        <span className={styles.label}>ROUND</span>
+        <span className={`${styles.text}`}>6/7</span>
+      </div>
+      <div className={styles.counter}>
+        <div className={styles.progress}></div>
+        <DurationInput
+          value={timeLeft}
+          readOnly
+          dataTestId={dataTestId}
+          style={{ margin: '0px' }}
+        />
+      </div>
+      <div className={styles.statusContainer}>
+        <div className={`${styles.progress} ${styles.progressBottom}`}></div>
+        <span className={`${styles.status}`}>WORK</span>
+      </div>
     </div>
   );
 }

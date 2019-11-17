@@ -9,6 +9,7 @@ export function DurationInput({
   onChange,
   label,
   readOnly,
+  style,
 }) {
   const formattedMinutes = format(value, 'mm');
   const formattedSeconds = format(value, 'ss');
@@ -57,7 +58,7 @@ export function DurationInput({
     e.preventDefault();
   };
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={style}>
       {label ? <label className={styles.label}>{label}</label> : null}
       <div className={styles.input}>
         <input
@@ -101,4 +102,5 @@ DurationInput.propTypes = {
   onChange: PropTypes.func,
   value: PropTypes.instanceOf(Date).isRequired,
   readOnly: PropTypes.bool,
+  style: PropTypes.shape(),
 };

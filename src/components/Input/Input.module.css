@@ -42,7 +42,6 @@ input[type='number'] {
 @media only screen and (min-height: 640px) {
   .container {
     align-items: flex-start;
-    margin-top: 16px;
     margin-left: 0px;
   }
   .input {

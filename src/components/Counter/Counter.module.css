@@ -12,45 +12,131 @@
   text-align: center;
 }
 .text {
-  font-size: 96px;
+  font-size: 60px;
   color: #ffffff;
   font-family: 'Lato', sans-serif;
   font-weight: 400;
   text-align: center;
 }
+.round,
+.counter,
+.statusContainer {
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+.counter {
+  margin-left: 16px;
+}
 .progress {
   height: 4px;
   background: #f9f871;
   width: 100%;
-  margin-top: 16px;
+  margin-bottom: 11px;
+  animation: fadein 0.25s ease;
+}
+@keyframes fadein {
+  from {
+    height: 15px;
+    width: 50%;
+    border-radius: 22px;
+    margin-bottom: 0px;
+  }
+  to {
+    height: 4px;
+    width: 100%;
+    border-radius: 0px;
+    margin-bottom: 11px;
+  }
+}
+.statusContainer {
+  margin-left: 16px;
 }
 .status {
-  font-size: 78px;
+  font-size: 60px;
   font-family: 'Lato', sans-serif;
   color: #ffffff;
-  margin-top: 16px;
 }
 @media only screen and (orientation: portrait) {
-  .label {
+  .label,
+  .text {
     text-align: left;
   }
 }
-@media only screen and (min-height: 240px) and (max-device-width: 540px) {
-}
 @media only screen and (min-height: 640px) {
-  .input {
+  .text,
+  .status {
     font-size: 72px;
   }
   .label {
     font-size: 16px;
   }
+  @keyframes fadein {
+    from {
+      height: 19px;
+      width: 50%;
+      border-radius: 19px;
+    }
+    to {
+      height: 4px;
+      width: 100%;
+      border-radius: 0px;
+    }
+  }
+  .progress {
+    margin-top: 7px;
+  }
 }
 @media only screen and (min-height: 768px) and (min-width: 1280px),
   screen and (min-height: 1024px) {
-  .input {
+  .text {
     font-size: 96px;
   }
   .label {
     font-size: 18px;
+  }
+  .progress {
+    margin-top: 18px;
+  }
+}
+@media only screen and (orientation: landscape) {
+  .container {
+    flex-flow: row nowrap;
+  }
+}
+@media only screen and (orientation: portrait) {
+  .container {
+    flex-flow: column nowrap;
+    align-items: flex-start;
+  }
+  .round,
+  .counter,
+  .statusContainer {
+    flex-flow: column nowrap;
+    align-items: flex-start;
+  }
+  .counter,
+  .statusContainer {
+    margin-left: 0;
+  }
+  .progress {
+    margin-top: 11px;
+  }
+}
+@media only screen and (orientation: landscape) and (min-device-height: 640px) {
+  .container {
+    flex-flow: column nowrap;
+    align-items: flex-start;
+  }
+  .round,
+  .counter,
+  .statusContainer {
+    flex-flow: column nowrap;
+    align-items: flex-start;
+  }
+  .counter,
+  .statusContainer {
+    margin-left: 0;
   }
 }

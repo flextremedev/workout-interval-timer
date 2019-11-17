@@ -48,22 +48,31 @@ describe('App', () => {
     act(() => {
       fireEvent.click(startButton);
     });
-    const timeLeft = getByTestId('time-left');
-    expect(timeLeft.textContent).toBe('00 : 03');
+    const timeLeft = getByTestId('time-left-seconds');
+    const round = getByTestId('round');
+    const status = getByTestId('status');
+    expect(round.textContent).toBe('0/2');
+    expect(timeLeft.value).toBe('03');
+    expect(status.textContent).toBe('PREPARE');
     act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 02');
+    expect(timeLeft.value).toBe('02');
     act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 01');
+    expect(timeLeft.value).toBe('01');
     act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 02');
+    expect(round.textContent).toBe('1/2');
+    expect(timeLeft.value).toBe('02');
+    expect(status.textContent).toBe('WORK');
     act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 01');
+    expect(timeLeft.value).toBe('01');
     act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 01');
+    expect(timeLeft.value).toBe('01');
+    expect(status.textContent).toBe('REST');
     act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 02');
+    expect(round.textContent).toBe('2/2');
+    expect(timeLeft.value).toBe('02');
+    expect(status.textContent).toBe('WORK');
     act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 01');
+    expect(timeLeft.value).toBe('01');
     act(() => jest.advanceTimersByTime(1000));
     expect(load).toHaveBeenCalledTimes(8);
     expect(play).toHaveBeenCalledTimes(8);
@@ -98,10 +107,14 @@ describe('App', () => {
     act(() => {
       fireEvent.click(startButton);
     });
-    const timeLeft = getByTestId('time-left');
-    expect(timeLeft.textContent).toBe('00 : 03');
+    const timeLeft = getByTestId('time-left-seconds');
+    const round = getByTestId('round');
+    const status = getByTestId('status');
+    expect(round.textContent).toBe('0/2');
+    expect(timeLeft.value).toBe('03');
+    expect(status.textContent).toBe('PREPARE');
     act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.textContent).toBe('00 : 02');
+    expect(timeLeft.value).toBe('02');
     act(() => {
       fireEvent.click(startButton);
     });

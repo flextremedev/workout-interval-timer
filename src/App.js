@@ -34,7 +34,6 @@ function App() {
         ) : (
           <Counter
             timeLeft={timeLeft}
-            dataTestId={'time-left'}
             status={status}
             roundsLeft={roundsLeft}
             rounds={rounds}

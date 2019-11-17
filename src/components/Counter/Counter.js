@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './Counter.module.css';
 import { DurationInput } from '../DurationInput/DurationInput';
 import { Status } from '../../model/Status';
-const evluateStatus = status => {
+const evaluateStatus = status => {
   if (status === Status.prework) {
     return 'PREPARE';
   }
@@ -12,12 +12,12 @@ const evluateStatus = status => {
   }
   return 'WORK';
 };
-export function Counter({ timeLeft, dataTestId, status, roundsLeft, rounds }) {
+export function Counter({ timeLeft, status, roundsLeft, rounds }) {
   return (
     <div className={styles.container}>
       <div className={styles.round}>
         <span className={styles.label}>ROUND</span>
-        <span className={`${styles.text}`}>{`${rounds -
+        <span className={`${styles.text}`} data-testid={'round'}>{`${rounds -
           roundsLeft}/${rounds}`}</span>
       </div>
       <div className={styles.counter}>
@@ -25,13 +25,15 @@ export function Counter({ timeLeft, dataTestId, status, roundsLeft, rounds }) {
         <DurationInput
           value={timeLeft}
           readOnly
-          dataTestId={dataTestId}
+          dataTestId={'time-left'}
           style={{ margin: '0px' }}
         />
       </div>
       <div className={styles.statusContainer}>
         <div className={`${styles.progress} ${styles.progressBottom}`}></div>
-        <span className={`${styles.status}`}>{evluateStatus(status)}</span>
+        <span className={`${styles.status}`} data-testid={'status'}>
+          {evaluateStatus(status)}
+        </span>
       </div>
     </div>
   );

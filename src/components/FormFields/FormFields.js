@@ -11,7 +11,6 @@ export function FormFields({
   breakInterval,
   setBreakInterval,
 }) {
-  console.log(workInterval);
   return (
     <div className={`${styles.formFields}`}>
       <Input
@@ -40,8 +39,8 @@ export function FormFields({
 FormFields.propTypes = {
   rounds: PropTypes.number,
   handleRoundsChange: PropTypes.func,
-  workInterval: PropTypes.string,
+  workInterval: PropTypes.instanceOf(Date),
   setWorkInterval: PropTypes.func,
-  breakInterval: PropTypes.string,
+  breakInterval: PropTypes.instanceOf(Date),
   setBreakInterval: PropTypes.func,
 };

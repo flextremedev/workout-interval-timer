@@ -28,7 +28,7 @@ export function useWorkoutTimer() {
   let timeLeftRef = React.useRef(timeLeft);
   timeLeftRef.current = timeLeft;
   const handleRoundsChange = e => {
-    setRounds(e.target.value);
+    setRounds(Number(e.target.value));
   };
   const start = React.useCallback(() => {
     if (status === Status.stopped) {
@@ -71,17 +71,14 @@ export function useWorkoutTimer() {
             beepBreakLong.play();
             setStatus(Status.work);
             setTimeLeft(workInterval);
-            // final round
-            if (roundsLeftRef.current === 1) {
-              setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
-            }
+            setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
+            // rest
           } else if (
             statusRef.current === Status.work &&
             roundsLeftRef.current > 0
           ) {
             setStatus(Status.break);
             setTimeLeft(breakInterval);
-            setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
             if (secondsLeft <= 4 && secondsLeft > 0) {
               beepBreak.load();
               beepBreak.play();
@@ -115,5 +112,6 @@ export function useWorkoutTimer() {
     start,
     timeLeft,
     status,
+    roundsLeft,
   };
 }

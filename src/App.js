@@ -17,6 +17,7 @@ function App() {
     start,
     timeLeft,
     status,
+    roundsLeft,
   } = useWorkoutTimer();
   return (
     <div className={styles.content}>
@@ -31,7 +32,13 @@ function App() {
             setBreakInterval={setBreakInterval}
           />
         ) : (
-          <Counter timeLeft={timeLeft} dataTestId={'time-left'} />
+          <Counter
+            timeLeft={timeLeft}
+            dataTestId={'time-left'}
+            status={status}
+            roundsLeft={roundsLeft}
+            rounds={rounds}
+          />
         )}
       </div>
       <Button onClick={start} data-testid={'start-button'}>

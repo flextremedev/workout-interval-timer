@@ -59,7 +59,7 @@ export function DurationInput({
   };
   return (
     <div className={styles.container} style={style}>
-      {label ? <label className={styles.label}>{label}</label> : null}
+      {label ? <label className={`${styles.label}`}>{label}</label> : null}
       <div className={styles.input}>
         <input
           type="text"

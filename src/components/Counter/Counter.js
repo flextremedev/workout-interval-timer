@@ -5,7 +5,7 @@ import { DurationInput } from '../DurationInput/DurationInput';
 import { Status } from '../../model/Status';
 const evaluateStatus = status => {
   if (status === Status.prework) {
-    return 'PREPARE';
+    return 'PREP';
   }
   if (status === Status.break) {
     return 'REST';

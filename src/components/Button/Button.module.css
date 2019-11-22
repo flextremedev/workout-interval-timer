@@ -51,3 +51,9 @@
     padding: 16px;
   }
 }
+@media only screen and (min-height: 1280px) {
+  .btn {
+    font-size: 32px;
+    padding: 20px;
+  }
+}

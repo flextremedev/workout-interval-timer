@@ -49,7 +49,7 @@ export function useWorkoutTimer() {
           getMinutes(timeLeftRef.current) * SECONDS_PER_MINUTE +
           getSeconds(timeLeftRef.current);
         if (secondsLeft > 1) {
-          if (secondsLeft <= 4 && secondsLeft > 0) {
+          if (secondsLeft <= 4) {
             if (status === Status.prework || status === Status.break) {
               beepBreak.load();
               beepBreak.play();

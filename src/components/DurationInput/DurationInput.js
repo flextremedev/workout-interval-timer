@@ -17,22 +17,20 @@ export function DurationInput({
   const secondsRef = React.useRef(null);
   const handleChange = e => {
     e.stopPropagation();
-    if (e.target.value && e.target.name) {
-      const { value: targetValue, name } = e.target;
-      if (targetValue.match(/^[0-9]*$/)) {
-        if (name === 'minutes') {
-          const formattedTargetValue = addNumberAtEndShifting(
-            formattedMinutes,
-            targetValue
-          );
-          onChange(setMinutes(new Date(value.valueOf()), formattedTargetValue));
-        } else if (name === 'seconds') {
-          const formattedTargetValue = addNumberAtEndShifting(
-            formattedSeconds,
-            targetValue
-          );
-          onChange(setSeconds(new Date(value.valueOf()), formattedTargetValue));
-        }
+    const { value: targetValue, name } = e.target;
+    if (targetValue.match(/^[0-9]*$/)) {
+      if (name === 'minutes') {
+        const formattedTargetValue = addNumberAtEndShifting(
+          formattedMinutes,
+          targetValue
+        );
+        onChange(setMinutes(new Date(value.valueOf()), formattedTargetValue));
+      } else {
+        const formattedTargetValue = addNumberAtEndShifting(
+          formattedSeconds,
+          targetValue
+        );
+        onChange(setSeconds(new Date(value.valueOf()), formattedTargetValue));
       }
     }
   };
@@ -54,6 +52,7 @@ export function DurationInput({
   const handleSecondsBlur = () => {
     secondsRef.current.selectionEnd = secondsRef.current.selectionStart;
   };
+  /* istanbul ignore next */
   const handlePaste = e => {
     e.preventDefault();
   };

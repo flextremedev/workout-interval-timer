@@ -4,6 +4,17 @@ import { render, fireEvent, act, cleanup } from '@testing-library/react';
 jest.useFakeTimers();
 const load = jest.fn();
 const play = jest.fn();
+function getSecondsStepper(seconds) {
+  return function* expectCountFrom() {
+    if (seconds > 0) {
+      for (let i = seconds; i >= 1; i--) {
+        const value = i < 10 ? `0${i}` : String(i);
+        expect(yield).toBe(value);
+        act(() => jest.advanceTimersByTime(1000));
+      }
+    }
+  };
+}
 HTMLMediaElement.prototype.load = load;
 HTMLMediaElement.prototype.play = play;
 describe('App', () => {
@@ -36,14 +47,20 @@ describe('App', () => {
     expect(breakIntervalMinuteInput).toBeTruthy();
     expect(breakIntervalSecondInput).toBeTruthy();
     expect(startButton).toBeTruthy();
+    const workSecondsValue = '5';
+    const breakSecondsValue = '5';
     act(() => {
       fireEvent.change(roundInput, { target: { value: '2' } });
     });
     act(() => {
-      fireEvent.change(workIntervalSecondInput, { target: { value: '2' } });
+      fireEvent.change(workIntervalSecondInput, {
+        target: { value: workSecondsValue },
+      });
     });
     act(() => {
-      fireEvent.change(breakIntervalSecondInput, { target: { value: '1' } });
+      fireEvent.change(breakIntervalSecondInput, {
+        target: { value: breakSecondsValue },
+      });
     });
     act(() => {
       fireEvent.click(startButton);
@@ -51,31 +68,39 @@ describe('App', () => {
     const timeLeft = getByTestId('time-left-seconds');
     const round = getByTestId('round');
     const status = getByTestId('status');
+
     expect(round.textContent).toBe('0/2');
-    expect(timeLeft.value).toBe('03');
     expect(status.textContent).toBe('PREP');
+    expect(timeLeft.value).toBe('03');
     act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.value).toBe('02');
     act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.value).toBe('01');
     act(() => jest.advanceTimersByTime(1000));
     expect(round.textContent).toBe('1/2');
-    expect(timeLeft.value).toBe('02');
     expect(status.textContent).toBe('WORK');
-    act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.value).toBe('01');
-    act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.value).toBe('01');
+    let secondsLeft = getSecondsStepper(Number(workSecondsValue))();
+    // enter generator function
+    secondsLeft.next();
+    for (let i = Number(workSecondsValue); i > 0; i--) {
+      // count down to zero seconds
+      secondsLeft.next(timeLeft.value);
+    }
     expect(status.textContent).toBe('REST');
-    act(() => jest.advanceTimersByTime(1000));
+    secondsLeft = getSecondsStepper(Number(breakSecondsValue))();
+    secondsLeft.next();
+    for (let i = Number(breakSecondsValue); i > 0; i--) {
+      secondsLeft.next(timeLeft.value);
+    }
     expect(round.textContent).toBe('2/2');
-    expect(timeLeft.value).toBe('02');
     expect(status.textContent).toBe('WORK');
-    act(() => jest.advanceTimersByTime(1000));
-    expect(timeLeft.value).toBe('01');
-    act(() => jest.advanceTimersByTime(1000));
-    expect(load).toHaveBeenCalledTimes(8);
-    expect(play).toHaveBeenCalledTimes(8);
+    secondsLeft = getSecondsStepper(Number(workSecondsValue))();
+    secondsLeft.next();
+    for (let i = Number(workSecondsValue); i > 0; i--) {
+      secondsLeft.next(timeLeft.value);
+    }
+    expect(load).toHaveBeenCalledTimes(15);
+    expect(play).toHaveBeenCalledTimes(15);
   });
   it('should stop interval when clicking button again', () => {
     const { getByTestId } = render(<App />);

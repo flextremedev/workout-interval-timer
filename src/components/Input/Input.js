@@ -1,7 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Input.module.css';
-export function Input({ label, type, value, onChange, min, max, dataTestId }) {
+export function Input({
+  label,
+  type,
+  value,
+  onChange,
+  min,
+  max,
+  dataTestId,
+  readOnly,
+}) {
   return (
     <div className={styles.container}>
       <label className={styles.label}>{label}</label>
@@ -14,6 +23,7 @@ export function Input({ label, type, value, onChange, min, max, dataTestId }) {
         min={min}
         max={max}
         data-testid={dataTestId}
+        readOnly={readOnly}
       ></input>
     </div>
   );
@@ -26,4 +36,5 @@ Input.propTypes = {
   min: PropTypes.string,
   max: PropTypes.string,
   dataTestId: PropTypes.string,
+  readOnly: PropTypes.bool,
 };

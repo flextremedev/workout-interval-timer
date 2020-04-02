@@ -29,8 +29,8 @@ export function useWorkoutTimer() {
   roundsLeftRef.current = roundsLeft;
   let timeLeftRef = React.useRef(timeLeft);
   timeLeftRef.current = timeLeft;
-  const handleRoundsChange = e => {
-    setRounds(Number(e.target.value));
+  const handleRoundsChange = value => {
+    setRounds(Number(value));
   };
   const start = React.useCallback(() => {
     if (status === Status.stopped) {

@@ -4,13 +4,34 @@ import styles from './Input.module.css';
 export function Input({
   label,
   type,
-  value,
+  value: valueFromProps,
   onChange,
+  onBlur,
   min,
   max,
   dataTestId,
   readOnly,
 }) {
+  const [value, setValue] = React.useState(valueFromProps);
+  const [inputDone, setInputDone] = React.useState(true);
+  if (valueFromProps !== value && inputDone) {
+    setValue(valueFromProps);
+  }
+  const handleChange = e => {
+    setInputDone(false);
+    setValue(e.target.value);
+    if (onChange) {
+      onChange(e);
+    }
+  };
+  const handleBlur = () => {
+    setInputDone(true);
+    onBlur(value);
+  };
+
+  const evaluateValue = () => {
+    return inputDone && type === 'number' ? Number(value) : value;
+  };
   return (
     <div className={styles.container}>
       <label className={styles.label}>{label}</label>
@@ -18,8 +39,9 @@ export function Input({
         className={styles.input}
         type={type}
         style={{ width: `${(String(value).length || 1) * 0.625}em` }}
-        value={value}
-        onChange={onChange}
+        value={evaluateValue()}
+        onChange={handleChange}
+        onBlur={handleBlur}
         min={min}
         max={max}
         data-testid={dataTestId}
@@ -33,6 +55,7 @@ Input.propTypes = {
   type: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
+  onBlur: PropTypes.func,
   min: PropTypes.string,
   max: PropTypes.string,
   dataTestId: PropTypes.string,

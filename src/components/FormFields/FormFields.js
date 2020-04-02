@@ -17,7 +17,7 @@ export function FormFields({
         label={'ROUNDS'}
         type={'number'}
         value={rounds}
-        onChange={handleRoundsChange}
+        onBlur={handleRoundsChange}
         dataTestId={'rounds-input'}
         min={'1'}
       />

@@ -24,4 +24,34 @@ describe('Input', () => {
     input = getByDisplayValue('');
     expect(input.style.width).toBe('0.625em');
   });
+  test('type number should work correctly and allow no empty input after blur', () => {
+    let changeResult;
+    let blurResult;
+    const handleChange = e => (changeResult = e.target.value);
+    const handleBlur = value => (blurResult = value);
+    const value = 1;
+    const { getByDisplayValue, rerender } = render(
+      <Input
+        value={value}
+        type="number"
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+    );
+    let input = getByDisplayValue(String(value));
+    expect(input).toBeTruthy();
+    fireEvent.change(input, { target: { value: '' } });
+    expect(changeResult).toBe('');
+    fireEvent.blur(input);
+    expect(blurResult).toBe('');
+    rerender(
+      <Input
+        value={''}
+        type="number"
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+    );
+    expect(getByDisplayValue('0')).toBeTruthy();
+  });
 });

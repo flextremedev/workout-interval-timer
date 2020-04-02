@@ -51,6 +51,7 @@ describe('App', () => {
     const breakSecondsValue = '5';
     const roundsValue = '2';
     fireEvent.change(roundInput, { target: { value: roundsValue } });
+    fireEvent.blur(roundInput);
     fireEvent.change(workIntervalSecondInput, {
       target: { value: workSecondsValue },
     });
@@ -113,6 +114,7 @@ describe('App', () => {
     expect(breakIntervalSecondInput).toBeTruthy();
     expect(startButton).toBeTruthy();
     fireEvent.change(roundInput, { target: { value: '2' } });
+    fireEvent.blur(roundInput);
     fireEvent.change(workIntervalSecondInput, { target: { value: '2' } });
     fireEvent.change(breakIntervalSecondInput, { target: { value: '1' } });
     fireEvent.click(startButton);

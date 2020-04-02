@@ -49,26 +49,18 @@ describe('App', () => {
     expect(startButton).toBeTruthy();
     const workSecondsValue = '5';
     const breakSecondsValue = '5';
-    act(() => {
-      fireEvent.change(roundInput, { target: { value: '2' } });
+    const roundsValue = '2';
+    fireEvent.change(roundInput, { target: { value: roundsValue } });
+    fireEvent.change(workIntervalSecondInput, {
+      target: { value: workSecondsValue },
     });
-    act(() => {
-      fireEvent.change(workIntervalSecondInput, {
-        target: { value: workSecondsValue },
-      });
+    fireEvent.change(breakIntervalSecondInput, {
+      target: { value: breakSecondsValue },
     });
-    act(() => {
-      fireEvent.change(breakIntervalSecondInput, {
-        target: { value: breakSecondsValue },
-      });
-    });
-    act(() => {
-      fireEvent.click(startButton);
-    });
+    fireEvent.click(startButton);
     const timeLeft = getByTestId('time-left-seconds');
     const round = getByTestId('round');
     const status = getByTestId('status');
-
     expect(round.textContent).toBe('0/2');
     expect(status.textContent).toBe('PREP');
     expect(timeLeft.value).toBe('03');
@@ -120,18 +112,10 @@ describe('App', () => {
     expect(breakIntervalMinuteInput).toBeTruthy();
     expect(breakIntervalSecondInput).toBeTruthy();
     expect(startButton).toBeTruthy();
-    act(() => {
-      fireEvent.change(roundInput, { target: { value: '2' } });
-    });
-    act(() => {
-      fireEvent.change(workIntervalSecondInput, { target: { value: '2' } });
-    });
-    act(() => {
-      fireEvent.change(breakIntervalSecondInput, { target: { value: '1' } });
-    });
-    act(() => {
-      fireEvent.click(startButton);
-    });
+    fireEvent.change(roundInput, { target: { value: '2' } });
+    fireEvent.change(workIntervalSecondInput, { target: { value: '2' } });
+    fireEvent.change(breakIntervalSecondInput, { target: { value: '1' } });
+    fireEvent.click(startButton);
     const timeLeft = getByTestId('time-left-seconds');
     const round = getByTestId('round');
     const status = getByTestId('status');
@@ -140,9 +124,7 @@ describe('App', () => {
     expect(status.textContent).toBe('PREP');
     act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.value).toBe('02');
-    act(() => {
-      fireEvent.click(startButton);
-    });
+    fireEvent.click(startButton);
     expect(load).toHaveBeenCalledTimes(2);
     expect(play).toHaveBeenCalledTimes(2);
   });

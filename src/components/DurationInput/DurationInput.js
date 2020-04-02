@@ -74,6 +74,7 @@ export function DurationInput({
           className={styles.textInput}
           ref={minutesRef}
           readOnly={readOnly}
+          inputMode="numeric"
         />
         :
         <input
@@ -90,6 +91,7 @@ export function DurationInput({
           className={styles.textInput}
           ref={secondsRef}
           readOnly={readOnly}
+          inputMode="numeric"
         />
       </div>
     </div>

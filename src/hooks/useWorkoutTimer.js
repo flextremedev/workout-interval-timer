@@ -2,6 +2,7 @@ import React from 'react';
 import beepBreakFile from '../BeepBreak.mp3';
 import beepBreakLongFile from '../BeepBreakLong.mp3';
 import beepWorkFile from '../BeepWork.mp3';
+import beepWorkLongFile from '../BeepWorkLong.mp3';
 import { subSeconds, getSeconds, addSeconds, getMinutes } from 'date-fns';
 import { useAudio } from './useAudio';
 const SECONDS_PER_MINUTE = 60;
@@ -15,6 +16,7 @@ export function useWorkoutTimer() {
   const { audio: beepBreak } = useAudio(beepBreakFile);
   const { audio: beepWork } = useAudio(beepWorkFile);
   const { audio: beepBreakLong } = useAudio(beepBreakLongFile);
+  const { audio: beepWorkLong } = useAudio(beepWorkLongFile);
   const [status, setStatus] = React.useState(Status.stopped);
   const [timeLeft, setTimeLeft] = React.useState(new Date(0));
   const [rounds, setRounds] = React.useState(1);
@@ -80,8 +82,8 @@ export function useWorkoutTimer() {
             setStatus(Status.break);
             setTimeLeft(breakInterval);
             if (secondsLeft <= 4 && secondsLeft > 0) {
-              beepBreak.load();
-              beepBreak.play();
+              beepWorkLong.load();
+              beepWorkLong.play();
             }
           } else {
             setStatus(Status.stopped);
@@ -101,6 +103,7 @@ export function useWorkoutTimer() {
     beepWork,
     beepBreak,
     beepBreakLong,
+    beepWorkLong,
   ]);
   return {
     rounds,

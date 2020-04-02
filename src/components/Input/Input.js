@@ -14,6 +14,7 @@ export function Input({
 }) {
   const [value, setValue] = React.useState(valueFromProps);
   const [inputDone, setInputDone] = React.useState(true);
+  const inputRef = React.useRef(null);
   if (valueFromProps !== value && inputDone) {
     setValue(valueFromProps);
   }
@@ -22,6 +23,11 @@ export function Input({
     setValue(e.target.value);
     if (onChange) {
       onChange(e);
+    }
+  };
+  const handleFocus = () => {
+    if (inputRef) {
+      inputRef.current.select();
     }
   };
   const handleBlur = () => {
@@ -41,11 +47,13 @@ export function Input({
         style={{ width: `${(String(value).length || 1) * 0.625}em` }}
         value={evaluateValue()}
         onChange={handleChange}
+        onFocus={handleFocus}
         onBlur={handleBlur}
         min={min}
         max={max}
         data-testid={dataTestId}
         readOnly={readOnly}
+        ref={inputRef}
       ></input>
     </div>
   );

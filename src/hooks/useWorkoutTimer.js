@@ -33,26 +33,30 @@ export function useWorkoutTimer() {
     setRounds(Number(value));
   };
   const start = React.useCallback(() => {
-    if (status === Status.stopped) {
-      beepBreak.load();
-      beepBreak.play();
+    const shouldStart = status === Status.stopped;
+    if (shouldStart) {
       setStatus(Status.prework);
-      setTimeLeft(addSeconds(new Date(0), 3));
+      setTimeLeft(addSeconds(new Date(0), 5));
       setRoundsLeft(rounds);
     } else {
       setStatus(Status.stopped);
     }
-  }, [rounds, status, beepBreak]);
+  }, [rounds, status]);
   React.useEffect(() => {
     let interval = null;
-    if (status !== Status.stopped && interval === null) {
+    const startWasInitiated = status !== Status.stopped && interval === null;
+    if (startWasInitiated) {
       interval = setInterval(function countDown() {
         const secondsLeft =
           getMinutes(timeLeftRef.current) * SECONDS_PER_MINUTE +
           getSeconds(timeLeftRef.current);
-        if (secondsLeft > 1) {
-          if (secondsLeft <= 4) {
-            if (status === Status.prework || status === Status.break) {
+        const shouldCountDown = secondsLeft > 1;
+        if (shouldCountDown) {
+          const shouldBeepFromTwoDown = secondsLeft <= 4;
+          if (shouldBeepFromTwoDown) {
+            const shouldGetReady =
+              status === Status.prework || status === Status.break;
+            if (shouldGetReady) {
               beepBreak.load();
               beepBreak.play();
             } else {
@@ -62,29 +66,24 @@ export function useWorkoutTimer() {
           }
           setTimeLeft(previousTimeLeft => subSeconds(previousTimeLeft, 1));
         } else {
-          // work start
-          if (
+          const shouldSwitchToWork =
             (statusRef.current === Status.prework ||
               statusRef.current === Status.break) &&
             roundsLeftRef.current > 0 &&
-            workInterval.valueOf() !== 0
-          ) {
+            workInterval.valueOf() !== 0;
+          const shouldSwitchToRest =
+            statusRef.current === Status.work && roundsLeftRef.current > 0;
+          if (shouldSwitchToWork) {
             beepBreakLong.load();
             beepBreakLong.play();
             setStatus(Status.work);
             setTimeLeft(workInterval);
             setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
-            // rest
-          } else if (
-            statusRef.current === Status.work &&
-            roundsLeftRef.current > 0
-          ) {
+          } else if (shouldSwitchToRest) {
             setStatus(Status.break);
             setTimeLeft(breakInterval);
-            if (secondsLeft <= 4 && secondsLeft > 0) {
-              beepWorkLong.load();
-              beepWorkLong.play();
-            }
+            beepWorkLong.load();
+            beepWorkLong.play();
           } else {
             setStatus(Status.stopped);
             clearInterval(interval);

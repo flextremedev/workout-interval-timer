@@ -64,6 +64,10 @@ describe('App', () => {
     const status = getByTestId('status');
     expect(round.textContent).toBe('0/2');
     expect(status.textContent).toBe('PREP');
+    expect(timeLeft.value).toBe('05');
+    act(() => jest.advanceTimersByTime(1000));
+    expect(timeLeft.value).toBe('04');
+    act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.value).toBe('03');
     act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.value).toBe('02');
@@ -122,6 +126,10 @@ describe('App', () => {
     const round = getByTestId('round');
     const status = getByTestId('status');
     expect(round.textContent).toBe('0/2');
+    expect(timeLeft.value).toBe('05');
+    act(() => jest.advanceTimersByTime(1000));
+    expect(timeLeft.value).toBe('04');
+    act(() => jest.advanceTimersByTime(1000));
     expect(timeLeft.value).toBe('03');
     expect(status.textContent).toBe('PREP');
     act(() => jest.advanceTimersByTime(1000));

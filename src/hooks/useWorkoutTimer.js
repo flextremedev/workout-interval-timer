@@ -6,6 +6,7 @@ import beepWorkLongFile from '../BeepWorkLong.mp3';
 import { subSeconds, getSeconds, addSeconds, getMinutes } from 'date-fns';
 import { useAudio } from './useAudio';
 const SECONDS_PER_MINUTE = 60;
+const PREP_TIME_SECONDS = 5;
 const Status = {
   stopped: 'stopped',
   prework: 'prework',
@@ -36,7 +37,7 @@ export function useWorkoutTimer() {
     const shouldStart = status === Status.stopped;
     if (shouldStart) {
       setStatus(Status.prework);
-      setTimeLeft(addSeconds(new Date(0), 5));
+      setTimeLeft(addSeconds(new Date(0), PREP_TIME_SECONDS));
       setRoundsLeft(rounds);
     } else {
       setStatus(Status.stopped);
@@ -73,6 +74,7 @@ export function useWorkoutTimer() {
             workInterval.valueOf() !== 0;
           const shouldSwitchToRest =
             statusRef.current === Status.work && roundsLeftRef.current > 0;
+
           if (shouldSwitchToWork) {
             beepBreakLong.load();
             beepBreakLong.play();

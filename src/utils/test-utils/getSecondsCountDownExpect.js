@@ -4,7 +4,9 @@ export function getSecondsCountDownExpect(seconds, timeAdvanceFn) {
       for (let i = seconds; i >= 1; i--) {
         const value = i < 10 ? `0${i}` : String(i);
         expect(yield).toBe(value);
-        timeAdvanceFn();
+        if (timeAdvanceFn) {
+          timeAdvanceFn();
+        }
       }
     }
   };

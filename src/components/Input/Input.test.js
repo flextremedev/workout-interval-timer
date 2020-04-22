@@ -40,6 +40,7 @@ describe('Input', () => {
     );
     let input = getByDisplayValue(String(value));
     expect(input).toBeTruthy();
+    fireEvent.focus(input);
     fireEvent.change(input, { target: { value: '' } });
     expect(changeResult).toBe('');
     fireEvent.blur(input);

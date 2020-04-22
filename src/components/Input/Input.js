@@ -26,9 +26,7 @@ export function Input({
     }
   };
   const handleFocus = () => {
-    if (inputRef) {
-      inputRef.current.select();
-    }
+    inputRef.current.select();
   };
   const handleBlur = () => {
     setInputDone(true);

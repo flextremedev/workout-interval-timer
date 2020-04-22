@@ -5,6 +5,7 @@ import beepWorkFile from '../BeepWork.mp3';
 import beepWorkLongFile from '../BeepWorkLong.mp3';
 import { subSeconds, getSeconds, addSeconds, getMinutes } from 'date-fns';
 import { useAudio } from './useAudio';
+import { hasOneSecondElapsed } from '../utils/hasOneSecondElapsed';
 const SECONDS_PER_MINUTE = 60;
 const PREP_TIME_SECONDS = 5;
 const Status = {
@@ -13,6 +14,7 @@ const Status = {
   work: 'work',
   break: 'break',
 };
+
 export function useWorkoutTimer() {
   const { audio: beepBreak } = useAudio(beepBreakFile);
   const { audio: beepWork } = useAudio(beepWorkFile);
@@ -24,6 +26,7 @@ export function useWorkoutTimer() {
   const [roundsLeft, setRoundsLeft] = React.useState(rounds);
   const [workInterval, setWorkInterval] = React.useState(new Date(0));
   const [breakInterval, setBreakInterval] = React.useState(new Date(0));
+  const timestamp = React.useRef(Date.now());
   let statusRef = React.useRef(status);
   statusRef.current = status;
   let roundsLeftRef = React.useRef(roundsLeft);
@@ -36,6 +39,7 @@ export function useWorkoutTimer() {
   const start = React.useCallback(() => {
     const shouldStart = status === Status.stopped;
     if (shouldStart) {
+      timestamp.current = Date.now();
       setStatus(Status.prework);
       setTimeLeft(addSeconds(new Date(0), PREP_TIME_SECONDS));
       setRoundsLeft(rounds);
@@ -48,50 +52,53 @@ export function useWorkoutTimer() {
     const startWasInitiated = status !== Status.stopped && interval === null;
     if (startWasInitiated) {
       interval = setInterval(function countDown() {
-        const secondsLeft =
-          getMinutes(timeLeftRef.current) * SECONDS_PER_MINUTE +
-          getSeconds(timeLeftRef.current);
-        const shouldCountDown = secondsLeft > 1;
-        if (shouldCountDown) {
-          const shouldBeepFromTwoDown = secondsLeft <= 4;
-          if (shouldBeepFromTwoDown) {
-            const shouldGetReady =
-              status === Status.prework || status === Status.break;
-            if (shouldGetReady) {
-              beepBreak.load();
-              beepBreak.play();
+        if (hasOneSecondElapsed(timestamp.current)) {
+          timestamp.current = Date.now();
+          const secondsLeft =
+            getMinutes(timeLeftRef.current) * SECONDS_PER_MINUTE +
+            getSeconds(timeLeftRef.current);
+          const shouldCountDown = secondsLeft > 1;
+          if (shouldCountDown) {
+            const shouldBeepFromTwoDown = secondsLeft <= 4;
+            if (shouldBeepFromTwoDown) {
+              const shouldGetReady =
+                status === Status.prework || status === Status.break;
+              if (shouldGetReady) {
+                beepBreak.load();
+                beepBreak.play();
+              } else {
+                beepWork.load();
+                beepWork.play();
+              }
+            }
+            setTimeLeft(previousTimeLeft => subSeconds(previousTimeLeft, 1));
+          } else {
+            const shouldSwitchToWork =
+              (statusRef.current === Status.prework ||
+                statusRef.current === Status.break) &&
+              roundsLeftRef.current > 0 &&
+              workInterval.valueOf() !== 0;
+            const shouldSwitchToRest =
+              statusRef.current === Status.work && roundsLeftRef.current > 0;
+
+            if (shouldSwitchToWork) {
+              beepBreakLong.load();
+              beepBreakLong.play();
+              setStatus(Status.work);
+              setTimeLeft(workInterval);
+              setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
+            } else if (shouldSwitchToRest) {
+              setStatus(Status.break);
+              setTimeLeft(breakInterval);
+              beepWorkLong.load();
+              beepWorkLong.play();
             } else {
-              beepWork.load();
-              beepWork.play();
+              setStatus(Status.stopped);
+              clearInterval(interval);
             }
           }
-          setTimeLeft(previousTimeLeft => subSeconds(previousTimeLeft, 1));
-        } else {
-          const shouldSwitchToWork =
-            (statusRef.current === Status.prework ||
-              statusRef.current === Status.break) &&
-            roundsLeftRef.current > 0 &&
-            workInterval.valueOf() !== 0;
-          const shouldSwitchToRest =
-            statusRef.current === Status.work && roundsLeftRef.current > 0;
-
-          if (shouldSwitchToWork) {
-            beepBreakLong.load();
-            beepBreakLong.play();
-            setStatus(Status.work);
-            setTimeLeft(workInterval);
-            setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
-          } else if (shouldSwitchToRest) {
-            setStatus(Status.break);
-            setTimeLeft(breakInterval);
-            beepWorkLong.load();
-            beepWorkLong.play();
-          } else {
-            setStatus(Status.stopped);
-            clearInterval(interval);
-          }
         }
-      }, 1000);
+      }, 100);
     }
     return () => {
       clearInterval(interval);

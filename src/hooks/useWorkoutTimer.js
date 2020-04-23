@@ -64,10 +64,8 @@ export function useWorkoutTimer() {
               const shouldGetReady =
                 status === Status.prework || status === Status.break;
               if (shouldGetReady) {
-                beepBreak.load();
                 beepBreak.play();
               } else {
-                beepWork.load();
                 beepWork.play();
               }
             }
@@ -82,7 +80,6 @@ export function useWorkoutTimer() {
               statusRef.current === Status.work && roundsLeftRef.current > 0;
 
             if (shouldSwitchToWork) {
-              beepBreakLong.load();
               beepBreakLong.play();
               setStatus(Status.work);
               setTimeLeft(workInterval);
@@ -90,7 +87,6 @@ export function useWorkoutTimer() {
             } else if (shouldSwitchToRest) {
               setStatus(Status.break);
               setTimeLeft(breakInterval);
-              beepWorkLong.load();
               beepWorkLong.play();
             } else {
               setStatus(Status.stopped);
@@ -98,7 +94,7 @@ export function useWorkoutTimer() {
             }
           }
         }
-      }, 100);
+      }, 5);
     }
     return () => {
       clearInterval(interval);

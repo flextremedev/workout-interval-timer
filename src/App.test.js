@@ -6,21 +6,16 @@ import { makeAdvanceTime } from './utils/test-utils/makeAdvanceTime';
 import { makeAdvanceDateNowBy } from './utils/test-utils/makeAdvanceDateNowBy';
 jest.useFakeTimers();
 const startDate = 1587574443099;
-const load = jest.fn();
 const play = jest.fn();
 
-HTMLMediaElement.prototype.load = load;
 HTMLMediaElement.prototype.play = play;
 describe('App', () => {
-  let load;
   let play;
   afterEach(() => {
     cleanup();
   });
   beforeEach(() => {
-    load = jest.fn();
     play = jest.fn();
-    HTMLMediaElement.prototype.load = load;
     HTMLMediaElement.prototype.play = play;
   });
   it('should run intervals correctly', () => {
@@ -104,7 +99,6 @@ describe('App', () => {
     for (let i = Number(workSecondsValue); i > 0; i--) {
       workSecondsCountDown.next(timeLeft.value);
     }
-    expect(load).toHaveBeenCalledTimes(15);
     expect(play).toHaveBeenCalledTimes(15);
   });
   it('should stop interval when clicking button again', () => {
@@ -161,7 +155,6 @@ describe('App', () => {
       prepSecondsCountDown.next(timeLeft.value);
     }
     fireEvent.click(startButton);
-    expect(load).toHaveBeenCalledTimes(2);
     expect(play).toHaveBeenCalledTimes(2);
   });
 });

@@ -2,7 +2,7 @@
   "name": "workout-interval-timer",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://https://workout-interval-timer.netlify.com/",
+  "homepage": "https://workout-interval-timer.netlify.com",
   "dependencies": {
     "@testing-library/react": "^9.1.4",
     "date-fns": "^2.1.0",

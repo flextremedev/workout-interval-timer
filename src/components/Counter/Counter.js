@@ -2,17 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Counter.module.css';
 import { DurationInput } from '../DurationInput/DurationInput';
-import { Status } from '../../model/Status';
-const evaluateStatus = status => {
-  if (status === Status.prework) {
-    return 'PREP';
-  }
-  if (status === Status.break) {
-    return 'REST';
-  }
-  return 'WORK';
-};
-export function Counter({ timeLeft, status, roundsLeft, rounds }) {
+import { StatusDisplay } from '../../model/StatusDisplay';
+
+export function Counter({ text, timeLeft, roundsLeft, rounds }) {
   return (
     <div className={styles.container}>
       <div className={styles.round}>
@@ -32,16 +24,20 @@ export function Counter({ timeLeft, status, roundsLeft, rounds }) {
       <div className={styles.statusContainer}>
         <div className={`${styles.progress} ${styles.progressBottom}`}></div>
         <span className={`${styles.status}`} data-testid={'status'}>
-          {evaluateStatus(status)}
+          {text}
         </span>
       </div>
     </div>
   );
 }
 Counter.propTypes = {
+  text: PropTypes.oneOf([
+    StatusDisplay.BREAK,
+    StatusDisplay.PREWORK,
+    StatusDisplay.WORK,
+  ]),
   timeLeft: PropTypes.instanceOf(Date),
   dataTestId: PropTypes.string,
-  status: PropTypes.oneOf([Status.work, Status.prework, Status.break]),
   roundsLeft: PropTypes.number,
   rounds: PropTypes.number,
 };

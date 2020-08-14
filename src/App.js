@@ -5,6 +5,7 @@ import { useWorkoutTimer } from './hooks/useWorkoutTimer';
 import { Status } from './model/Status';
 import { FormFields } from './components/FormFields/FormFields';
 import { Counter } from './components/Counter/Counter';
+import { evaluateStatus } from './utils/evaluateStatus';
 
 function App() {
   const {
@@ -22,7 +23,7 @@ function App() {
   return (
     <div className={styles.content}>
       <div className={styles.centerArea}>
-        {status === Status.stopped ? (
+        {status === Status.STOPPED ? (
           <FormFields
             rounds={rounds}
             handleRoundsChange={handleRoundsChange}
@@ -34,14 +35,14 @@ function App() {
         ) : (
           <Counter
             timeLeft={timeLeft}
-            status={status}
+            text={evaluateStatus(status)}
             roundsLeft={roundsLeft}
             rounds={rounds}
           />
         )}
       </div>
       <Button onClick={start} data-testid={'start-button'}>
-        {status === Status.stopped ? 'Start' : 'Stop'}
+        {status === Status.STOPPED ? 'Start' : 'Stop'}
       </Button>
     </div>
   );

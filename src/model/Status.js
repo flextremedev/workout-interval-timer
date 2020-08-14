@@ -1,6 +1,6 @@
 export const Status = {
-  stopped: 'stopped',
-  prework: 'prework',
-  work: 'work',
-  break: 'break',
+  STOPPED: 'STOPPED',
+  PREWORK: 'PREWORK',
+  WORK: 'WORK',
+  BREAK: 'BREAK',
 };

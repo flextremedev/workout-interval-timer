@@ -67,11 +67,11 @@ export function useWorkoutTimer() {
     const shouldStart = status.value === Status.STOPPED;
     if (shouldStart) {
       timestamp.current = Date.now();
-      send(statusEvents.START);
+      send({ type: statusEvents.START });
       setTimeLeft(addSeconds(new Date(0), PREP_TIME_SECONDS));
       setRoundsLeft(rounds);
     } else {
-      send(statusEvents.STOP);
+      send({ type: statusEvents.STOP });
     }
   }, [rounds, status, send]);
   React.useEffect(() => {
@@ -110,15 +110,15 @@ export function useWorkoutTimer() {
 
             if (shouldSwitchToWork) {
               beepBreakLong.play();
-              send(statusEvents.WORK);
+              send({ type: statusEvents.WORK });
               setTimeLeft(workInterval);
               setRoundsLeft(prevRoundsLeft => prevRoundsLeft - 1);
             } else if (shouldSwitchToRest) {
-              send(statusEvents.BREAK);
+              send({ type: statusEvents.BREAK });
               setTimeLeft(breakInterval);
               beepWorkLong.play();
             } else {
-              send(statusEvents.STOP);
+              send({ type: statusEvents.STOP });
               clearInterval(interval);
             }
           }

@@ -19,11 +19,11 @@
     "test:coverage": "yarn test --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
     "eject": "react-scripts eject",
-    "lint:fix": "eslint src/**/*.{js,jsx} --fix"
+    "lint:fix": "eslint src/**/*.js --fix"
   },
   "lint-staged": {
-    "src/**/*.{js, jsx}": [
-      "yarn run --silent lint:fix",
+    "src/**/*.js": [
+      "yarn run --silent eslint",
       "git add"
     ]
   },

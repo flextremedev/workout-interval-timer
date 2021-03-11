@@ -75,11 +75,12 @@ export function useWorkoutTimer() {
     }
   }, [rounds, status, send]);
   React.useEffect(() => {
-    let interval = null;
+    let intervalWorker = null;
     const startWasInitiated =
-      status.value !== Status.STOPPED && interval === null;
+      status.value !== Status.STOPPED && intervalWorker === null;
     if (startWasInitiated) {
-      interval = setInterval(function countDown() {
+      intervalWorker = new Worker('intervalWorker.js');
+      intervalWorker.addEventListener('message', function countDown() {
         if (hasOneSecondElapsed(timestamp.current)) {
           timestamp.current = Date.now();
           const secondsLeft =
@@ -119,14 +120,16 @@ export function useWorkoutTimer() {
               beepWorkLong.play();
             } else {
               send({ type: statusEvents.STOP });
-              clearInterval(interval);
             }
           }
         }
-      }, 5);
+      });
     }
     return () => {
-      clearInterval(interval);
+      if (intervalWorker) {
+        intervalWorker.terminate();
+        intervalWorker = null;
+      }
     };
   }, [
     breakInterval,

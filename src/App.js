@@ -9,6 +9,8 @@ import { evaluateStatus } from './utils/evaluateStatus';
 import { format } from 'date-fns';
 import { Helmet } from 'react-helmet';
 
+const DEFAULT_DOCUMENT_TITLE = 'HI!';
+
 function App() {
   const {
     rounds,
@@ -24,12 +26,13 @@ function App() {
   } = useWorkoutTimer();
   return (
     <>
-      {status !== Status.STOPPED ? (
-        <Helmet defer={false}>
-          <title>{format(timeLeft, 'mm:ss')}</title>
-        </Helmet>
-      ) : null}
-
+      <Helmet defer={false}>
+        <title>
+          {status !== Status.STOPPED
+            ? format(timeLeft, 'mm:ss')
+            : DEFAULT_DOCUMENT_TITLE}
+        </title>
+      </Helmet>
       <div className={styles.content}>
         <div className={styles.centerArea}>
           {status === Status.STOPPED ? (

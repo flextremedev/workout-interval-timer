@@ -4,6 +4,8 @@ import { render, fireEvent, act, cleanup } from '@testing-library/react';
 import { getSecondsCountDownExpect } from './utils/test-utils/getSecondsCountDownExpect';
 import { makeAdvanceTime } from './utils/test-utils/makeAdvanceTime';
 import { makeAdvanceDateNowBy } from './utils/test-utils/makeAdvanceDateNowBy';
+import { MockWorker } from './__mocks__/Worker';
+
 jest.useFakeTimers();
 const startDate = 1587574443099;
 const play = jest.fn();
@@ -13,10 +15,12 @@ describe('App', () => {
   let play;
   afterEach(() => {
     cleanup();
+    window.Worker = undefined;
   });
   beforeEach(() => {
     play = jest.fn();
     HTMLMediaElement.prototype.play = play;
+    window.Worker = MockWorker;
   });
   it('should run intervals correctly', () => {
     const { getByTestId } = render(<App />);

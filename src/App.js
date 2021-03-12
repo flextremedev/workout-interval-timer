@@ -9,7 +9,7 @@ import { evaluateStatus } from './utils/evaluateStatus';
 import { format } from 'date-fns';
 import { Helmet } from 'react-helmet';
 
-const DEFAULT_DOCUMENT_TITLE = 'HI!';
+const DEFAULT_DOCUMENT_TITLE = 'Interval timer';
 
 function App() {
   const {

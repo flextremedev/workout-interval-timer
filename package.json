@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://workout-interval-timer.netlify.com",
   "dependencies": {
-    "@testing-library/react": "^9.1.4",
+    "@testing-library/react": "^11.2.5",
     "@xstate/react": "^0.8.1",
     "date-fns": "^2.1.0",
     "react": "^16.9.0",

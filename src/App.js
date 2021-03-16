@@ -1,44 +1,66 @@
 import React from 'react';
 import { Button } from './components/Button/Button';
 import styles from './App.module.css';
-import { useWorkoutTimer } from './hooks/useWorkoutTimer';
 import { Status } from './model/Status';
 import { FormFields } from './components/FormFields/FormFields';
 import { Counter } from './components/Counter/Counter';
 import { evaluateStatus } from './utils/evaluateStatus';
 import { format } from 'date-fns';
 import { Helmet } from 'react-helmet';
+import { useMachine } from '@xstate/react';
+import { timerMachine, timerEvents } from './machines/timerMachine';
 
 const DEFAULT_DOCUMENT_TITLE = 'Interval timer';
-
 function App() {
+  const [state, send] = useMachine(timerMachine);
+
+  const startTimer = () => {
+    state.value === Status.STOPPED
+      ? send(timerEvents.START)
+      : send(timerEvents.STOP);
+  };
+
+  const setRounds = rounds => {
+    send({ type: timerEvents.SET_ROUNDS, rounds: Number(rounds) });
+  };
+
+  const setWorkInterval = workInterval => {
+    send({
+      type: timerEvents.SET_WORK_INTERVAL,
+      workInterval,
+    });
+  };
+
+  const setBreakInterval = breakInterval => {
+    send({
+      type: timerEvents.SET_BREAK_INTERVAL,
+      breakInterval,
+    });
+  };
+
   const {
-    rounds,
-    handleRoundsChange,
-    workInterval,
-    setWorkInterval,
     breakInterval,
-    setBreakInterval,
-    start,
-    timeLeft,
-    status,
+    rounds,
     roundsLeft,
-  } = useWorkoutTimer();
+    timeLeft,
+    workInterval,
+  } = state.context;
+
   return (
     <>
       <Helmet defer={false}>
         <title>
-          {status !== Status.STOPPED
-            ? format(timeLeft, 'mm:ss')
+          {state.value !== Status.STOPPED
+            ? format(state.context.timeLeft, 'mm:ss')
             : DEFAULT_DOCUMENT_TITLE}
         </title>
       </Helmet>
       <div className={styles.content}>
         <div className={styles.centerArea}>
-          {status === Status.STOPPED ? (
+          {state.value === Status.STOPPED ? (
             <FormFields
               rounds={rounds}
-              handleRoundsChange={handleRoundsChange}
+              handleRoundsChange={setRounds}
               workInterval={workInterval}
               setWorkInterval={setWorkInterval}
               breakInterval={breakInterval}
@@ -47,14 +69,14 @@ function App() {
           ) : (
             <Counter
               timeLeft={timeLeft}
-              text={evaluateStatus(status)}
+              text={evaluateStatus(state.value)}
               roundsLeft={roundsLeft}
               rounds={rounds}
             />
           )}
         </div>
-        <Button onClick={start} data-testid={'start-button'}>
-          {status === Status.STOPPED ? 'Start' : 'Stop'}
+        <Button onClick={startTimer} data-testid={'start-button'}>
+          {state.value === Status.STOPPED ? 'Start' : 'Stop'}
         </Button>
       </div>
     </>

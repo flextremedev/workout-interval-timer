@@ -11,6 +11,7 @@ const startDate = 1587574443099;
 const play = jest.fn();
 
 HTMLMediaElement.prototype.play = play;
+HTMLMediaElement.prototype.pause = jest.fn();
 describe('App', () => {
   let play;
   afterEach(() => {

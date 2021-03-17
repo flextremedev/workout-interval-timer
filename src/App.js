@@ -8,10 +8,18 @@ import { evaluateStatus } from './utils/evaluateStatus';
 import { format } from 'date-fns';
 import { Helmet } from 'react-helmet';
 import { useMachine } from '@xstate/react';
-import { timerMachine, timerEvents } from './machines/timerMachine';
+import { timerEvents, buildTimerMachine } from './machines/timerMachine';
+import { useBeep } from './hooks/useBeep';
 
 const DEFAULT_DOCUMENT_TITLE = 'Interval timer';
 function App() {
+  const { beepBreak, beepBreakLong, beepWork, beepWorkLong } = useBeep();
+  const timerMachine = buildTimerMachine({
+    beepBreak,
+    beepBreakLong,
+    beepWork,
+    beepWorkLong,
+  });
   const [state, send] = useMachine(timerMachine);
 
   const startTimer = () => {

@@ -1,9 +1,18 @@
 export class MockWorker {
   interval = null;
-  addEventListener = jest.fn((event, callback) => {
-    this.interval = setInterval(callback, 50);
-  });
-  terminate = jest.fn(() => {
-    clearInterval(this.interval);
-  });
+  callback = () => {};
+  addEventListener = (_event, callback) => {
+    this.callback = callback;
+  };
+
+  postMessage = e => {
+    if (e === 'START') {
+      this.interval = setInterval(() => {
+        this.callback({ data: 'TICK' });
+      }, 1000);
+    }
+    if (e === 'STOP') {
+      clearInterval(this.interval);
+    }
+  };
 }

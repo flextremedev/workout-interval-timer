@@ -1,4 +1,4 @@
-import { assign, createMachine } from 'xstate';
+import { assign, createMachine, send } from 'xstate';
 import { hasOneSecondElapsed } from '../utils/hasOneSecondElapsed';
 import { Status } from '../model/Status';
 import { getMinutes, getSeconds, subSeconds } from 'date-fns';
@@ -14,26 +14,15 @@ export const timerEvents = {
 };
 const SECONDS_PER_MINUTE = 60;
 
-const buildCountDown = ({ onCountEnd, countEndSeconds = 3 }) =>
-  assign(ctx => {
-    if (hasOneSecondElapsed(ctx.timestamp)) {
-      const secondsLeft =
-        getMinutes(ctx.timeLeft) * SECONDS_PER_MINUTE +
-        getSeconds(ctx.timeLeft);
-      const actualSecondsLeft = secondsLeft - 1;
-      if (actualSecondsLeft <= countEndSeconds && actualSecondsLeft > 0) {
-        onCountEnd();
-      }
-      return {
-        timestamp: Date.now(),
-        timeLeft: subSeconds(ctx.timeLeft, 1),
-      };
-    }
-    return {
-      timestamp: ctx.timestamp,
-      timeLeft: ctx.timeLeft,
-    };
-  });
+const countDown = ctx => {
+  return {
+    timestamp: Date.now(),
+    timeLeft: subSeconds(ctx.timeLeft, 1),
+  };
+};
+const shouldCountDown = ctx => {
+  return getSeconds(ctx.timeLeft) > 0 && hasOneSecondElapsed(ctx.timestamp);
+};
 
 export const buildTimerMachine = ({
   beepBreak,
@@ -64,7 +53,9 @@ export const buildTimerMachine = ({
                 timestamp: () => {
                   return Date.now();
                 },
-                roundsLeft: ctx => ctx.rounds,
+                roundsLeft: ctx => {
+                  return ctx.rounds;
+                },
               }),
             },
             [timerEvents.SET_ROUNDS]: {
@@ -89,100 +80,79 @@ export const buildTimerMachine = ({
               }),
             },
           },
+          entry: send(timerEvents.STOP),
         },
         [Status.PREWORK]: {
           on: {
             [timerEvents.STOP]: Status.STOPPED,
-            [timerEvents.TICK]: {
-              actions: buildCountDown({
-                onCountEnd: () => {
-                  beepBreak.pause();
-                  beepBreak.currentTime = 0;
-                  beepBreak.play();
-                },
-              }),
-              cond: 'shouldCountDown',
-            },
-            '': {
-              target: Status.WORK,
-              cond: 'shouldTransition',
-            },
-          },
-          entry: assign({
-            timeLeft: ctx => {
-              return ctx.prepareTime;
-            },
-          }),
-          invoke: {
-            src: 'ticker',
-          },
-        },
-        [Status.WORK]: {
-          on: {
-            [timerEvents.STOP]: Status.STOPPED,
-            [timerEvents.TICK]: {
-              actions: buildCountDown({
-                onCountEnd: () => {
-                  beepWork.pause();
-                  beepWork.currentTime = 0;
-                  beepWork.play();
-                },
-              }),
-              cond: 'shouldCountDown',
-            },
-            '': [
+            [timerEvents.TICK]: [
               {
-                target: Status.BREAK,
-                cond: 'shouldTransition',
+                actions: 'countDownBreakLast',
+                cond: 'shouldCountDownLast',
               },
+              {
+                actions: 'countDown',
+                cond: 'shouldCountDown',
+              },
+            ],
+            '': [
               {
                 target: Status.STOPPED,
                 cond: 'isDone',
               },
+              {
+                target: Status.WORK,
+                cond: 'shouldTransition',
+              },
             ],
           },
-          entry: [
-            assign({
-              timeLeft: ctx => {
-                return ctx.workInterval;
+          entry: 'initPrepare',
+        },
+        [Status.WORK]: {
+          on: {
+            [timerEvents.STOP]: Status.STOPPED,
+            [timerEvents.TICK]: [
+              {
+                actions: 'countDownWorkLast',
+                cond: 'shouldCountDownLast',
               },
-              roundsLeft: ctx => ctx.roundsLeft - 1,
-            }),
-            'beepWorkLong',
-          ],
-          invoke: {
-            src: 'ticker',
+              {
+                actions: 'countDown',
+                cond: 'shouldCountDown',
+              },
+            ],
+            '': [
+              {
+                target: Status.STOPPED,
+                cond: 'isDone',
+              },
+              {
+                target: Status.BREAK,
+                cond: 'shouldTransition',
+              },
+            ],
           },
+          entry: ['initWork', 'beepWorkLong'],
         },
         [Status.BREAK]: {
           on: {
             [timerEvents.STOP]: Status.STOPPED,
-            [timerEvents.TICK]: {
-              actions: buildCountDown({
-                onCountEnd: () => {
-                  beepBreak.pause();
-                  beepBreak.currentTime = 0;
-                  beepBreak.play();
-                },
-              }),
-              cond: 'shouldCountDown',
-            },
+            [timerEvents.TICK]: [
+              {
+                actions: 'countDownBreakLast',
+                cond: 'shouldCountDownLast',
+              },
+              {
+                actions: 'countDown',
+                cond: 'shouldCountDown',
+              },
+            ],
             '': {
               target: Status.WORK,
               cond: 'shouldTransition',
             },
           },
-          entry: [
-            assign({
-              timeLeft: ctx => {
-                return ctx.breakInterval;
-              },
-            }),
-            'beepBreakLong',
-          ],
-          invoke: {
-            src: 'ticker',
-          },
+          entry: ['initBreak', 'beepBreakLong'],
         },
       },
     },
@@ -194,26 +164,61 @@ export const buildTimerMachine = ({
         beepBreakLong: () => {
           beepBreakLong.play();
         },
+        countDown: assign(countDown),
+        countDownWorkLast: assign(ctx => {
+          beepWork.pause();
+          beepWork.currentTime = 0;
+          beepWork.play();
+          return countDown(ctx);
+        }),
+        countDownBreakLast: assign(ctx => {
+          beepBreak.pause();
+          beepBreak.currentTime = 0;
+          beepBreak.play();
+          return countDown(ctx);
+        }),
+        initBreak: assign({
+          timeLeft: ctx => {
+            return ctx.breakInterval;
+          },
+        }),
+        initPrepare: assign({
+          timeLeft: ctx => {
+            return ctx.prepareTime;
+          },
+        }),
+        initWork: assign({
+          timeLeft: ctx => {
+            return ctx.workInterval;
+          },
+          roundsLeft: ctx => {
+            return ctx.roundsLeft - 1;
+          },
+        }),
       },
       guards: {
+        shouldCountDownLast: ctx => {
+          const secondsLeft =
+            getMinutes(ctx.timeLeft) * SECONDS_PER_MINUTE +
+            getSeconds(ctx.timeLeft);
+          const actualSecondsLeft = secondsLeft - 1;
+          return (
+            shouldCountDown(ctx) &&
+            actualSecondsLeft <= 3 &&
+            actualSecondsLeft > 0
+          );
+        },
         shouldTransition: ctx => {
           return getSeconds(ctx.timeLeft) <= 0 && ctx.roundsLeft > 0;
         },
-        shouldCountDown: ctx => {
-          return getSeconds(ctx.timeLeft) > 0;
-        },
+        shouldCountDown,
         isDone: ctx => {
-          return getSeconds(ctx.timeLeft) <= 0 && ctx.roundsLeft <= 0;
-        },
-      },
-      services: {
-        ticker: ctx => sendBack => {
-          const interval = setInterval(() => {
-            sendBack(timerEvents.TICK);
-          }, ctx.interval);
-          return () => {
-            clearInterval(interval);
-          };
+          return (
+            getSeconds(ctx.timeLeft) <= 0 &&
+            (ctx.roundsLeft <= 0 ||
+              getSeconds(ctx.workInterval) === 0 ||
+              getSeconds(ctx.breakInterval) === 0)
+          );
         },
       },
     }

@@ -12,20 +12,40 @@ import { timerEvents, buildTimerMachine } from './machines/timerMachine';
 import { useBeep } from './hooks/useBeep';
 
 const DEFAULT_DOCUMENT_TITLE = 'Interval timer';
+
 function App() {
+  const intervalWorkerRef = React.useRef(new Worker('intervalWorker.js'));
   const { beepBreak, beepBreakLong, beepWork, beepWorkLong } = useBeep();
+
   const timerMachine = buildTimerMachine({
     beepBreak,
     beepBreakLong,
     beepWork,
     beepWorkLong,
   });
-  const [state, send] = useMachine(timerMachine);
+  const [state, send, service] = useMachine(timerMachine);
 
-  const startTimer = () => {
-    state.value === Status.STOPPED
-      ? send(timerEvents.START)
-      : send(timerEvents.STOP);
+  React.useEffect(() => {
+    intervalWorkerRef.current.addEventListener('message', () => {
+      service.send({ type: timerEvents.TICK });
+    });
+
+    service.subscribe((_state, event) => {
+      if (
+        event &&
+        (event.type === timerEvents.START || event.type === timerEvents.STOP)
+      ) {
+        intervalWorkerRef.current.postMessage(event.type);
+      }
+    });
+  }, [service]);
+
+  const toggleTimer = () => {
+    if (state.value === Status.STOPPED) {
+      send(timerEvents.START);
+    } else {
+      send(timerEvents.STOP);
+    }
   };
 
   const setRounds = rounds => {
@@ -83,7 +103,7 @@ function App() {
             />
           )}
         </div>
-        <Button onClick={startTimer} data-testid={'start-button'}>
+        <Button onClick={toggleTimer} data-testid={'start-button'}>
           {state.value === Status.STOPPED ? 'Start' : 'Stop'}
         </Button>
       </div>

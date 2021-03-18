@@ -12,6 +12,7 @@ const play = jest.fn();
 
 HTMLMediaElement.prototype.play = play;
 HTMLMediaElement.prototype.pause = jest.fn();
+
 describe('App', () => {
   let play;
   afterEach(() => {
@@ -106,6 +107,7 @@ describe('App', () => {
     }
     expect(play).toHaveBeenCalledTimes(15);
   });
+
   it('should stop interval when clicking button again', () => {
     const { getByTestId } = render(<App />);
     const roundInput = getByTestId('rounds-input');

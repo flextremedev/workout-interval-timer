@@ -1,6 +1,6 @@
 import { assign, createMachine, send } from 'xstate';
 import { hasOneSecondElapsed } from '../utils/hasOneSecondElapsed';
-import { Status } from '../model/Status';
+import { TimerState } from '../model/TimerState';
 import { getMinutes, getSeconds, subSeconds } from 'date-fns';
 export const timerEvents = {
   START: 'START',
@@ -43,12 +43,12 @@ export const buildTimerMachine = ({
         timestamp: Date.now(),
         interval: 50,
       },
-      initial: Status.STOPPED,
+      initial: TimerState.STOPPED,
       states: {
-        [Status.STOPPED]: {
+        [TimerState.STOPPED]: {
           on: {
             [timerEvents.START]: {
-              target: Status.PREWORK,
+              target: TimerState.PREWORK,
               actions: assign({
                 timestamp: () => {
                   return Date.now();
@@ -82,9 +82,9 @@ export const buildTimerMachine = ({
           },
           entry: send(timerEvents.STOP),
         },
-        [Status.PREWORK]: {
+        [TimerState.PREWORK]: {
           on: {
-            [timerEvents.STOP]: Status.STOPPED,
+            [timerEvents.STOP]: TimerState.STOPPED,
             [timerEvents.TICK]: [
               {
                 actions: 'countDownBreakLast',
@@ -97,20 +97,20 @@ export const buildTimerMachine = ({
             ],
             '': [
               {
-                target: Status.STOPPED,
+                target: TimerState.STOPPED,
                 cond: 'isDone',
               },
               {
-                target: Status.WORK,
+                target: TimerState.WORK,
                 cond: 'shouldTransition',
               },
             ],
           },
           entry: 'initPrepare',
         },
-        [Status.WORK]: {
+        [TimerState.WORK]: {
           on: {
-            [timerEvents.STOP]: Status.STOPPED,
+            [timerEvents.STOP]: TimerState.STOPPED,
             [timerEvents.TICK]: [
               {
                 actions: 'countDownWorkLast',
@@ -123,20 +123,20 @@ export const buildTimerMachine = ({
             ],
             '': [
               {
-                target: Status.STOPPED,
+                target: TimerState.STOPPED,
                 cond: 'isDone',
               },
               {
-                target: Status.BREAK,
+                target: TimerState.BREAK,
                 cond: 'shouldTransition',
               },
             ],
           },
           entry: ['initWork', 'beepWorkLong'],
         },
-        [Status.BREAK]: {
+        [TimerState.BREAK]: {
           on: {
-            [timerEvents.STOP]: Status.STOPPED,
+            [timerEvents.STOP]: TimerState.STOPPED,
             [timerEvents.TICK]: [
               {
                 actions: 'countDownBreakLast',
@@ -148,7 +148,7 @@ export const buildTimerMachine = ({
               },
             ],
             '': {
-              target: Status.WORK,
+              target: TimerState.WORK,
               cond: 'shouldTransition',
             },
           },

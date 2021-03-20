@@ -4,7 +4,7 @@ import styles from './App.module.css';
 import { TimerState } from './model/TimerState';
 import { FormFields } from './components/FormFields/FormFields';
 import { Counter } from './components/Counter/Counter';
-import { evaluateStatus } from './utils/evaluateStatus';
+import { getStateLabel } from './utils/getStateLabel';
 import { format } from 'date-fns';
 import { Helmet } from 'react-helmet';
 import { useMachine } from '@xstate/react';
@@ -97,7 +97,7 @@ function App() {
           ) : (
             <Counter
               timeLeft={timeLeft}
-              text={evaluateStatus(state.value)}
+              text={getStateLabel(state.value)}
               roundsLeft={roundsLeft}
               rounds={rounds}
             />

@@ -1,4 +1,4 @@
-export const Status = {
+export const TimerState = {
   STOPPED: 'STOPPED',
   PREWORK: 'PREWORK',
   WORK: 'WORK',

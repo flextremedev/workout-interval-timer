@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from './components/Button/Button';
 import styles from './App.module.css';
-import { Status } from './model/Status';
+import { TimerState } from './model/TimerState';
 import { FormFields } from './components/FormFields/FormFields';
 import { Counter } from './components/Counter/Counter';
 import { evaluateStatus } from './utils/evaluateStatus';
@@ -41,7 +41,7 @@ function App() {
   }, [service]);
 
   const toggleTimer = () => {
-    if (state.value === Status.STOPPED) {
+    if (state.value === TimerState.STOPPED) {
       send(timerEvents.START);
     } else {
       send(timerEvents.STOP);
@@ -78,14 +78,14 @@ function App() {
     <>
       <Helmet defer={false}>
         <title>
-          {state.value !== Status.STOPPED
+          {state.value !== TimerState.STOPPED
             ? format(state.context.timeLeft, 'mm:ss')
             : DEFAULT_DOCUMENT_TITLE}
         </title>
       </Helmet>
       <div className={styles.content}>
         <div className={styles.centerArea}>
-          {state.value === Status.STOPPED ? (
+          {state.value === TimerState.STOPPED ? (
             <FormFields
               rounds={rounds}
               handleRoundsChange={setRounds}
@@ -104,7 +104,7 @@ function App() {
           )}
         </div>
         <Button onClick={toggleTimer} data-testid={'start-button'}>
-          {state.value === Status.STOPPED ? 'Start' : 'Stop'}
+          {state.value === TimerState.STOPPED ? 'Start' : 'Stop'}
         </Button>
       </div>
     </>

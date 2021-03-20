@@ -12,9 +12,7 @@ import { timerEvents, buildTimerMachine } from './machines/timerMachine';
 import { useBeep } from './hooks/useBeep';
 
 const DEFAULT_DOCUMENT_TITLE = 'Interval timer';
-
 function App() {
-  const intervalWorkerRef = React.useRef(new Worker('intervalWorker.js'));
   const { beepBreak, beepBreakLong, beepWork, beepWorkLong } = useBeep();
 
   const timerMachine = buildTimerMachine({
@@ -26,7 +24,9 @@ function App() {
   const [state, send, service] = useMachine(timerMachine);
 
   React.useEffect(() => {
-    intervalWorkerRef.current.addEventListener('message', () => {
+    const intervalWorker = new Worker('intervalWorker.js');
+
+    intervalWorker.addEventListener('message', () => {
       service.send({ type: timerEvents.TICK });
     });
 
@@ -35,7 +35,7 @@ function App() {
         event &&
         (event.type === timerEvents.START || event.type === timerEvents.STOP)
       ) {
-        intervalWorkerRef.current.postMessage(event.type);
+        intervalWorker.postMessage(event.type);
       }
     });
   }, [service]);

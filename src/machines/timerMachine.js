@@ -2,6 +2,7 @@ import { assign, createMachine, send } from 'xstate';
 import { hasOneSecondElapsed } from '../utils/hasOneSecondElapsed';
 import { TimerState } from '../model/TimerState';
 import { getMinutes, getSeconds, subSeconds } from 'date-fns';
+import { TimerRunningState } from '../model/TimerRunningState.';
 export const timerEvents = {
   START: 'START',
   WORK: 'WORK',
@@ -48,7 +49,7 @@ export const buildTimerMachine = ({
         [TimerState.STOPPED]: {
           on: {
             [timerEvents.START]: {
-              target: TimerState.PREWORK,
+              target: TimerRunningState.PREWORK,
               actions: assign({
                 timestamp: () => {
                   return Date.now();
@@ -82,7 +83,7 @@ export const buildTimerMachine = ({
           },
           entry: send(timerEvents.STOP),
         },
-        [TimerState.PREWORK]: {
+        [TimerRunningState.PREWORK]: {
           on: {
             [timerEvents.STOP]: TimerState.STOPPED,
             [timerEvents.TICK]: [
@@ -101,14 +102,14 @@ export const buildTimerMachine = ({
                 cond: 'isDone',
               },
               {
-                target: TimerState.WORK,
+                target: TimerRunningState.WORK,
                 cond: 'shouldTransition',
               },
             ],
           },
           entry: 'initPrepare',
         },
-        [TimerState.WORK]: {
+        [TimerRunningState.WORK]: {
           on: {
             [timerEvents.STOP]: TimerState.STOPPED,
             [timerEvents.TICK]: [
@@ -127,14 +128,14 @@ export const buildTimerMachine = ({
                 cond: 'isDone',
               },
               {
-                target: TimerState.BREAK,
+                target: TimerRunningState.BREAK,
                 cond: 'shouldTransition',
               },
             ],
           },
           entry: ['initWork', 'beepWorkLong'],
         },
-        [TimerState.BREAK]: {
+        [TimerRunningState.BREAK]: {
           on: {
             [timerEvents.STOP]: TimerState.STOPPED,
             [timerEvents.TICK]: [
@@ -148,7 +149,7 @@ export const buildTimerMachine = ({
               },
             ],
             '': {
-              target: TimerState.WORK,
+              target: TimerRunningState.WORK,
               cond: 'shouldTransition',
             },
           },

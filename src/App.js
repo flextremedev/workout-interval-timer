@@ -78,8 +78,8 @@ function App() {
     <>
       <Helmet defer={false}>
         <title>
-          {state.value !== TimerState.STOPPED
-            ? format(state.context.timeLeft, 'mm:ss')
+          {!state.matches(TimerState.STOPPED)
+            ? format(timeLeft, 'mm:ss')
             : DEFAULT_DOCUMENT_TITLE}
         </title>
       </Helmet>
@@ -104,7 +104,7 @@ function App() {
           )}
         </div>
         <Button onClick={toggleTimer} data-testid={'start-button'}>
-          {state.value === TimerState.STOPPED ? 'Start' : 'Stop'}
+          {state.matches(TimerState.STOPPED) ? 'Start' : 'Stop'}
         </Button>
       </div>
     </>

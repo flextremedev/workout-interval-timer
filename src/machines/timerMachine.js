@@ -33,7 +33,6 @@ export const buildTimerMachine = ({
 }) =>
   createMachine(
     {
-      id: 'timer',
       context: {
         prepareTime: new Date(5000),
         timeLeft: new Date(5000),

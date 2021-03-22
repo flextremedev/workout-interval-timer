@@ -214,10 +214,13 @@ export const buildTimerMachine = ({
         shouldCountDown,
         isDone: ctx => {
           return (
+            getMinutes(ctx.timeLeft) <= 0 &&
             getSeconds(ctx.timeLeft) <= 0 &&
             (ctx.roundsLeft <= 0 ||
-              getSeconds(ctx.workInterval) === 0 ||
-              getSeconds(ctx.breakInterval) === 0)
+              (getMinutes(ctx.workInterval) === 0 &&
+                getSeconds(ctx.workInterval) === 0) ||
+              (getMinutes(ctx.breakInterval) === 0 &&
+                getSeconds(ctx.breakInterval) === 0))
           );
         },
       },

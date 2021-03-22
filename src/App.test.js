@@ -14,13 +14,12 @@ HTMLMediaElement.prototype.play = play;
 HTMLMediaElement.prototype.pause = jest.fn();
 
 describe('App', () => {
-  let play;
   afterEach(() => {
     cleanup();
+    jest.clearAllMocks();
     window.Worker = undefined;
   });
   beforeEach(() => {
-    play = jest.fn();
     HTMLMediaElement.prototype.play = play;
     window.Worker = MockWorker;
   });

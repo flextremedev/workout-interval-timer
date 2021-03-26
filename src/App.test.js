@@ -1,8 +1,6 @@
 import React from 'react';
 import App from './App';
 import { render, fireEvent, act, cleanup } from '@testing-library/react';
-import { getSecondsCountDownExpect } from './utils/test-utils/getSecondsCountDownExpect';
-import { makeAdvanceTime } from './utils/test-utils/makeAdvanceTime';
 import { makeAdvanceDateNowBy } from './utils/test-utils/makeAdvanceDateNowBy';
 import { MockWorker } from './__mocks__/Worker';
 
@@ -13,18 +11,27 @@ const play = jest.fn();
 HTMLMediaElement.prototype.play = play;
 HTMLMediaElement.prototype.pause = jest.fn();
 
+const isLastMinute = minutes => minutes <= 0;
+
+const toTwoDigit = value => (value < 10 ? `0${value}` : String(value));
+
+const ONE_SECOND_IN_MS = 1000;
+
 describe('App', () => {
   afterEach(() => {
     cleanup();
     jest.clearAllMocks();
     window.Worker = undefined;
   });
+
   beforeEach(() => {
     HTMLMediaElement.prototype.play = play;
     window.Worker = MockWorker;
   });
+
   it('should run intervals correctly', () => {
     const { getByTestId } = render(<App />);
+
     const roundInput = getByTestId('rounds-input');
     const workIntervalMinuteInput = getByTestId('work-interval-input-minutes');
     const workIntervalSecondInput = getByTestId('work-interval-input-seconds');
@@ -35,75 +42,128 @@ describe('App', () => {
       'break-interval-input-seconds'
     );
     const startButton = getByTestId('start-button');
+
     expect(workIntervalMinuteInput).toBeTruthy();
     expect(workIntervalSecondInput).toBeTruthy();
     expect(breakIntervalMinuteInput).toBeTruthy();
+
     const prepTime = 5;
-    const workSecondsValue = '5';
-    const breakSecondsValue = '5';
+
+    const workMinutesValue = '1';
+    const workSecondsValue = '1';
+    const workMinutes = Number(workMinutesValue);
+    const workSeconds = Number(workSecondsValue);
+
+    const breakMinutesValue = '1';
+    const breakSecondsValue = '1';
+    const breakMinutes = Number(breakMinutesValue);
+    const breakSeconds = Number(breakSecondsValue);
+
     const roundsValue = '2';
+
     fireEvent.change(roundInput, { target: { value: roundsValue } });
     fireEvent.blur(roundInput);
+
+    fireEvent.change(workIntervalMinuteInput, {
+      target: { value: workMinutesValue },
+    });
     fireEvent.change(workIntervalSecondInput, {
       target: { value: workSecondsValue },
+    });
+
+    fireEvent.change(breakIntervalMinuteInput, {
+      target: { value: breakMinutesValue },
     });
     fireEvent.change(breakIntervalSecondInput, {
       target: { value: breakSecondsValue },
     });
+
     const advanceDateNowBy = makeAdvanceDateNowBy(startDate);
-    const jestAdvanceTimeWithAdditionalCallback = makeAdvanceTime(
-      1000,
-      advanceDateNowBy,
-      millisecondsToAdvance =>
-        act(() => jest.advanceTimersByTime(millisecondsToAdvance))
-    );
+
     fireEvent.click(startButton);
-    const timeLeft = getByTestId('time-left-seconds');
+
+    const timeLeftMinutes = getByTestId('time-left-minutes');
+    const timeLeftSeconds = getByTestId('time-left-seconds');
+
     const round = getByTestId('round');
+
     const status = getByTestId('status');
+
     expect(round.textContent).toBe('0/2');
     expect(status.textContent).toBe('PREP');
-    const prepSecondsCountDown = getSecondsCountDownExpect(
-      prepTime,
-      jestAdvanceTimeWithAdditionalCallback
-    )();
-    // enter generator function
-    prepSecondsCountDown.next();
-    for (let i = prepTime; i > 0; i--) {
-      // count down to zero seconds
-      prepSecondsCountDown.next(timeLeft.value);
+
+    // count down from 00:05
+    for (let prepSeconds = prepTime; prepSeconds > 0; prepSeconds--) {
+      expect(timeLeftSeconds.value).toBe(toTwoDigit(prepSeconds));
+      advanceDateNowBy(ONE_SECOND_IN_MS);
+      act(() => {
+        jest.advanceTimersByTime(ONE_SECOND_IN_MS);
+      });
     }
+
     expect(round.textContent).toBe('1/2');
     expect(status.textContent).toBe('WORK');
-    let workSecondsCountDown = getSecondsCountDownExpect(
-      Number(workSecondsValue),
-      jestAdvanceTimeWithAdditionalCallback
-    )();
-    // enter generator function
-    workSecondsCountDown.next();
-    for (let i = Number(workSecondsValue); i > 0; i--) {
-      // count down to zero seconds
-      workSecondsCountDown.next(timeLeft.value);
+
+    // count down from 01:01
+    for (let minutes = workMinutes; minutes >= 0; minutes--) {
+      const secondsToCountInMinute = minutes >= 1 ? workSeconds : 59;
+      expect(timeLeftMinutes.value).toBe(toTwoDigit(minutes));
+
+      for (
+        let seconds = secondsToCountInMinute;
+        seconds >= (isLastMinute(minutes) ? 1 : 0);
+        seconds--
+      ) {
+        expect(timeLeftSeconds.value).toBe(toTwoDigit(seconds));
+        advanceDateNowBy(ONE_SECOND_IN_MS);
+        act(() => {
+          jest.advanceTimersByTime(ONE_SECOND_IN_MS);
+        });
+      }
     }
+
     expect(status.textContent).toBe('REST');
-    const breakSecondsCountDown = getSecondsCountDownExpect(
-      Number(breakSecondsValue),
-      jestAdvanceTimeWithAdditionalCallback
-    )();
-    breakSecondsCountDown.next();
-    for (let i = Number(breakSecondsValue); i > 0; i--) {
-      breakSecondsCountDown.next(timeLeft.value);
+
+    // 01:01
+    for (let minutes = breakMinutes; minutes >= 0; minutes--) {
+      let secondsToCountInMinute = minutes >= 1 ? breakSeconds : 59;
+
+      expect(timeLeftMinutes.value).toBe(toTwoDigit(minutes));
+
+      for (
+        let seconds = secondsToCountInMinute;
+        seconds >= (isLastMinute(minutes) ? 1 : 0);
+        seconds--
+      ) {
+        expect(timeLeftSeconds.value).toBe(toTwoDigit(seconds));
+        advanceDateNowBy(ONE_SECOND_IN_MS);
+        act(() => {
+          jest.advanceTimersByTime(ONE_SECOND_IN_MS);
+        });
+      }
     }
+
     expect(round.textContent).toBe('2/2');
     expect(status.textContent).toBe('WORK');
-    workSecondsCountDown = getSecondsCountDownExpect(
-      Number(workSecondsValue),
-      jestAdvanceTimeWithAdditionalCallback
-    )();
-    workSecondsCountDown.next();
-    for (let i = Number(workSecondsValue); i > 0; i--) {
-      workSecondsCountDown.next(timeLeft.value);
+
+    // 01:01
+    for (let minutes = workMinutes; minutes >= 0; minutes--) {
+      let secondsToCountInMinute = minutes >= 1 ? workSeconds : 59;
+      expect(timeLeftMinutes.value).toBe(toTwoDigit(minutes));
+
+      for (
+        let seconds = secondsToCountInMinute;
+        seconds >= (isLastMinute(minutes) ? 1 : 0);
+        seconds--
+      ) {
+        expect(timeLeftSeconds.value).toBe(toTwoDigit(seconds));
+        advanceDateNowBy(ONE_SECOND_IN_MS);
+        act(() => {
+          jest.advanceTimersByTime(ONE_SECOND_IN_MS);
+        });
+      }
     }
+
     expect(play).toHaveBeenCalledTimes(15);
   });
 
@@ -119,47 +179,59 @@ describe('App', () => {
       'break-interval-input-seconds'
     );
     const startButton = getByTestId('start-button');
+
     expect(roundInput).toBeTruthy();
     expect(workIntervalMinuteInput).toBeTruthy();
     expect(workIntervalSecondInput).toBeTruthy();
     expect(breakIntervalMinuteInput).toBeTruthy();
     expect(breakIntervalSecondInput).toBeTruthy();
     expect(startButton).toBeTruthy();
+
     const prepTime = 5;
-    const workSecondsValue = '2';
+
+    const workMinutesValue = '1';
+    const workSecondsValue = '1';
+
+    const breakMinutesValue = '1';
     const breakSecondsValue = '1';
+
     const roundsValue = '2';
+
     fireEvent.change(roundInput, { target: { value: roundsValue } });
     fireEvent.blur(roundInput);
+
+    fireEvent.change(workIntervalMinuteInput, {
+      target: { value: workMinutesValue },
+    });
     fireEvent.change(workIntervalSecondInput, {
       target: { value: workSecondsValue },
+    });
+
+    fireEvent.change(breakIntervalMinuteInput, {
+      target: { value: breakMinutesValue },
     });
     fireEvent.change(breakIntervalSecondInput, {
       target: { value: breakSecondsValue },
     });
+
     const advanceDateNowBy = makeAdvanceDateNowBy(startDate);
-    const jestAdvanceTimeWithAdditionalCallback = makeAdvanceTime(
-      1000,
-      advanceDateNowBy,
-      millisecondsToAdvance =>
-        act(() => jest.advanceTimersByTime(millisecondsToAdvance))
-    );
+
     fireEvent.click(startButton);
-    const timeLeft = getByTestId('time-left-seconds');
+    const timeLeftSeconds = getByTestId('time-left-seconds');
     const round = getByTestId('round');
     const status = getByTestId('status');
     expect(round.textContent).toBe('0/2');
     expect(status.textContent).toBe('PREP');
-    const prepSecondsCountDown = getSecondsCountDownExpect(
-      prepTime,
-      jestAdvanceTimeWithAdditionalCallback
-    )();
-    // enter generator function
-    prepSecondsCountDown.next();
-    for (let i = prepTime; i > 2; i--) {
-      // count down to two seconds
-      prepSecondsCountDown.next(timeLeft.value);
+
+    // count down from 00:05 and stop after two seconds
+    for (let prepSeconds = prepTime; prepSeconds > 2; prepSeconds--) {
+      expect(timeLeftSeconds.value).toBe(toTwoDigit(prepSeconds));
+      advanceDateNowBy(ONE_SECOND_IN_MS);
+      act(() => {
+        jest.advanceTimersByTime(ONE_SECOND_IN_MS);
+      });
     }
+
     fireEvent.click(startButton);
     expect(play).toHaveBeenCalledTimes(2);
   });

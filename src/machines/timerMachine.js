@@ -22,7 +22,10 @@ const countDown = ctx => {
   };
 };
 const shouldCountDown = ctx => {
-  return getSeconds(ctx.timeLeft) > 0 && hasOneSecondElapsed(ctx.timestamp);
+  return (
+    (getSeconds(ctx.timeLeft) > 0 || getMinutes(ctx.timeLeft) > 0) &&
+    hasOneSecondElapsed(ctx.timestamp)
+  );
 };
 
 export const buildTimerMachine = ({
@@ -209,7 +212,11 @@ export const buildTimerMachine = ({
           );
         },
         shouldTransition: ctx => {
-          return getSeconds(ctx.timeLeft) <= 0 && ctx.roundsLeft > 0;
+          return (
+            getMinutes(ctx.timeLeft) <= 0 &&
+            getSeconds(ctx.timeLeft) <= 0 &&
+            ctx.roundsLeft > 0
+          );
         },
         shouldCountDown,
         isDone: ctx => {

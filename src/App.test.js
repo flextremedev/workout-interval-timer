@@ -193,4 +193,78 @@ describe('App', () => {
     fireEvent.click(startButton);
     expect(play).toHaveBeenCalledTimes(2);
   });
+
+  it.each`
+    case                   | workMinutesValue | workSecondsValue | breakMinutesValue | breakSecondsValue
+    ${'work input empty'}  | ${'0'}           | ${'0'}           | ${'1'}            | ${'1'}
+    ${'break input empty'} | ${'1'}           | ${'1'}           | ${'0'}            | ${'0'}
+  `(
+    'should not run when $case',
+    ({
+      workMinutesValue,
+      workSecondsValue,
+      breakMinutesValue,
+      breakSecondsValue,
+    }) => {
+      const {
+        breakIntervalMinuteInput,
+        breakIntervalSecondInput,
+        prepTime,
+        roundInput,
+        startButton,
+        workIntervalMinuteInput,
+        workIntervalSecondInput,
+        getByTestId,
+        getByText,
+      } = renderApp();
+
+      expect(roundInput).toBeTruthy();
+      expect(workIntervalMinuteInput).toBeTruthy();
+      expect(workIntervalSecondInput).toBeTruthy();
+      expect(breakIntervalMinuteInput).toBeTruthy();
+      expect(breakIntervalSecondInput).toBeTruthy();
+      expect(startButton).toBeTruthy();
+
+      const roundsValue = '2';
+
+      fireEvent.change(roundInput, { target: { value: roundsValue } });
+      fireEvent.blur(roundInput);
+
+      fireEvent.change(workIntervalMinuteInput, {
+        target: { value: workMinutesValue },
+      });
+      fireEvent.change(workIntervalSecondInput, {
+        target: { value: workSecondsValue },
+      });
+
+      fireEvent.change(breakIntervalMinuteInput, {
+        target: { value: breakMinutesValue },
+      });
+      fireEvent.change(breakIntervalSecondInput, {
+        target: { value: breakSecondsValue },
+      });
+
+      const advanceDateNowBy = makeAdvanceDateNowBy(startDate);
+
+      fireEvent.click(startButton);
+
+      const timeLeftSeconds = getByTestId('time-left-seconds');
+      const round = getByTestId('round');
+      const status = getByTestId('status');
+
+      expect(round.textContent).toBe('0/2');
+      expect(status.textContent).toBe('PREP');
+
+      // count down from 00:05 and stop after two seconds
+      expectCountDownFrom({
+        minutes: 0,
+        seconds: prepTime,
+        advanceDateNowBy,
+        timeLeftMinutes: { value: '00' },
+        timeLeftSeconds,
+      });
+
+      expect(getByText('Start')).toBeTruthy();
+    }
+  );
 });

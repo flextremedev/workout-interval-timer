@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import App from '../../App';
 
 export const renderApp = () => {
-  const { getByTestId } = render(<App />);
+  const { getByTestId, getByText } = render(<App />);
 
   const roundInput = getByTestId('rounds-input');
   const workIntervalMinuteInput = getByTestId('work-interval-input-minutes');
@@ -22,5 +22,6 @@ export const renderApp = () => {
     startButton,
     prepTime,
     getByTestId,
+    getByText,
   };
 };

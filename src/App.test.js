@@ -4,7 +4,6 @@ import { makeAdvanceDateNowBy } from './utils/test-utils/makeAdvanceDateNowBy';
 import { renderApp } from './utils/test-utils/renderApp';
 import { MockWorker } from './__mocks__/Worker';
 
-jest.useFakeTimers();
 const startDate = 1587574443099;
 const play = jest.fn();
 
@@ -21,6 +20,7 @@ describe('App', () => {
   beforeEach(() => {
     HTMLMediaElement.prototype.play = play;
     window.Worker = MockWorker;
+    jest.useFakeTimers('modern');
   });
 
   it('should run intervals correctly', () => {

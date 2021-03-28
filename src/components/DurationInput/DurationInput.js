@@ -15,6 +15,18 @@ export function DurationInput({
   const formattedSeconds = format(value, 'ss');
   const minutesRef = React.useRef(null);
   const secondsRef = React.useRef(null);
+
+  React.useEffect(() => {
+    /* istanbul ignore else */
+    if (secondsRef.current) {
+      secondsRef.current.setSelectionRange(0, 0);
+    }
+    /* istanbul ignore else */
+    if (minutesRef.current) {
+      minutesRef.current.setSelectionRange(0, 0);
+    }
+  }, []);
+
   const handleChange = e => {
     e.stopPropagation();
     const { value: targetValue, name } = e.target;

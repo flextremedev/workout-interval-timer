@@ -1,7 +1,10 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
 import { DurationInput } from './DurationInput';
 describe('DurationInput', () => {
+  afterEach(() => {
+    cleanup();
+  });
   it('should call onChange when minutes changed', () => {
     const handleChange = jest.fn();
     const { getByTestId } = render(

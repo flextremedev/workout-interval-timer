@@ -7,7 +7,8 @@
   ],
   "scripts": {
     "web": "yarn workspace @interval-timer/web run start",
-    "web-lint": "yarn workspace @interval-timer/web run lint:fix"
+    "web-lint": "yarn workspace @interval-timer/web run lint:fix",
+    "web-test-coverage": "yarn workspace @interval-timer/web run test:coverage"
   },
   "devDependencies": {
     "@flextremedev/eslint-config": "^0.1.1",

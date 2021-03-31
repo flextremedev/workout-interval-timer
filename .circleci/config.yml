@@ -13,12 +13,12 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/mongo:3.4.4
 
-    working_directory: ~/repo/packages/web
+    working_directory: ~/repo
 
     steps:
       - checkout
       - run: yarn install
-      - run: yarn test:coverage
+      - run: yarn web-test-coverage
       - codecov/upload:
         file: coverage/*.json
 workflows:

@@ -6,12 +6,13 @@
     "packages/*"
   ],
   "scripts": {
-      "web": "yarn workspace @interval-timer/web run start",
-      "web-lint": "yarn workspace @interval-timer/web run lint:fix"
+    "web": "yarn workspace @interval-timer/web run start",
+    "web-lint": "yarn workspace @interval-timer/web run lint:fix"
   },
   "devDependencies": {
+    "@flextremedev/prettier-config": "^0.1.0",
     "husky": "^3.0.5",
     "lint-staged": "^9.2.5",
-    "prettier": "^1.18.2"
+    "prettier": "^2.0.0"
   }
 }

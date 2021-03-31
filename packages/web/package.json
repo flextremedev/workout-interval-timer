@@ -1,0 +1,54 @@
+{
+  "name": "@interval-timer/web",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://workout-interval-timer.netlify.com",
+  "dependencies": {
+    "@testing-library/react": "^11.2.5",
+    "@xstate/react": "^0.8.1",
+    "date-fns": "^2.1.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-scripts": "^4.0.3",
+    "xstate": "^4.11.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "test:coverage": "yarn test --coverage --watchAll=false",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
+    "eject": "react-scripts eject",
+    "lint:fix": "eslint src/**/*.js --fix"
+  },
+  "lint-staged": {
+    "src/**/*.js": [
+      "yarn run --silent eslint",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^2.0.1"
+  }
+}

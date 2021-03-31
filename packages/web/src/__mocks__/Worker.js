@@ -5,7 +5,7 @@ export class MockWorker {
     this.callback = callback;
   };
 
-  postMessage = e => {
+  postMessage = (e) => {
     if (e === 'START') {
       this.interval = setInterval(() => {
         this.callback({ data: 'TICK' });

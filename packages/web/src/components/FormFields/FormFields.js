@@ -1,7 +1,10 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
-import { Input } from '../Input/Input';
+
 import { DurationInput } from '../DurationInput/DurationInput';
+import { Input } from '../Input/Input';
+
 import styles from './FormFields.module.css';
 export function FormFields({
   rounds,

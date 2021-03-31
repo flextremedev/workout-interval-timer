@@ -1,5 +1,7 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
+
 import styles from './Input.module.css';
 export function Input({
   label,
@@ -18,7 +20,7 @@ export function Input({
   if (valueFromProps !== value && inputDone) {
     setValue(valueFromProps);
   }
-  const handleChange = e => {
+  const handleChange = (e) => {
     setInputDone(false);
     setValue(e.target.value);
     if (onChange) {

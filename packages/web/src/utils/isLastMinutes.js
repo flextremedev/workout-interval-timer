@@ -1,1 +1,1 @@
-export const isLastMinute = minutes => minutes <= 0;
+export const isLastMinute = (minutes) => minutes <= 0;

@@ -1,8 +1,9 @@
 import { cleanup, fireEvent } from '@testing-library/react';
+
+import { MockWorker } from './__mocks__/Worker';
 import { expectCountDownFrom } from './utils/test-utils/expectCountDownFrom';
 import { makeAdvanceDateNowBy } from './utils/test-utils/makeAdvanceDateNowBy';
 import { renderApp } from './utils/test-utils/renderApp';
-import { MockWorker } from './__mocks__/Worker';
 
 const startDate = 1587574443099;
 const play = jest.fn();

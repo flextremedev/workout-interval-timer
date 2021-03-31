@@ -1,16 +1,20 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
-import styles from './Counter.module.css';
-import { DurationInput } from '../DurationInput/DurationInput';
+
 import { StatusDisplay } from '../../model/StatusDisplay';
+import { DurationInput } from '../DurationInput/DurationInput';
+
+import styles from './Counter.module.css';
 
 export function Counter({ text, timeLeft, roundsLeft, rounds }) {
   return (
     <div className={styles.container}>
       <div className={styles.round}>
         <span className={styles.label}>ROUND</span>
-        <span className={`${styles.text}`} data-testid={'round'}>{`${rounds -
-          roundsLeft}/${rounds}`}</span>
+        <span className={`${styles.text}`} data-testid={'round'}>{`${
+          rounds - roundsLeft
+        }/${rounds}`}</span>
       </div>
       <div className={styles.counter}>
         <div className={styles.progress}></div>

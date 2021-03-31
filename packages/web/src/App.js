@@ -1,15 +1,17 @@
 import React from 'react';
-import { Button } from './components/Button/Button';
-import styles from './App.module.css';
-import { TimerState } from './model/TimerState';
-import { FormFields } from './components/FormFields/FormFields';
-import { Counter } from './components/Counter/Counter';
-import { getStateLabel } from './utils/getStateLabel';
+
+import { useMachine } from '@xstate/react';
 import { format } from 'date-fns';
 import { Helmet } from 'react-helmet';
-import { useMachine } from '@xstate/react';
-import { timerEvents, buildTimerMachine } from './machines/timerMachine';
+
+import styles from './App.module.css';
+import { Button } from './components/Button/Button';
+import { Counter } from './components/Counter/Counter';
+import { FormFields } from './components/FormFields/FormFields';
 import { useBeep } from './hooks/useBeep';
+import { timerEvents, buildTimerMachine } from './machines/timerMachine';
+import { TimerState } from './model/TimerState';
+import { getStateLabel } from './utils/getStateLabel';
 
 const DEFAULT_DOCUMENT_TITLE = 'Interval timer';
 function App() {
@@ -48,18 +50,18 @@ function App() {
     }
   };
 
-  const setRounds = rounds => {
+  const setRounds = (rounds) => {
     send({ type: timerEvents.SET_ROUNDS, rounds: Number(rounds) });
   };
 
-  const setWorkInterval = workInterval => {
+  const setWorkInterval = (workInterval) => {
     send({
       type: timerEvents.SET_WORK_INTERVAL,
       workInterval,
     });
   };
 
-  const setBreakInterval = breakInterval => {
+  const setBreakInterval = (breakInterval) => {
     send({
       type: timerEvents.SET_BREAK_INTERVAL,
       breakInterval,
@@ -111,4 +113,4 @@ function App() {
   );
 }
 
-export default App;
+export { App };

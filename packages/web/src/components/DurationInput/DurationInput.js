@@ -1,8 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { format, setSeconds, setMinutes } from 'date-fns';
-import styles from './DurationInput.module.css';
+import PropTypes from 'prop-types';
+
 import { addNumberAtEndShifting } from './addNumberAtEndShifting';
+import styles from './DurationInput.module.css';
 export function DurationInput({
   dataTestId,
   value,
@@ -27,7 +29,7 @@ export function DurationInput({
     }
   }, []);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     e.stopPropagation();
     const { value: targetValue, name } = e.target;
     if (targetValue.match(/^[0-9]*$/)) {
@@ -46,7 +48,7 @@ export function DurationInput({
       }
     }
   };
-  const handleMinutesSelect = e => {
+  const handleMinutesSelect = (e) => {
     e.preventDefault();
     if (!readOnly) {
       minutesRef.current.select();
@@ -55,7 +57,7 @@ export function DurationInput({
   const handleMinutesBlur = () => {
     minutesRef.current.selectionEnd = minutesRef.current.selectionStart;
   };
-  const handleSecondsSelect = e => {
+  const handleSecondsSelect = (e) => {
     e.preventDefault();
     if (!readOnly) {
       secondsRef.current.select();
@@ -65,7 +67,7 @@ export function DurationInput({
     secondsRef.current.selectionEnd = secondsRef.current.selectionStart;
   };
   /* istanbul ignore next */
-  const handlePaste = e => {
+  const handlePaste = (e) => {
     e.preventDefault();
   };
   return (

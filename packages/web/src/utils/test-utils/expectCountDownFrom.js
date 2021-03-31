@@ -1,4 +1,5 @@
 import { act } from '@testing-library/react';
+
 import { ONE_SECOND_IN_MS } from '../../constants/oneSecondInMs';
 import { isLastMinute } from '../isLastMinutes';
 import { toTwoDigitString } from '../toTwoDigitString';
@@ -14,7 +15,7 @@ export const expectCountDownFrom = ({
 }) => {
   let firstRound = true;
 
-  const shouldDisplayInitialSeconds = minutesLeft =>
+  const shouldDisplayInitialSeconds = (minutesLeft) =>
     minutesLeft >= 1 || (firstRound && minutesLeft <= 0);
 
   for (let minutesLeft = minutes; minutesLeft >= toMinutes; minutesLeft--) {

@@ -1,7 +1,9 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
+
 import styles from './Button.module.css';
-export const Button = function({ children, className, ...props }) {
+export const Button = function ({ children, className, ...props }) {
   return (
     <button className={`${styles.btn} ${className}`} {...props}>
       {children}

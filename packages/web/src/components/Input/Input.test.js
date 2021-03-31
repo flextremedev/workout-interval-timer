@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { render, fireEvent } from '@testing-library/react';
+
 import { Input } from './Input';
 
 describe('Input', () => {
@@ -27,8 +29,8 @@ describe('Input', () => {
   test('type number should work correctly and allow no empty input after blur', () => {
     let changeResult;
     let blurResult;
-    const handleChange = e => (changeResult = e.target.value);
-    const handleBlur = value => (blurResult = value);
+    const handleChange = (e) => (changeResult = e.target.value);
+    const handleBlur = (value) => (blurResult = value);
     const value = 1;
     const { getByDisplayValue, rerender } = render(
       <Input

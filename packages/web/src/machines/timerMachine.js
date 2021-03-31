@@ -1,8 +1,9 @@
-import { assign, createMachine, send } from 'xstate';
-import { hasOneSecondElapsed } from '../utils/hasOneSecondElapsed';
-import { TimerState } from '../model/TimerState';
 import { getMinutes, getSeconds, subSeconds } from 'date-fns';
+import { assign, createMachine, send } from 'xstate';
+
 import { TimerRunningState } from '../model/TimerRunningState.';
+import { TimerState } from '../model/TimerState';
+import { hasOneSecondElapsed } from '../utils/hasOneSecondElapsed';
 export const timerEvents = {
   START: 'START',
   WORK: 'WORK',
@@ -15,13 +16,13 @@ export const timerEvents = {
 };
 const SECONDS_PER_MINUTE = 60;
 
-const countDown = ctx => {
+const countDown = (ctx) => {
   return {
     timestamp: Date.now(),
     timeLeft: subSeconds(ctx.timeLeft, 1),
   };
 };
-const shouldCountDown = ctx => {
+const shouldCountDown = (ctx) => {
   return (
     (getSeconds(ctx.timeLeft) > 0 || getMinutes(ctx.timeLeft) > 0) &&
     hasOneSecondElapsed(ctx.timestamp)
@@ -162,20 +163,20 @@ export const buildTimerMachine = ({
           beepBreakLong.play();
         },
         countDown: assign(countDown),
-        countDownWorkLast: assign(ctx => {
+        countDownWorkLast: assign((ctx) => {
           beepWork.pause();
           beepWork.currentTime = 0;
           beepWork.play();
           return countDown(ctx);
         }),
-        countDownBreakLast: assign(ctx => {
+        countDownBreakLast: assign((ctx) => {
           beepBreak.pause();
           beepBreak.currentTime = 0;
           beepBreak.play();
           return countDown(ctx);
         }),
         initBreak: assign({
-          timeLeft: ctx => {
+          timeLeft: (ctx) => {
             return ctx.breakInterval;
           },
         }),
@@ -183,24 +184,24 @@ export const buildTimerMachine = ({
           timestamp: () => {
             return Date.now();
           },
-          roundsLeft: ctx => {
+          roundsLeft: (ctx) => {
             return ctx.rounds;
           },
-          timeLeft: ctx => {
+          timeLeft: (ctx) => {
             return ctx.prepareTime;
           },
         }),
         initWork: assign({
-          timeLeft: ctx => {
+          timeLeft: (ctx) => {
             return ctx.workInterval;
           },
-          roundsLeft: ctx => {
+          roundsLeft: (ctx) => {
             return ctx.roundsLeft - 1;
           },
         }),
       },
       guards: {
-        shouldCountDownLast: ctx => {
+        shouldCountDownLast: (ctx) => {
           const secondsLeft =
             getMinutes(ctx.timeLeft) * SECONDS_PER_MINUTE +
             getSeconds(ctx.timeLeft);
@@ -211,7 +212,7 @@ export const buildTimerMachine = ({
             actualSecondsLeft > 0
           );
         },
-        shouldTransition: ctx => {
+        shouldTransition: (ctx) => {
           return (
             getMinutes(ctx.timeLeft) <= 0 &&
             getSeconds(ctx.timeLeft) <= 0 &&
@@ -219,7 +220,7 @@ export const buildTimerMachine = ({
           );
         },
         shouldCountDown,
-        isDone: ctx => {
+        isDone: (ctx) => {
           return (
             getMinutes(ctx.timeLeft) <= 0 &&
             getSeconds(ctx.timeLeft) <= 0 &&

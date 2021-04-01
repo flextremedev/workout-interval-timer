@@ -6,6 +6,7 @@
     "packages/*"
   ],
   "scripts": {
+    "core-test": "yarn workspace @interval-timer/core run test",
     "web": "yarn workspace @interval-timer/web run start",
     "web-build": "yarn workspace @interval-timer/web run build",
     "web-lint": "yarn workspace @interval-timer/web run lint:fix",
@@ -13,6 +14,8 @@
     "web-test": "yarn workspace @interval-timer/web run test"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-typescript": "^7.13.0",
     "@flextremedev/eslint-config": "^0.1.1",
     "@flextremedev/prettier-config": "^0.1.0",
     "eslint": "^7.23.0",

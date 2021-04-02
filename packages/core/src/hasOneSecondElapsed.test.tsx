@@ -10,4 +10,10 @@ describe('hasOneSecondElapsed()', () => {
       false
     );
   });
+  it('should use current time by default', () => {
+    const timestamp = 1587494146595;
+    const currentTimeMock = 1587494147595;
+    Date.now = jest.fn().mockReturnValueOnce(currentTimeMock);
+    expect(hasOneSecondElapsed(timestamp)).toBe(true);
+  });
 });

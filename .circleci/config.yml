@@ -19,6 +19,7 @@ jobs:
       - checkout
       - run: yarn install
       - run: yarn web-test-coverage
+      - run: yarn core-test-coverage
       - codecov/upload:
         file: packages/web/coverage/*.json
 workflows:

@@ -4,6 +4,8 @@
   "private": true,
   "homepage": "https://workout-interval-timer.netlify.com",
   "dependencies": {
+    "@craco/craco": "^6.1.1",
+    "@interval-timer/core": "*",
     "@testing-library/react": "^11.2.5",
     "@xstate/react": "^0.8.1",
     "date-fns": "^2.1.0",
@@ -14,12 +16,12 @@
     "xstate": "^4.11.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "test:coverage": "yarn test --coverage --watchAll=false",
-    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
-    "eject": "react-scripts eject",
+    "test:debug": "craco --inspect-brk test --runInBand --no-cache",
+    "eject": "craco eject",
     "lint:fix": "eslint src --fix"
   },
   "lint-staged": {

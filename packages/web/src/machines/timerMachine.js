@@ -1,9 +1,9 @@
+import { hasOneSecondElapsed } from '@interval-timer/core';
 import { getMinutes, getSeconds, subSeconds } from 'date-fns';
 import { assign, createMachine, send } from 'xstate';
 
 import { TimerRunningState } from '../model/TimerRunningState.';
 import { TimerState } from '../model/TimerState';
-import { hasOneSecondElapsed } from '../utils/hasOneSecondElapsed';
 export const timerEvents = {
   START: 'START',
   WORK: 'WORK',

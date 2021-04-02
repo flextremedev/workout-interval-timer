@@ -1,7 +1,7 @@
 body {
   margin: 0;
   background-image: linear-gradient(to right bottom, #040fd9, #d100a6);
-  background-image: url('./Background.png');
+  background-image: url('./assets/Background.png');
   background-size: cover;
 }
 body,

@@ -1,7 +1,7 @@
-import beepBreakFile from '../BeepBreak.mp3';
-import beepBreakLongFile from '../BeepBreakLong.mp3';
-import beepWorkFile from '../BeepWork.mp3';
-import beepWorkLongFile from '../BeepWorkLong.mp3';
+import beepBreakFile from '../assets/BeepBreak.mp3';
+import beepBreakLongFile from '../assets/BeepBreakLong.mp3';
+import beepWorkFile from '../assets/BeepWork.mp3';
+import beepWorkLongFile from '../assets/BeepWorkLong.mp3';
 
 import { useAudio } from './useAudio';
 export const useBeep = () => {

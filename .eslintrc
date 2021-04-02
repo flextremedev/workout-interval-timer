@@ -1,0 +1,3 @@
+{
+    "extends": "@flextremedev/eslint-config"
+}

@@ -1,0 +1,60 @@
+{
+  "name": "@interval-timer/web",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "https://workout-interval-timer.netlify.com",
+  "dependencies": {
+    "@craco/craco": "^6.1.1",
+    "@interval-timer/core": "*",
+    "@testing-library/react": "^11.2.5",
+    "@xstate/react": "^0.8.1",
+    "date-fns": "^2.1.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-scripts": "^4.0.3",
+    "xstate": "^4.11.0"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "test:coverage": "yarn test --coverage --watchAll=false",
+    "test:debug": "craco --inspect-brk test --runInBand --no-cache",
+    "eject": "craco eject",
+    "lint:fix": "eslint src --fix"
+  },
+  "lint-staged": {
+    "src": [
+      "yarn run --silent eslint",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@flextremedev/eslint-config-react": "^0.1.1",
+    "@types/react": "^17.0.3",
+    "@types/react-dom": "^17.0.3",
+    "@types/react-helmet": "^6.1.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.23.1",
+    "eslint-plugin-react-hooks": "^4.2.0"
+  }
+}

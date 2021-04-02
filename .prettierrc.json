@@ -1,5 +1,1 @@
-{
-  "trailingComma": "es5",
-  "singleQuote": true,
-  "jsxBracketSameLine": false
-}
+"@flextremedev/prettier-config"

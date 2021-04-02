@@ -5,6 +5,10 @@
   "main": "src/index.ts",
   "scripts": {
     "check-types": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "lint-fix": "eslint src --fix"
+  },
+  "devDependencies": {
+    "@flextremedev/eslint-config-typescript": "^0.1.1"
   }
 }

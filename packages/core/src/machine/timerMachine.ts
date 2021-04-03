@@ -1,9 +1,17 @@
 import { hasOneSecondElapsed } from '@interval-timer/core';
 import { getMinutes, getSeconds, subSeconds } from 'date-fns';
-import { assign, createMachine, send } from 'xstate';
+import { assign, createMachine, send, StateMachine } from 'xstate';
 
-import { TimerRunningState } from '../model/TimerRunningState.';
-import { TimerState } from '../model/TimerState';
+import {
+  SetBreakIntervalEvent,
+  SetRoundsEvent,
+  SetWorkIntervalEvent,
+  TimerContext,
+  TimerEvent,
+  TimerState,
+  TimerStateSchema,
+} from './types';
+
 export const timerEvents = {
   START: 'START',
   WORK: 'WORK',
@@ -14,28 +22,40 @@ export const timerEvents = {
   SET_WORK_INTERVAL: 'SET_WORK_INTERVAL',
   SET_BREAK_INTERVAL: 'SET_BREAK_INTERVAL',
 };
+
 const SECONDS_PER_MINUTE = 60;
 
-const countDown = (ctx) => {
+const countDown = (ctx: TimerContext): Partial<TimerContext> => {
   return {
     timestamp: Date.now(),
     timeLeft: subSeconds(ctx.timeLeft, 1),
   };
 };
-const shouldCountDown = (ctx) => {
+const shouldCountDown = (ctx: TimerContext): boolean => {
   return (
     (getSeconds(ctx.timeLeft) > 0 || getMinutes(ctx.timeLeft) > 0) &&
     hasOneSecondElapsed(ctx.timestamp)
   );
 };
 
+type TimerMachineDependencies = {
+  beepBreak: HTMLAudioElement;
+  beepWork: HTMLAudioElement;
+  beepBreakLong: HTMLAudioElement;
+  beepWorkLong: HTMLAudioElement;
+};
 export const buildTimerMachine = ({
   beepBreak,
   beepWork,
   beepBreakLong,
   beepWorkLong,
-}) =>
-  createMachine(
+}: TimerMachineDependencies): StateMachine<
+  TimerContext,
+  TimerStateSchema,
+  TimerEvent,
+  TimerState
+> =>
+  createMachine<TimerContext, TimerEvent, TimerState>(
     {
       context: {
         prepareTime: new Date(5000),
@@ -46,12 +66,12 @@ export const buildTimerMachine = ({
         breakInterval: new Date(0),
         timestamp: Date.now(),
       },
-      initial: TimerState.STOPPED,
+      initial: 'STOPPED',
       states: {
-        [TimerState.STOPPED]: {
+        STOPPED: {
           on: {
             [timerEvents.START]: {
-              target: TimerRunningState.PREWORK,
+              target: 'PREWORK',
             },
             [timerEvents.SET_ROUNDS]: {
               actions: 'assignRounds',
@@ -65,9 +85,9 @@ export const buildTimerMachine = ({
           },
           entry: send(timerEvents.STOP),
         },
-        [TimerRunningState.PREWORK]: {
+        PREWORK: {
           on: {
-            [timerEvents.STOP]: TimerState.STOPPED,
+            [timerEvents.STOP]: 'STOPPED',
             [timerEvents.TICK]: [
               {
                 actions: 'countDownBreakLast',
@@ -80,20 +100,20 @@ export const buildTimerMachine = ({
             ],
             '': [
               {
-                target: TimerState.STOPPED,
+                target: 'STOPPED',
                 cond: 'isDone',
               },
               {
-                target: TimerRunningState.WORK,
+                target: 'WORK',
                 cond: 'shouldTransition',
               },
             ],
           },
           entry: 'initPrepare',
         },
-        [TimerRunningState.WORK]: {
+        WORK: {
           on: {
-            [timerEvents.STOP]: TimerState.STOPPED,
+            [timerEvents.STOP]: 'STOPPED',
             [timerEvents.TICK]: [
               {
                 actions: 'countDownWorkLast',
@@ -106,20 +126,20 @@ export const buildTimerMachine = ({
             ],
             '': [
               {
-                target: TimerState.STOPPED,
+                target: 'STOPPED',
                 cond: 'isDone',
               },
               {
-                target: TimerRunningState.BREAK,
+                target: 'BREAK',
                 cond: 'shouldTransition',
               },
             ],
           },
           entry: ['initWork', 'beepWorkLong'],
         },
-        [TimerRunningState.BREAK]: {
+        BREAK: {
           on: {
-            [timerEvents.STOP]: TimerState.STOPPED,
+            [timerEvents.STOP]: 'STOPPED',
             [timerEvents.TICK]: [
               {
                 actions: 'countDownBreakLast',
@@ -131,7 +151,7 @@ export const buildTimerMachine = ({
               },
             ],
             '': {
-              target: TimerRunningState.WORK,
+              target: 'WORK',
               cond: 'shouldTransition',
             },
           },
@@ -143,17 +163,17 @@ export const buildTimerMachine = ({
       actions: {
         assignBreakInterval: assign({
           breakInterval: (_context, event) => {
-            return event.breakInterval;
+            return (event as SetBreakIntervalEvent).breakInterval;
           },
         }),
         assignRounds: assign({
           rounds: (_context, event) => {
-            return event.rounds;
+            return (event as SetRoundsEvent).rounds;
           },
         }),
         assignWorkInterval: assign({
           workInterval: (_context, event) => {
-            return event.workInterval;
+            return (event as SetWorkIntervalEvent).workInterval;
           },
         }),
         beepWorkLong: () => {
@@ -180,7 +200,7 @@ export const buildTimerMachine = ({
             return ctx.breakInterval;
           },
         }),
-        initPrepare: assign({
+        initPrepare: assign<TimerContext, TimerEvent>({
           timestamp: () => {
             return Date.now();
           },

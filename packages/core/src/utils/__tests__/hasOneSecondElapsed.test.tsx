@@ -1,4 +1,4 @@
-import { hasOneSecondElapsed } from './hasOneSecondElapsed';
+import { hasOneSecondElapsed } from '../hasOneSecondElapsed';
 
 describe('hasOneSecondElapsed()', () => {
   it('should return true if one second has elapsed', () => {

@@ -1,11 +1,9 @@
+import { TimerStates } from '@interval-timer/core';
+
 import { StatusDisplay } from '../model/StatusDisplay';
-import { TimerRunningState } from '../model/TimerRunningState.';
 
 export const getStateLabel = (state) => {
-  if (
-    state === TimerRunningState.PREWORK ||
-    state === TimerRunningState.BREAK
-  ) {
+  if (state === TimerStates.PREWORK || state === TimerStates.BREAK) {
     return StatusDisplay[state];
   }
   return StatusDisplay.WORK;

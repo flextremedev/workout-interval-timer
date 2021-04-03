@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { buildTimerMachine, TimerStates } from '@interval-timer/core';
 import { useMachine } from '@xstate/react';
 import { format } from 'date-fns';
 import { Helmet } from 'react-helmet';
@@ -9,8 +10,6 @@ import { Button } from './components/Button/Button';
 import { Counter } from './components/Counter/Counter';
 import { FormFields } from './components/FormFields/FormFields';
 import { useBeep } from './hooks/useBeep';
-import { timerEvents, buildTimerMachine } from './machines/timerMachine';
-import { TimerState } from './model/TimerState';
 import { getStateLabel } from './utils/getStateLabel';
 
 const DEFAULT_DOCUMENT_TITLE = 'Interval timer';
@@ -29,41 +28,38 @@ function App() {
     const intervalWorker = new Worker('intervalWorker.js');
 
     intervalWorker.addEventListener('message', () => {
-      service.send({ type: timerEvents.TICK });
+      service.send({ type: 'TICK' });
     });
 
     service.subscribe((_state, event) => {
-      if (
-        event &&
-        (event.type === timerEvents.START || event.type === timerEvents.STOP)
-      ) {
+      if (event && (event.type === 'START' || event.type === 'STOP')) {
         intervalWorker.postMessage(event.type);
       }
     });
   }, [service]);
 
   const toggleTimer = () => {
-    if (state.value === TimerState.STOPPED) {
-      send(timerEvents.START);
+    if (state.value === TimerStates.STOPPED) {
+      send('START');
     } else {
-      send(timerEvents.STOP);
+      send('STOP');
     }
   };
 
   const setRounds = (rounds) => {
-    send({ type: timerEvents.SET_ROUNDS, rounds: Number(rounds) });
+    send({ type: 'SET_ROUNDS', rounds: Number(rounds) });
   };
 
   const setWorkInterval = (workInterval) => {
     send({
-      type: timerEvents.SET_WORK_INTERVAL,
+      type: 'SET_WORK_INTERVAL',
       workInterval,
     });
   };
 
   const setBreakInterval = (breakInterval) => {
     send({
-      type: timerEvents.SET_BREAK_INTERVAL,
+      type: 'SET_BREAK_INTERVAL',
       breakInterval,
     });
   };
@@ -80,14 +76,14 @@ function App() {
     <>
       <Helmet defer={false}>
         <title>
-          {!state.matches(TimerState.STOPPED)
+          {!state.matches(TimerStates.STOPPED)
             ? format(timeLeft, 'mm:ss')
             : DEFAULT_DOCUMENT_TITLE}
         </title>
       </Helmet>
       <div className={styles.content}>
         <div className={styles.centerArea}>
-          {state.value === TimerState.STOPPED ? (
+          {state.value === TimerStates.STOPPED ? (
             <FormFields
               rounds={rounds}
               handleRoundsChange={setRounds}
@@ -106,7 +102,7 @@ function App() {
           )}
         </div>
         <Button onClick={toggleTimer} data-testid={'start-button'}>
-          {state.matches(TimerState.STOPPED) ? 'Start' : 'Stop'}
+          {state.matches(TimerStates.STOPPED) ? 'Start' : 'Stop'}
         </Button>
       </div>
     </>

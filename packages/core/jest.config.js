@@ -3,6 +3,7 @@ module.exports = {
     name: 'Core',
     color: 'white',
   },
+  collectCoverageFrom: ['**/*.{ts,tsx}'],
   coverageThreshold: {
     global: {
       branches: 100,

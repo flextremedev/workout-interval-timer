@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { buildTimerMachine, TimerStates } from '@interval-timer/core';
+import { timerMachine, TimerStates } from '@interval-timer/core';
 import { useMachine } from '@xstate/react';
 import { format } from 'date-fns';
 import { Helmet } from 'react-helmet';
@@ -15,14 +15,26 @@ import { getStateLabel } from './utils/getStateLabel';
 const DEFAULT_DOCUMENT_TITLE = 'Interval timer';
 function App() {
   const { beepBreak, beepBreakLong, beepWork, beepWorkLong } = useBeep();
-
-  const timerMachine = buildTimerMachine({
-    beepBreak,
-    beepBreakLong,
-    beepWork,
-    beepWorkLong,
+  const [state, send, service] = useMachine(timerMachine, {
+    actions: {
+      initBreakEffect: () => {
+        beepBreakLong.play();
+      },
+      initWorkEffect: () => {
+        beepWorkLong.play();
+      },
+      countDownLastWorkEffect: () => {
+        beepWork.pause();
+        beepWork.currentTime = 0;
+        beepWork.play();
+      },
+      countDownLastBreakEffect: () => {
+        beepBreak.pause();
+        beepBreak.currentTime = 0;
+        beepBreak.play();
+      },
+    },
   });
-  const [state, send, service] = useMachine(timerMachine);
 
   React.useEffect(() => {
     const intervalWorker = new Worker('intervalWorker.js');

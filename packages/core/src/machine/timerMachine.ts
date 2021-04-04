@@ -1,6 +1,10 @@
+/* istanbul ignore file */
+/* covered by app integration test */
 import { hasOneSecondElapsed } from '@interval-timer/core';
 import { getMinutes, getSeconds, subSeconds } from 'date-fns';
 import { assign, createMachine, send } from 'xstate';
+
+import { timerStates } from '../model/timerStates';
 
 import {
   SetBreakIntervalEvent,
@@ -47,12 +51,12 @@ export const timerMachine = createMachine<TimerContext, TimerEvent, TimerState>(
       breakInterval: new Date(0),
       timestamp: Date.now(),
     },
-    initial: 'STOPPED',
+    initial: timerStates.STOPPED,
     states: {
-      STOPPED: {
+      [timerStates.STOPPED]: {
         on: {
           [timerEvents.START]: {
-            target: 'PREWORK',
+            target: timerStates.PREWORK,
           },
           [timerEvents.SET_ROUNDS]: {
             actions: 'assignRounds',
@@ -66,9 +70,9 @@ export const timerMachine = createMachine<TimerContext, TimerEvent, TimerState>(
         },
         entry: send(timerEvents.STOP),
       },
-      PREWORK: {
+      [timerStates.PREWORK]: {
         on: {
-          [timerEvents.STOP]: 'STOPPED',
+          [timerEvents.STOP]: timerStates.STOPPED,
           [timerEvents.TICK]: [
             {
               actions: ['countDown', 'countDownLastBreakEffect'],
@@ -81,20 +85,20 @@ export const timerMachine = createMachine<TimerContext, TimerEvent, TimerState>(
           ],
           '': [
             {
-              target: 'STOPPED',
+              target: timerStates.STOPPED,
               cond: 'isDone',
             },
             {
-              target: 'WORK',
+              target: timerStates.WORK,
               cond: 'shouldTransition',
             },
           ],
         },
         entry: 'initPrepare',
       },
-      WORK: {
+      [timerStates.WORK]: {
         on: {
-          [timerEvents.STOP]: 'STOPPED',
+          [timerEvents.STOP]: timerStates.STOPPED,
           [timerEvents.TICK]: [
             {
               actions: ['countDown', 'countDownLastWorkEffect'],
@@ -107,20 +111,20 @@ export const timerMachine = createMachine<TimerContext, TimerEvent, TimerState>(
           ],
           '': [
             {
-              target: 'STOPPED',
+              target: timerStates.STOPPED,
               cond: 'isDone',
             },
             {
-              target: 'BREAK',
+              target: timerStates.BREAK,
               cond: 'shouldTransition',
             },
           ],
         },
         entry: ['initWork', 'initWorkEffect'],
       },
-      BREAK: {
+      [timerStates.BREAK]: {
         on: {
-          [timerEvents.STOP]: 'STOPPED',
+          [timerEvents.STOP]: timerStates.STOPPED,
           [timerEvents.TICK]: [
             {
               actions: ['countDown', 'countDownLastBreakEffect'],
@@ -132,7 +136,7 @@ export const timerMachine = createMachine<TimerContext, TimerEvent, TimerState>(
             },
           ],
           '': {
-            target: 'WORK',
+            target: timerStates.WORK,
             cond: 'shouldTransition',
           },
         },

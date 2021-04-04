@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { timerMachine, TimerStates } from '@interval-timer/core';
+import { timerMachine, timerStates } from '@interval-timer/core';
 import { useMachine } from '@xstate/react';
 import { format } from 'date-fns';
 import { Helmet } from 'react-helmet';
@@ -51,7 +51,7 @@ function App() {
   }, [service]);
 
   const toggleTimer = () => {
-    if (state.value === TimerStates.STOPPED) {
+    if (state.value === timerStates.STOPPED) {
       send('START');
     } else {
       send('STOP');
@@ -88,14 +88,14 @@ function App() {
     <>
       <Helmet defer={false}>
         <title>
-          {!state.matches(TimerStates.STOPPED)
+          {!state.matches(timerStates.STOPPED)
             ? format(timeLeft, 'mm:ss')
             : DEFAULT_DOCUMENT_TITLE}
         </title>
       </Helmet>
       <div className={styles.content}>
         <div className={styles.centerArea}>
-          {state.value === TimerStates.STOPPED ? (
+          {state.value === timerStates.STOPPED ? (
             <FormFields
               rounds={rounds}
               handleRoundsChange={setRounds}
@@ -114,7 +114,7 @@ function App() {
           )}
         </div>
         <Button onClick={toggleTimer} data-testid={'start-button'}>
-          {state.matches(TimerStates.STOPPED) ? 'Start' : 'Stop'}
+          {state.matches(timerStates.STOPPED) ? 'Start' : 'Stop'}
         </Button>
       </div>
     </>

@@ -1,4 +1,4 @@
-import { TimerStates } from '../model/TimerStates';
+import { timerStates } from '../model/timerStates';
 
 export type TimerContext = {
   prepareTime: Date;
@@ -35,7 +35,7 @@ export type TimerEvent =
   | BaseEvent;
 
 export type TimerStateSchema = {
-  states: Record<keyof typeof TimerStates, Record<string, unknown>>;
+  states: Record<keyof typeof timerStates, Record<string, unknown>>;
 };
 
 export type TimerState = {

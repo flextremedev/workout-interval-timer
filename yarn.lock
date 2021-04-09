@@ -1523,6 +1523,11 @@
     pouchdb-collections "^1.0.1"
     tiny-queue "^0.2.1"
 
+"@flextremedev/eslint-config-react-typescript@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@flextremedev/eslint-config-react-typescript/-/eslint-config-react-typescript-0.1.1.tgz#139c298a790f0fa5345519d9be3d2e06d8834720"
+  integrity sha512-tRRugmBhXPxbWhxuNA9NFHqMFQ2y9NEK5Jg1WRKpYifmjBo38/NPEXvAbMRsExmULh4/vEpGyxjbFzNznnkCbQ==
+
 "@flextremedev/eslint-config-react@^0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@flextremedev/eslint-config-react/-/eslint-config-react-0.1.1.tgz#8dfaadfc1db5cea5c8f91e15854ec619224327c3"
@@ -1530,7 +1535,7 @@
 
 "@flextremedev/eslint-config-typescript@^0.1.1":
   version "0.1.1"
-  resolved "https://registry.npmjs.org/@flextremedev/eslint-config-typescript/-/eslint-config-typescript-0.1.1.tgz#1cc2c8ba2aaa8453de361d14b9506a70f520bfe8"
+  resolved "https://registry.yarnpkg.com/@flextremedev/eslint-config-typescript/-/eslint-config-typescript-0.1.1.tgz#1cc2c8ba2aaa8453de361d14b9506a70f520bfe8"
   integrity sha512-1I7D6MxesS2QOWhxfSjdDlj3t5DE1iO0EbNSwefv/Z9lngjvTTuj4jrz5ZqrFvm+4r0+F9GJuqg82niHRAy+bg==
 
 "@flextremedev/eslint-config@^0.1.1":

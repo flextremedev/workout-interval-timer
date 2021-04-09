@@ -1,0 +1,6 @@
+{
+  "extends": ["@flextremedev/eslint-config-react-typescript"],
+  "settings": {
+    "import/ignore": ["node_modules/react-native/index\\.js$"]
+  }
+}

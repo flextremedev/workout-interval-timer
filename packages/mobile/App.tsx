@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { Input } from './components/Input/Input';
 
-export default function App() {
+// eslint-disable-next-line import/no-default-export
+export default function App(): JSX.Element {
+  const [rounds, setRounds] = React.useState('0');
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <Input label="Rounds" value={rounds} onBlur={setRounds} type="number" />
     </View>
   );
 }

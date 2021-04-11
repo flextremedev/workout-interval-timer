@@ -1,0 +1,1 @@
+export { hasOneSecondElapsed } from './hasOneSecondElapsed';

@@ -1,10 +1,10 @@
 /* istanbul ignore file */
 /* covered by app integration test */
-import { hasOneSecondElapsed } from '@interval-timer/core';
 import { getMinutes, getSeconds, subSeconds } from 'date-fns';
 import { assign, createMachine, send } from 'xstate';
 
 import { timerStates } from '../model/timerStates';
+import { hasOneSecondElapsed } from '../utils';
 
 import {
   SetBreakIntervalEvent,

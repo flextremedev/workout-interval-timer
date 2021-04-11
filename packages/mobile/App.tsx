@@ -1,7 +1,7 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Input } from './components/Input/Input';
+
+import { Input } from './src/components/Input/Input';
 
 // eslint-disable-next-line import/no-default-export
 export default function App(): JSX.Element {

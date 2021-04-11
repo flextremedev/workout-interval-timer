@@ -7,6 +7,8 @@ import {
   View,
 } from 'react-native';
 
+import { theme } from '../../theme';
+
 type InputProps = Omit<TextInputProps, 'onBlur'> & {
   label?: string;
   value: string;
@@ -48,9 +50,9 @@ export function Input({
     setSelection(undefined);
     setInputDone(false);
     setValueBasedOnType(text);
-    // if (onChange) {
-    //   onChange(text);
-    // }
+    if (onChange) {
+      onChange(text);
+    }
   };
   const handleFocus = (): void => {
     setSelection({ start: 0, end: value.length });
@@ -67,9 +69,7 @@ export function Input({
       {label ? <Text style={styles.label}>{label}</Text> : null}
       <TextInput
         value={value}
-        style={{
-          alignSelf: 'stretch',
-        }}
+        style={styles.input}
         editable={!readOnly}
         onChangeText={handleChangeText}
         onBlur={handleBlur}
@@ -88,5 +88,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
   },
   label: {},
-  input: {},
+  input: {
+    fontSize: theme.fontSizes.input,
+  },
 });

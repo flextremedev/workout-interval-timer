@@ -22,6 +22,7 @@
   "devDependencies": {
     "@babel/core": "^7.9.0",
     "@flextremedev/eslint-config-react-typescript": "^0.1.1",
+    "@interval-timer/core": "*",
     "@testing-library/react-native": "^7.2.0",
     "@types/react": "~16.9.35",
     "@types/react-dom": "~16.9.8",

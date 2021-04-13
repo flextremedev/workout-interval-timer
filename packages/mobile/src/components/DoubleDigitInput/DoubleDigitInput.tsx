@@ -14,29 +14,40 @@ type DoubleDigitInputProps = {
   value: string;
   onChangeText: (value: string) => void;
   style?: StyleProp<TextStyle>;
+  editable?: boolean;
 };
 
 const DoubleDigitInput = ({
   onChangeText,
   value,
   style,
+  editable = true,
 }: DoubleDigitInputProps): JSX.Element => {
   const [inputSelected, setInputSelected] = React.useState(false);
   const inputRef = React.useRef<TextInput | null>(null);
 
+  const setInputSelectedInEditableMode = React.useCallback(
+    (selected: boolean): void => {
+      if (editable) {
+        setInputSelected(selected);
+      }
+    },
+    [editable]
+  );
+
   React.useEffect(() => {
     if (value.length >= 2) {
-      setInputSelected(true);
+      setInputSelectedInEditableMode(true);
     }
-  }, [value]);
+  }, [value, setInputSelectedInEditableMode]);
 
   React.useEffect(() => {
     if (cantBeFollowedByDigit(value)) {
-      setInputSelected(true);
+      setInputSelectedInEditableMode(true);
     } else if (canBeFollowedByDigit(value)) {
-      setInputSelected(false);
+      setInputSelectedInEditableMode(false);
     }
-  }, [value]);
+  }, [value, setInputSelectedInEditableMode]);
 
   const handleChange = (input: string): void => {
     if (isValidDigit(input)) {
@@ -47,11 +58,11 @@ const DoubleDigitInput = ({
   };
 
   const handleFocus = (): void => {
-    setInputSelected(true);
+    setInputSelectedInEditableMode(true);
   };
 
   const handleBlur = (): void => {
-    setInputSelected(false);
+    setInputSelectedInEditableMode(false);
     if (value.length < 2) {
       onChangeText(toTwoDigitString(Number(value)));
     }
@@ -70,6 +81,8 @@ const DoubleDigitInput = ({
       }
       ref={inputRef}
       style={style}
+      editable={editable}
+      caretHidden={!editable}
     />
   );
 };

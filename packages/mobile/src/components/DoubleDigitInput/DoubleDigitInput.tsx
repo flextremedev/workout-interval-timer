@@ -15,6 +15,7 @@ type DoubleDigitInputProps = {
   onChangeText: (value: string) => void;
   style?: StyleProp<TextStyle>;
   editable?: boolean;
+  testID?: string;
 };
 
 const DoubleDigitInput = ({
@@ -22,9 +23,13 @@ const DoubleDigitInput = ({
   value,
   style,
   editable = true,
+  testID,
 }: DoubleDigitInputProps): JSX.Element => {
   const [inputSelected, setInputSelected] = React.useState(false);
   const inputRef = React.useRef<TextInput | null>(null);
+  const [inputStatus, setInputStatus] = React.useState<
+    'initial' | 'editing' | 'done'
+  >('initial');
 
   const setInputSelectedInEditableMode = React.useCallback(
     (selected: boolean): void => {
@@ -36,53 +41,49 @@ const DoubleDigitInput = ({
   );
 
   React.useEffect(() => {
-    if (value.length >= 2) {
-      setInputSelectedInEditableMode(true);
-    }
-  }, [value, setInputSelectedInEditableMode]);
-
-  React.useEffect(() => {
-    if (cantBeFollowedByDigit(value)) {
-      setInputSelectedInEditableMode(true);
-    } else if (canBeFollowedByDigit(value)) {
+    if (inputStatus === 'editing' && canBeFollowedByDigit(value)) {
       setInputSelectedInEditableMode(false);
+    } else {
+      setInputSelectedInEditableMode(true);
     }
-  }, [value, setInputSelectedInEditableMode]);
+  }, [inputStatus, value, setInputSelectedInEditableMode]);
 
   const handleChange = (input: string): void => {
-    if (isValidDigit(input)) {
-      onChangeText(input);
+    if (input.length === 2) {
+      setInputStatus('done');
     } else {
-      onChangeText(input.charAt(input.length - 1));
+      setInputStatus('editing');
     }
+    onChangeText(input);
   };
 
   const handleFocus = (): void => {
-    setInputSelectedInEditableMode(true);
+    setInputStatus('initial');
   };
 
   const handleBlur = (): void => {
-    setInputSelectedInEditableMode(false);
-    if (value.length < 2) {
-      onChangeText(toTwoDigitString(Number(value)));
-    }
+    setInputStatus('done');
   };
 
   return (
     <TextInput
-      value={value}
+      value={
+        inputStatus === 'editing' ? value : toTwoDigitString(Number(value))
+      }
       onChangeText={handleChange}
       onBlur={handleBlur}
       onFocus={handleFocus}
       selection={
         inputSelected
-          ? { start: 0, end: value.length }
-          : { start: value.length, end: value.length }
+          ? { start: 0, end: inputStatus === 'editing' ? value.length : 2 }
+          : { start: 1, end: 1 }
       }
       ref={inputRef}
       style={style}
       editable={editable}
       caretHidden={!editable}
+      keyboardType="number-pad"
+      testID={testID}
     />
   );
 };

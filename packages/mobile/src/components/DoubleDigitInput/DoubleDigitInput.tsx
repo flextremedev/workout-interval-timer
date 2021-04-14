@@ -2,10 +2,9 @@ import { toTwoDigitString } from '@interval-timer/core';
 import * as React from 'react';
 import { StyleProp, TextInput, TextStyle } from 'react-native';
 
-const isValidDigit = (value: string): boolean => /^[0-5]?[0-9]{1}$/.test(value);
+const CURSOR_AT_END_OF_VALUE = { start: 1, end: 1 };
 
-const cantBeFollowedByDigit = (value: string): boolean =>
-  /^[6-9]{1}$/.test(value);
+const isValidDigit = (value: string): boolean => /^[0-5]?[0-9]{1}$/.test(value);
 
 const canBeFollowedByDigit = (value: string): boolean =>
   /^[0-5]{1}$/.test(value);
@@ -26,10 +25,12 @@ const DoubleDigitInput = ({
   testID,
 }: DoubleDigitInputProps): JSX.Element => {
   const [inputSelected, setInputSelected] = React.useState(false);
-  const inputRef = React.useRef<TextInput | null>(null);
   const [inputStatus, setInputStatus] = React.useState<
     'initial' | 'editing' | 'done'
   >('initial');
+
+  const oneOrTwoDigitValue =
+    inputStatus === 'editing' ? value : toTwoDigitString(Number(value));
 
   const setInputSelectedInEditableMode = React.useCallback(
     (selected: boolean): void => {
@@ -49,12 +50,18 @@ const DoubleDigitInput = ({
   }, [inputStatus, value, setInputSelectedInEditableMode]);
 
   const handleChange = (input: string): void => {
-    if (input.length === 2) {
-      setInputStatus('done');
+    // weird android selection makes checking required
+    if (isValidDigit(input)) {
+      if (input.length === 2) {
+        setInputStatus('done');
+      } else {
+        setInputStatus('editing');
+      }
+      onChangeText(input);
     } else {
       setInputStatus('editing');
+      onChangeText(input.charAt(input.length - 1));
     }
-    onChangeText(input);
   };
 
   const handleFocus = (): void => {
@@ -67,21 +74,18 @@ const DoubleDigitInput = ({
 
   return (
     <TextInput
-      value={
-        inputStatus === 'editing' ? value : toTwoDigitString(Number(value))
-      }
+      value={oneOrTwoDigitValue}
       onChangeText={handleChange}
       onBlur={handleBlur}
       onFocus={handleFocus}
       selection={
         inputSelected
-          ? { start: 0, end: inputStatus === 'editing' ? value.length : 2 }
-          : { start: 1, end: 1 }
+          ? { start: 0, end: oneOrTwoDigitValue.length }
+          : CURSOR_AT_END_OF_VALUE
       }
-      ref={inputRef}
       style={style}
       editable={editable}
-      caretHidden={!editable}
+      caretHidden={true}
       keyboardType="number-pad"
       testID={testID}
     />

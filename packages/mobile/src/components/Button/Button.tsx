@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableHighlight } from 'react-native';
 
 type ButtonProps = {
   onPress?: () => void;
 };
 const Button: React.FC<ButtonProps> = ({ onPress, children }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableHighlight style={styles.button} onPress={onPress}>
       {children}
-    </TouchableOpacity>
+    </TouchableHighlight>
   );
 };
 

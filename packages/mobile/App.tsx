@@ -1,3 +1,4 @@
+import { useTimerMachine } from '@interval-timer/core';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -7,13 +8,56 @@ import { Input } from './src/components/Input/Input';
 
 // eslint-disable-next-line import/no-default-export
 export default function App(): JSX.Element {
-  const [rounds, setRounds] = React.useState('0');
-  const [workInterval, setWorkInterval] = React.useState(new Date(0));
-  const [breakInterval, setBreakInterval] = React.useState(new Date(0));
+  const {
+    service,
+    setBreakInterval,
+    setRounds,
+    setWorkInterval,
+    state,
+    toggleTimer,
+  } = useTimerMachine();
+
+  React.useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    const subscription = service.subscribe((newState) => {
+      if (newState.event.type === 'START') {
+        interval = setInterval(() => {
+          service.send({ type: 'TICK' });
+        }, 50);
+      } else if (newState.event.type === 'STOP') {
+        if (interval) {
+          clearInterval(interval);
+        }
+      }
+    });
+    return (): void => {
+      subscription.unsubscribe();
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [service]);
+
+  const {
+    breakInterval,
+    rounds,
+    roundsLeft,
+    timeLeft,
+    workInterval,
+  } = state.context;
   return (
     <View style={styles.container}>
-      <Input label="Rounds" value={rounds} onBlur={setRounds} type="number" />
-      <Input label="Round" value="1/2" />
+      <Input
+        label="Rounds"
+        value={String(rounds)}
+        onBlur={setRounds}
+        type="number"
+      />
+      <Input
+        label="Round"
+        value={`${rounds - roundsLeft}/${rounds}`}
+        readOnly
+      />
       <DurationInput
         value={workInterval}
         onChange={setWorkInterval}
@@ -22,9 +66,10 @@ export default function App(): JSX.Element {
       <DurationInput
         value={breakInterval}
         onChange={setBreakInterval}
-        label="Work Interval"
+        label="Break Interval"
       />
-      <Button>
+      <DurationInput value={timeLeft} label="Time left" readOnly />
+      <Button onPress={toggleTimer}>
         <Text>Go</Text>
       </Button>
     </View>

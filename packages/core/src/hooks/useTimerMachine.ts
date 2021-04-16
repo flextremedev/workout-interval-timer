@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+/* covered by app integration test */
 import { useMachine } from '@xstate/react';
 
 import { timerMachine } from '../machine/timerMachine';

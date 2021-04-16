@@ -12,6 +12,7 @@
     "@flextremedev/eslint-config-typescript": "^0.1.1"
   },
   "dependencies": {
+    "@xstate/react": "^0.8.1",
     "xstate": "^4.17.1"
   }
 }

@@ -1,9 +1,11 @@
 import * as React from 'react';
 import {
+  StyleProp,
   StyleSheet,
   Text,
   TextInput,
   TextInputProps,
+  TextStyle,
   View,
 } from 'react-native';
 
@@ -11,12 +13,14 @@ import { theme } from '../../theme';
 
 type InputProps = Omit<TextInputProps, 'onBlur'> & {
   label?: string;
+  labelStyle?: StyleProp<TextStyle>;
   value: string;
   type?: 'text' | 'number';
   onChange?: (text: string) => void;
   onBlur?: (value: string) => void;
   readOnly?: boolean;
   testID?: string;
+  style?: StyleProp<TextStyle>;
 };
 
 export function Input({
@@ -27,6 +31,8 @@ export function Input({
   onBlur,
   testID,
   readOnly,
+  labelStyle,
+  style,
   ...restProps
 }: InputProps): JSX.Element {
   const [value, setValue] = React.useState(valueFromProps);
@@ -66,10 +72,10 @@ export function Input({
 
   return (
     <View style={styles.container}>
-      {label ? <Text style={styles.label}>{label}</Text> : null}
+      {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
       <TextInput
         value={value}
-        style={styles.input}
+        style={[styles.input, style]}
         editable={!readOnly}
         onChangeText={handleChangeText}
         onBlur={handleBlur}

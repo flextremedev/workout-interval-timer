@@ -1,6 +1,13 @@
 import { getMinutes, getSeconds, setMinutes, setSeconds } from 'date-fns';
 import * as React from 'react';
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import {
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 
 import { theme } from '../../theme';
 import { DoubleDigitInput } from '../DoubleDigitInput/DoubleDigitInput';
@@ -12,6 +19,7 @@ type DurationInputProps = {
   onChange?: (date: Date) => void;
   readOnly?: boolean;
   style?: StyleProp<ViewStyle>;
+  labelStyle?: StyleProp<TextStyle>;
 };
 export function DurationInput({
   dataTestId,
@@ -20,6 +28,7 @@ export function DurationInput({
   label,
   readOnly,
   style,
+  labelStyle,
 }: DurationInputProps): JSX.Element {
   const handleMinutesChange = (minutes: string): void => {
     if (onChange) {
@@ -35,7 +44,7 @@ export function DurationInput({
 
   return (
     <View style={[styles.container, style]}>
-      {label ? <Text style={styles.label}>{label}</Text> : null}
+      {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
       <View style={styles.input}>
         <DoubleDigitInput
           value={String(getMinutes(value))}

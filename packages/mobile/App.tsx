@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useTimerMachine } from '@interval-timer/core';
 import * as React from 'react';
 import {
@@ -28,7 +29,7 @@ export default function App(): JSX.Element {
     toggleTimer,
   } = useTimerMachine();
 
-  const { colors, spaces, shadows, fontSizes } = useTheme();
+  const { colors, spaces, fontSizes } = useTheme();
 
   React.useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -65,8 +66,6 @@ export default function App(): JSX.Element {
 
   const themedButtonStyle: StyleProp<ViewStyle> = {
     backgroundColor: colors.background,
-    paddingLeft: spaces.m,
-    paddingRight: spaces.m,
   };
 
   const themedLabelStyle: StyleProp<TextStyle> = {
@@ -95,14 +94,14 @@ export default function App(): JSX.Element {
                 value={workInterval}
                 onChange={setWorkInterval}
                 label="WORK"
-                labelStyle={[styles.label, themedLabelStyle]}
+                labelStyle={[themedLabelStyle]}
                 style={themedInputStyle}
               />
               <DurationInput
                 value={breakInterval}
                 onChange={setBreakInterval}
                 label="BREAK"
-                labelStyle={[styles.label, themedLabelStyle]}
+                labelStyle={[themedLabelStyle]}
                 style={themedInputStyle}
               />
             </View>
@@ -112,13 +111,24 @@ export default function App(): JSX.Element {
               onPress={toggleTimer}
               style={[styles.button, themedButtonStyle]}
             >
-              <Text
-                style={{
-                  color: colors.primary,
-                }}
-              >
-                Go
-              </Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Ionicons
+                  name="play"
+                  size={24}
+                  color={colors.primary}
+                  suppressHighlighting
+                  style={{ marginRight: theme.spaces.s }}
+                />
+                <Text
+                  style={{
+                    color: colors.primary,
+                    fontWeight: '600',
+                    fontSize: fontSizes.label,
+                  }}
+                >
+                  START
+                </Text>
+              </View>
             </Button>
           </View>
         </View>

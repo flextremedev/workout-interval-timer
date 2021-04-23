@@ -1,5 +1,5 @@
 import { useTimerMachine } from '@interval-timer/core';
-import React from 'react';
+import * as React from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -13,7 +13,7 @@ import {
 
 import { Button } from './src/components/Button/Button';
 import { DurationInput } from './src/components/DurationInput/DurationInput';
-import { Input } from './src/components/Input/Input';
+import { RoundInput } from './src/components/RoundInput/RoundInput';
 import { useTheme } from './src/hooks/useTheme';
 import { theme } from './src/theme';
 
@@ -59,98 +59,87 @@ export default function App(): JSX.Element {
     workInterval,
   } = state.context;
 
-  const themedCardStyle: StyleProp<ViewStyle> = {
-    backgroundColor: colors.surface,
-    borderRadius: spaces.m,
-    padding: spaces.m,
-    margin: spaces.m,
-    ...shadows.foreground,
+  const themedContainerStyle: StyleProp<ViewStyle> = {
+    backgroundColor: colors.background,
   };
 
   const themedButtonStyle: StyleProp<ViewStyle> = {
-    height: spaces.xl,
-    borderRadius: spaces.m,
-    backgroundColor: colors.primary,
-    padding: spaces.m,
-    margin: spaces.m,
-    ...shadows.foreground,
+    backgroundColor: colors.background,
+    paddingLeft: spaces.m,
+    paddingRight: spaces.m,
   };
 
   const themedLabelStyle: StyleProp<TextStyle> = {
     color: colors.primary,
-    fontSize: fontSizes.label,
-    letterSpacing: 0.625,
   };
 
   const themedInputStyle: StyleProp<TextStyle> = {
     marginBottom: spaces.m,
   };
-
   return (
     <>
-      <StatusBar />
-      <SafeAreaView
-        style={[styles.container, { backgroundColor: colors.background }]}
-      >
-        <View />
-        <View>
-          <Text style={styles.heading}>Welcome!</Text>
-          <View style={[styles.card, themedCardStyle]}>
-            <Input
-              label="Rounds"
-              value={String(rounds)}
-              onBlur={setRounds}
-              type="number"
-              labelStyle={[styles.label, themedLabelStyle]}
-              style={themedInputStyle}
-            />
-            <DurationInput
-              value={workInterval}
-              onChange={setWorkInterval}
-              label="Work Interval"
-              labelStyle={[styles.label, themedLabelStyle]}
-              style={themedInputStyle}
-            />
-            <DurationInput
-              value={breakInterval}
-              onChange={setBreakInterval}
-              label="Break Interval"
-              labelStyle={[styles.label, themedLabelStyle]}
-              style={themedInputStyle}
-            />
+      <SafeAreaView style={{ backgroundColor: colors.background }} />
+      <StatusBar backgroundColor={colors.background} barStyle={'default'} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }}>
+        <View style={{ height: 44, backgroundColor: colors.background }} />
+        <View style={{ backgroundColor: colors.primary, flex: 1 }}>
+          <View style={[styles.container, themedContainerStyle]}>
+            <View style={styles.formFieldContainer}>
+              <RoundInput
+                rounds={rounds}
+                setRounds={setRounds}
+                labelStyle={[themedLabelStyle]}
+                style={themedInputStyle}
+              />
+              <DurationInput
+                value={workInterval}
+                onChange={setWorkInterval}
+                label="WORK"
+                labelStyle={[styles.label, themedLabelStyle]}
+                style={themedInputStyle}
+              />
+              <DurationInput
+                value={breakInterval}
+                onChange={setBreakInterval}
+                label="BREAK"
+                labelStyle={[styles.label, themedLabelStyle]}
+                style={themedInputStyle}
+              />
+            </View>
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            <Button
+              onPress={toggleTimer}
+              style={[styles.button, themedButtonStyle]}
+            >
+              <Text
+                style={{
+                  color: colors.primary,
+                }}
+              >
+                Go
+              </Text>
+            </Button>
           </View>
         </View>
-        <Button
-          onPress={toggleTimer}
-          style={[themedButtonStyle, styles.button]}
-        >
-          <Text style={{ color: colors.surface }}>Go</Text>
-        </Button>
       </SafeAreaView>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  heading: {
-    fontSize: theme.fontSizes.heading,
-    fontWeight: '600',
-    marginBottom: theme.spaces.s,
-    marginLeft: theme.spaces.m,
-  },
   container: {
     flex: 1,
-    alignItems: 'stretch',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    borderBottomRightRadius: theme.spaces.l,
+    borderBottomLeftRadius: theme.spaces.l,
   },
-  card: {
-    height: 'auto',
+  formFieldContainer: {
+    alignSelf: 'center',
   },
+  input: {},
   button: {
-    alignSelf: 'stretch',
-    marginBottom: theme.spaces.l,
-  },
-  label: {
-    fontWeight: '600',
+    marginTop: theme.spaces.xxl,
+    marginBottom: theme.spaces.xxl,
   },
 });

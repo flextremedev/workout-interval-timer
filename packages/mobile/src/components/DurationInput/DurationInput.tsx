@@ -68,8 +68,19 @@ export function DurationInput({
 
 const styles = StyleSheet.create({
   container: { alignSelf: 'stretch' },
-  label: {},
-  input: { flexDirection: 'row', alignItems: 'center' },
+  label: {
+    fontSize: theme.fontSizes.label,
+    letterSpacing: 0.625,
+    textAlign: 'center',
+    fontWeight: '600',
+    marginTop: theme.spaces.xs,
+    marginBottom: theme.spaces.s,
+  },
+  input: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   textInput: {
     fontSize: theme.fontSizes.input,
   },

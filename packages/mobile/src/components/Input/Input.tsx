@@ -93,8 +93,17 @@ const styles = StyleSheet.create({
   container: {
     alignSelf: 'stretch',
   },
-  label: {},
+  label: {
+    fontSize: theme.fontSizes.label,
+    letterSpacing: 0.625,
+    textAlign: 'center',
+    fontWeight: '600',
+    marginTop: theme.spaces.xs,
+    marginBottom: theme.spaces.s,
+  },
   input: {
     fontSize: theme.fontSizes.input,
+    justifyContent: 'center',
+    textAlign: 'center',
   },
 });

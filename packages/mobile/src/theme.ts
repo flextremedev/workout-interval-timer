@@ -1,12 +1,13 @@
 export const theme = {
   colors: {
-    text: '#161A22',
+    text: '#14223D',
     primary: '#0066FF',
-    background: '#F6F9FE',
-    surface: '#FBFCFE',
+    background: '#F7F9FD',
+    surface: '#F7F9FD',
     muted: '#CDD9EE',
   },
   spaces: {
+    xs: 4,
     s: 8,
     m: 16,
     l: 32,

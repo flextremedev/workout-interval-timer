@@ -7,32 +7,31 @@ export type TThemeContext = {
   colors: Theme['colors'];
   fontSizes: Theme['fontSizes'];
   spaces: Theme['spaces'];
-  shadows: Theme['shadows'];
+  isDark: boolean;
 };
 export const ThemeContext = React.createContext<TThemeContext>({
   toggle: () => {
-    console.log('Toggle');
+    // do nothing
   },
   colors: theme.colors,
   fontSizes: theme.fontSizes,
   spaces: theme.spaces,
-  shadows: theme.shadows,
+  isDark: false,
 });
 
 export const ThemeContextProvider: React.FC = ({ children }) => {
-  //   const [isDark, setIsDark] = React.useState(false);
+  const [isDark, setIsDark] = React.useState(false);
   const toggle = (): void => {
-    // setIsDark((prevSetIsDark) => !prevSetIsDark);
+    setIsDark((prevIsDark) => !prevIsDark);
   };
 
-  const colors = theme.colors;
+  const colors = isDark ? theme.darkMode : theme.colors;
   const fontSizes = theme.fontSizes;
   const spaces = theme.spaces;
-  const shadows = theme.shadows;
 
   return (
     <ThemeContext.Provider
-      value={{ colors, fontSizes, toggle, spaces, shadows }}
+      value={{ colors, fontSizes, toggle, spaces, isDark }}
     >
       {children}
     </ThemeContext.Provider>

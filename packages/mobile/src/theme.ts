@@ -5,6 +5,15 @@ export const theme = {
     background: '#F7F9FD',
     surface: '#F7F9FD',
     muted: '#CDD9EE',
+    button: '#F7F9FD',
+  },
+  darkMode: {
+    text: '#F7F9FD',
+    primary: '#0066FF',
+    background: '#14223D',
+    surface: '#14223D',
+    muted: '#203660',
+    button: '#F7F9FD',
   },
   spaces: {
     xs: 4,

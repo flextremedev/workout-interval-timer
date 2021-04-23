@@ -43,22 +43,22 @@ export function DurationInput({
   };
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container]}>
       {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
       <View style={styles.input}>
         <DoubleDigitInput
           value={String(getMinutes(value))}
           onChangeText={handleMinutesChange}
           testID={dataTestId && `${dataTestId}-minutes`}
-          style={styles.textInput}
+          style={[styles.textInput, style]}
           editable={!readOnly}
         />
-        <Text style={styles.textInput}>:</Text>
+        <Text style={[styles.textInput, style]}>:</Text>
         <DoubleDigitInput
           value={String(getSeconds(value))}
           onChangeText={handleSecondsChange}
           data-testid={dataTestId && `${dataTestId}-seconds`}
-          style={styles.textInput}
+          style={[styles.textInput, style]}
           editable={!readOnly}
         />
       </View>

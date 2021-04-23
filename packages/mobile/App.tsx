@@ -2,7 +2,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTimerMachine } from '@interval-timer/core';
 import * as React from 'react';
 import {
+  KeyboardAvoidingView,
   SafeAreaView,
+  ScrollView,
   StatusBar,
   StyleProp,
   StyleSheet,
@@ -83,28 +85,32 @@ export default function App(): JSX.Element {
         <View style={{ height: 44, backgroundColor: colors.background }} />
         <View style={{ backgroundColor: colors.primary, flex: 1 }}>
           <View style={[styles.container, themedContainerStyle]}>
-            <View style={styles.formFieldContainer}>
-              <RoundInput
-                rounds={rounds}
-                setRounds={setRounds}
-                labelStyle={[themedLabelStyle]}
-                style={themedInputStyle}
-              />
-              <DurationInput
-                value={workInterval}
-                onChange={setWorkInterval}
-                label="WORK"
-                labelStyle={[themedLabelStyle]}
-                style={themedInputStyle}
-              />
-              <DurationInput
-                value={breakInterval}
-                onChange={setBreakInterval}
-                label="BREAK"
-                labelStyle={[themedLabelStyle]}
-                style={themedInputStyle}
-              />
-            </View>
+            <KeyboardAvoidingView behavior="padding">
+              <ScrollView>
+                <View style={styles.formFieldContainer}>
+                  <RoundInput
+                    rounds={rounds}
+                    setRounds={setRounds}
+                    labelStyle={[themedLabelStyle]}
+                    style={themedInputStyle}
+                  />
+                  <DurationInput
+                    value={workInterval}
+                    onChange={setWorkInterval}
+                    label="WORK"
+                    labelStyle={[themedLabelStyle]}
+                    style={themedInputStyle}
+                  />
+                  <DurationInput
+                    value={breakInterval}
+                    onChange={setBreakInterval}
+                    label="BREAK"
+                    labelStyle={[themedLabelStyle]}
+                    style={themedInputStyle}
+                  />
+                </View>
+              </ScrollView>
+            </KeyboardAvoidingView>
           </View>
           <View style={{ alignItems: 'center' }}>
             <Button

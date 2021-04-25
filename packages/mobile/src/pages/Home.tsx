@@ -54,13 +54,7 @@ export function Home(): JSX.Element {
     };
   }, [service]);
 
-  const {
-    breakInterval,
-    rounds,
-    roundsLeft,
-    timeLeft,
-    workInterval,
-  } = state.context;
+  const { breakInterval, rounds, workInterval } = state.context;
 
   const themedContainerStyle: StyleProp<ViewStyle> = {
     backgroundColor: colors.background,

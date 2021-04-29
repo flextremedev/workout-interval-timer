@@ -1,7 +1,7 @@
 export const theme = {
   colors: {
     text: '#14223D',
-    primary: '#0066FF',
+    primary: '#2C5CED',
     background: '#F7F9FD',
     surface: '#F7F9FD',
     muted: '#CDD9EE',
@@ -9,7 +9,7 @@ export const theme = {
   },
   darkMode: {
     text: '#F7F9FD',
-    primary: '#0066FF',
+    primary: '#2C5CED',
     background: '#14223D',
     surface: '#14223D',
     muted: '#203660',

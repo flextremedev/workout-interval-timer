@@ -139,7 +139,7 @@ export function Home(): JSX.Element {
                 <Text
                   style={{
                     color: colors.primary,
-                    fontWeight: '600',
+                    fontWeight: '700',
                     fontSize: fontSizes.label,
                   }}
                 >

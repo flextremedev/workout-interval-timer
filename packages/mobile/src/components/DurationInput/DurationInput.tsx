@@ -53,7 +53,7 @@ export function DurationInput({
           style={[styles.textInput, style]}
           editable={!readOnly}
         />
-        <Text style={[styles.textInput, style]}>:</Text>
+        <Text style={[styles.textInputSeparator, style]}>:</Text>
         <DoubleDigitInput
           value={String(getSeconds(value))}
           onChangeText={handleSecondsChange}
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSizes.label,
     letterSpacing: 0.625,
     textAlign: 'center',
-    fontWeight: '600',
+    fontWeight: '700',
     marginTop: theme.spaces.xs,
     marginBottom: theme.spaces.s,
   },
@@ -81,7 +81,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  textInputSeparator: {
+    fontSize: theme.fontSizes.input,
+  },
   textInput: {
     fontSize: theme.fontSizes.input,
+    width: 70,
   },
 });

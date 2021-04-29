@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     fontSize: theme.fontSizes.label,
     letterSpacing: 0.625,
     textAlign: 'center',
-    fontWeight: '600',
+    fontWeight: '700',
     marginTop: theme.spaces.xs,
     marginBottom: theme.spaces.s,
   },

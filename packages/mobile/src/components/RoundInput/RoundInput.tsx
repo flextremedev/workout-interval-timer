@@ -61,11 +61,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  textInput: {
+    width: 76,
+  },
   label: {
     fontSize: theme.fontSizes.label,
     letterSpacing: 0.625,
     textAlign: 'center',
-    fontWeight: '600',
+    fontWeight: '700',
     marginTop: theme.spaces.xs,
     marginBottom: theme.spaces.s,
   },

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import { theme } from '../../theme';
+import { isNumber } from '../../utils/isNumber';
 
 type InputProps = Omit<TextInputProps, 'onBlur'> & {
   label?: string;
@@ -20,6 +21,8 @@ type InputProps = Omit<TextInputProps, 'onBlur'> & {
   onBlur?: (value: string) => void;
   readOnly?: boolean;
   testID?: string;
+  max?: number;
+  min?: number;
   style?: StyleProp<TextStyle>;
 };
 
@@ -33,6 +36,8 @@ export function Input({
   readOnly,
   labelStyle,
   style,
+  max,
+  min,
   ...restProps
 }: InputProps): JSX.Element {
   const [value, setValue] = React.useState(valueFromProps);
@@ -45,10 +50,22 @@ export function Input({
     setValue(valueFromProps);
   }
 
+  const setValueWithOnChange = (text: string): void => {
+    setValue(text);
+    if (onChange) {
+      onChange(text);
+    }
+  };
+
   const setValueBasedOnType = (text: string): void => {
-    const isNumber = /^[0-9]*$/.test(text);
-    if (type !== 'number' || (type === 'number' && isNumber)) {
-      setValue(text);
+    if (type !== 'number' || text === '') {
+      setValueWithOnChange(text);
+    } else if (type === 'number' && isNumber(text)) {
+      const isValidMax = max !== undefined ? Number(text) <= max : true;
+      const isValidMin = min !== undefined ? Number(text) >= min : true;
+      if (isValidMax && isValidMin) {
+        setValueWithOnChange(text);
+      }
     }
   };
 
@@ -56,13 +73,12 @@ export function Input({
     setSelection(undefined);
     setInputDone(false);
     setValueBasedOnType(text);
-    if (onChange) {
-      onChange(text);
-    }
   };
+
   const handleFocus = (): void => {
     setSelection({ start: 0, end: value.length });
   };
+
   const handleBlur = (): void => {
     setInputDone(true);
     if (onBlur) {

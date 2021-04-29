@@ -13,6 +13,12 @@ type RoundInputProps = {
   style?: StyleProp<TextStyle>;
 };
 
+const MAX = 99;
+const MIN = 1;
+
+const canCountUp = (rounds: number): boolean => rounds < MAX;
+const canCountDown = (rounds: number): boolean => rounds > MIN;
+
 export const RoundInput = ({
   rounds,
   setRounds,
@@ -21,13 +27,16 @@ export const RoundInput = ({
 }: RoundInputProps): JSX.Element => {
   const { colors } = useTheme();
   const handleDecrement = (): void => {
-    if (rounds > 1) {
+    if (canCountDown(rounds)) {
       setRounds(String(rounds - 1));
     }
   };
   const handleIncrement = (): void => {
-    setRounds(String(rounds + 1));
+    if (canCountUp(rounds)) {
+      setRounds(String(rounds + 1));
+    }
   };
+
   return (
     <View>
       <Text style={[styles.label, labelStyle]}>ROUNDS</Text>
@@ -42,7 +51,9 @@ export const RoundInput = ({
           value={String(rounds)}
           onBlur={setRounds}
           type="number"
-          style={style}
+          style={[styles.textInput, style]}
+          max={MAX}
+          min={MIN}
         />
         <Ionicons
           name="add"

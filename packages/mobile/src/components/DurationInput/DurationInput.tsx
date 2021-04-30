@@ -15,14 +15,14 @@ import { DoubleDigitInput } from '../DoubleDigitInput/DoubleDigitInput';
 type DurationInputProps = {
   value: Date;
   label?: string;
-  dataTestId?: string;
+  testID?: string;
   onChange?: (date: Date) => void;
   readOnly?: boolean;
   style?: StyleProp<ViewStyle>;
   labelStyle?: StyleProp<TextStyle>;
 };
 export function DurationInput({
-  dataTestId,
+  testID,
   value,
   onChange,
   label,
@@ -49,7 +49,7 @@ export function DurationInput({
         <DoubleDigitInput
           value={String(getMinutes(value))}
           onChangeText={handleMinutesChange}
-          testID={dataTestId && `${dataTestId}-minutes`}
+          testID={testID && `${testID}-minutes`}
           style={[styles.textInput, style]}
           editable={!readOnly}
         />
@@ -57,7 +57,7 @@ export function DurationInput({
         <DoubleDigitInput
           value={String(getSeconds(value))}
           onChangeText={handleSecondsChange}
-          data-testid={dataTestId && `${dataTestId}-seconds`}
+          testID={testID && `${testID}-seconds`}
           style={[styles.textInput, style]}
           editable={!readOnly}
         />

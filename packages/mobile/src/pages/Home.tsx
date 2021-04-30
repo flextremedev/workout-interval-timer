@@ -111,6 +111,7 @@ export function Home(): JSX.Element {
                     label="WORK"
                     labelStyle={[themedLabelStyle]}
                     style={themedInputStyle}
+                    testID="work-interval-duration-input"
                   />
                   <DurationInput
                     value={breakInterval}
@@ -118,6 +119,7 @@ export function Home(): JSX.Element {
                     label="BREAK"
                     labelStyle={[themedLabelStyle]}
                     style={themedInputStyle}
+                    testID="break-interval-duration-input"
                   />
                 </View>
               </ScrollView>

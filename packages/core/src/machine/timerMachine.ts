@@ -45,7 +45,7 @@ export const timerMachine = createMachine<TimerContext, TimerEvent, TimerState>(
     context: {
       prepareTime: new Date(5000),
       timeLeft: new Date(5000),
-      rounds: 2,
+      rounds: 1,
       roundsLeft: 0,
       workInterval: new Date(0),
       breakInterval: new Date(0),

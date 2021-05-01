@@ -1,6 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as React from 'react';
-import { StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native';
+import {
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  View,
+} from 'react-native';
 
 import { useTheme } from '../../hooks/useTheme';
 import { theme } from '../../theme';
@@ -9,6 +16,7 @@ import { Input } from '../Input/Input';
 type RoundInputProps = {
   rounds: number;
   setRounds: (rounds: string) => void;
+  testID?: string;
   labelStyle?: StyleProp<TextStyle>;
   style?: StyleProp<TextStyle>;
 };
@@ -24,6 +32,7 @@ export const RoundInput = ({
   setRounds,
   labelStyle,
   style,
+  testID,
 }: RoundInputProps): JSX.Element => {
   const { colors } = useTheme();
   const handleDecrement = (): void => {
@@ -41,12 +50,12 @@ export const RoundInput = ({
     <View>
       <Text style={[styles.label, labelStyle]}>ROUNDS</Text>
       <View style={styles.container}>
-        <Ionicons
-          name="remove"
-          size={32}
-          color={colors.text}
+        <Pressable
+          testID={testID && `${testID}-decrement`}
           onPress={handleDecrement}
-        />
+        >
+          <Ionicons name="remove" size={32} color={colors.text} />
+        </Pressable>
         <Input
           value={String(rounds)}
           onBlur={setRounds}
@@ -55,12 +64,12 @@ export const RoundInput = ({
           max={MAX}
           min={MIN}
         />
-        <Ionicons
-          name="add"
-          size={32}
-          color={colors.text}
+        <Pressable
           onPress={handleIncrement}
-        />
+          testID={testID && `${testID}-increment`}
+        >
+          <Ionicons name="add" size={32} color={colors.text} />
+        </Pressable>
       </View>
     </View>
   );
@@ -73,7 +82,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textInput: {
-    width: 76,
+    width: 72,
   },
   label: {
     fontSize: theme.fontSizes.label,

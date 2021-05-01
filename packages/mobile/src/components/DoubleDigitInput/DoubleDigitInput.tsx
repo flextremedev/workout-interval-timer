@@ -64,10 +64,14 @@ const DoubleDigitInput = ({
     }
   };
 
+  /* could't find a way to test focus */
+  /* istanbul ignore next */
   const handleFocus = (): void => {
     setInputStatus('initial');
   };
 
+  /* could't find a way to test blur */
+  /* istanbul ignore next */
   const handleBlur = (): void => {
     setInputStatus('done');
   };

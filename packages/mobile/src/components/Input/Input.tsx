@@ -13,7 +13,7 @@ import { theme } from '../../theme';
 import { isNumber } from '../../utils/isNumber';
 
 type InputProps = Omit<TextInputProps, 'onBlur'> & {
-  label?: string;
+  label: string;
   labelStyle?: StyleProp<TextStyle>;
   value: string;
   type?: 'text' | 'number';
@@ -75,10 +75,14 @@ export function Input({
     setValueBasedOnType(text);
   };
 
+  /* could't find a way to test focus */
+  /* istanbul ignore next */
   const handleFocus = (): void => {
     setSelection({ start: 0, end: value.length });
   };
 
+  /* could't find a way to test blur */
+  /* istanbul ignore next */
   const handleBlur = (): void => {
     setInputDone(true);
     if (onBlur) {
@@ -88,7 +92,7 @@ export function Input({
 
   return (
     <View style={styles.container}>
-      {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
+      <Text style={[styles.label, labelStyle]}>{label}</Text>
       <TextInput
         value={value}
         style={[styles.input, style]}

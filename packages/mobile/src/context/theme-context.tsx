@@ -9,9 +9,9 @@ export type TThemeContext = {
   spaces: Theme['spaces'];
   isDark: boolean;
 };
+/* don't need to test default */
+/* istanbul ignore next */
 export const ThemeContext = React.createContext<TThemeContext>({
-  /* don't need to test default toggle right now */
-  /* istanbul ignore next */
   toggle: () => {
     // do nothing
   },

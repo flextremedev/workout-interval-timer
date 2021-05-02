@@ -23,7 +23,6 @@ import { theme } from '../theme';
 
 export function Home(): JSX.Element {
   const {
-    service,
     setBreakInterval,
     setRounds,
     setWorkInterval,
@@ -32,27 +31,6 @@ export function Home(): JSX.Element {
   } = useTimerMachine();
 
   const { colors, spaces, fontSizes, isDark, toggle } = useTheme();
-
-  React.useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    const subscription = service.subscribe((newState) => {
-      if (newState.event.type === 'START') {
-        interval = setInterval(() => {
-          service.send({ type: 'TICK' });
-        }, 50);
-      } else if (newState.event.type === 'STOP') {
-        if (interval) {
-          clearInterval(interval);
-        }
-      }
-    });
-    return (): void => {
-      subscription.unsubscribe();
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [service]);
 
   const { breakInterval, rounds, workInterval } = state.context;
 

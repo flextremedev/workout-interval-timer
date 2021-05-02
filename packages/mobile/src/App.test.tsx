@@ -35,4 +35,13 @@ describe('App', () => {
       breakSecondsValue
     );
   });
+
+  it('should trigger color mode', () => {
+    const { queryByTestId, getByTestId } = render(<App />);
+    expect(queryByTestId('color-mode-toggle-light')).toBeFalsy();
+
+    fireEvent.press(getByTestId('color-mode-toggle-dark'));
+    expect(queryByTestId('color-mode-toggle-dark')).toBeFalsy();
+    expect(getByTestId('color-mode-toggle-light')).toBeTruthy();
+  });
 });

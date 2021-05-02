@@ -10,6 +10,8 @@ export type TThemeContext = {
   isDark: boolean;
 };
 export const ThemeContext = React.createContext<TThemeContext>({
+  /* don't need to test default toggle right now */
+  /* istanbul ignore next */
   toggle: () => {
     // do nothing
   },

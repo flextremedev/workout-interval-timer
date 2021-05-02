@@ -85,7 +85,11 @@ export function Home(): JSX.Element {
       />
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.primary }}>
         <View style={[styles.header, themedHeaderStyle]}>
-          <Pressable onPress={toggle} hitSlop={16}>
+          <Pressable
+            onPress={toggle}
+            hitSlop={16}
+            testID={`color-mode-toggle-${isDark ? 'light' : 'dark'}`}
+          >
             <Ionicons
               name={isDark ? 'sunny' : 'moon'}
               size={24}

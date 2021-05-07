@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { timerStates, useTimerMachine } from '@interval-timer/core';
+import { getSeconds } from 'date-fns';
 import * as React from 'react';
 import {
   KeyboardAvoidingView,
@@ -19,8 +20,11 @@ import Svg, { Circle } from 'react-native-svg';
 import { Button } from '../components/Button/Button';
 import { DurationInput } from '../components/DurationInput/DurationInput';
 import { RoundInput } from '../components/RoundInput/RoundInput';
+import { usePrevious } from '../hooks/usePrevious';
 import { useTheme } from '../hooks/useTheme';
 import { theme } from '../theme';
+
+const CIRCLE_LENGTH = 939;
 
 export function Home(): JSX.Element {
   const {
@@ -57,6 +61,12 @@ export function Home(): JSX.Element {
 
   const { breakInterval, rounds, workInterval, timeLeft } = state.context;
 
+  const initialTimeLeftRef = React.useRef(timeLeft);
+  const prevTimeLeft = usePrevious(timeLeft);
+  if (timeLeft.valueOf() > prevTimeLeft.valueOf()) {
+    initialTimeLeftRef.current = timeLeft;
+  }
+
   const themedContainerStyle: StyleProp<ViewStyle> = {
     backgroundColor: colors.background,
   };
@@ -75,7 +85,10 @@ export function Home(): JSX.Element {
   const themedInputStyle: StyleProp<TextStyle> = {
     color: colors.text,
   };
-
+  const strokeDashoffset =
+    CIRCLE_LENGTH -
+    (CIRCLE_LENGTH * getSeconds(timeLeft)) /
+      getSeconds(initialTimeLeftRef.current);
   return (
     <>
       <SafeAreaView style={{ backgroundColor: colors.background }} />
@@ -174,8 +187,8 @@ export function Home(): JSX.Element {
                       r={149.5}
                       stroke={colors.primary}
                       strokeWidth="4"
-                      strokeDashoffset={50}
-                      strokeDasharray={939}
+                      strokeDashoffset={strokeDashoffset}
+                      strokeDasharray={CIRCLE_LENGTH}
                       strokeLinecap="round"
                     />
                   </Svg>

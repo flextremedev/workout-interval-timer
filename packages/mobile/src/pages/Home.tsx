@@ -14,6 +14,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import Svg, { Circle } from 'react-native-svg';
 
 import { Button } from '../components/Button/Button';
 import { DurationInput } from '../components/DurationInput/DurationInput';
@@ -146,14 +147,13 @@ export function Home(): JSX.Element {
                     },
                   ]}
                 >
-                  <svg
+                  <Svg
                     viewBox="0 0 304 304"
                     width="100%"
                     height="100%"
                     fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
                     style={{
-                      transform: 'rotateZ(270deg)',
+                      transform: [{ rotateZ: '270deg' }],
                       position: 'absolute',
                       top: 0,
                       left: 0,
@@ -161,14 +161,14 @@ export function Home(): JSX.Element {
                       bottom: 0,
                     }}
                   >
-                    <circle
+                    <Circle
                       cx={152}
                       cy={152}
                       r={149.5}
                       stroke={colors.muted}
                       strokeWidth="4"
                     />
-                    <circle
+                    <Circle
                       cx={152}
                       cy={152}
                       r={149.5}
@@ -178,7 +178,7 @@ export function Home(): JSX.Element {
                       strokeDasharray={939}
                       strokeLinecap="round"
                     />
-                  </svg>
+                  </Svg>
                   <DurationInput
                     value={timeLeft}
                     labelStyle={[themedLabelStyle]}

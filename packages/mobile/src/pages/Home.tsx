@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useTimerMachine } from '@interval-timer/core';
+import { timerStates, useTimerMachine } from '@interval-timer/core';
 import * as React from 'react';
 import {
   KeyboardAvoidingView,
@@ -27,12 +27,34 @@ export function Home(): JSX.Element {
     setRounds,
     setWorkInterval,
     state,
+    service,
     toggleTimer,
   } = useTimerMachine();
 
-  const { colors, spaces, fontSizes, isDark, toggle } = useTheme();
+  React.useEffect(() => {
+    let interval: NodeJS.Timeout | null = null;
+    const subscription = service.subscribe((newState) => {
+      if (newState.event.type === 'START') {
+        interval = setInterval(() => {
+          service.send({ type: 'TICK' });
+        }, 50);
+      } else if (newState.event.type === 'STOP') {
+        if (interval) {
+          clearInterval(interval);
+        }
+      }
+    });
+    return (): void => {
+      subscription.unsubscribe();
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [service]);
 
-  const { breakInterval, rounds, workInterval } = state.context;
+  const { colors, fontSizes, isDark, toggle } = useTheme();
+
+  const { breakInterval, rounds, workInterval, timeLeft } = state.context;
 
   const themedContainerStyle: StyleProp<ViewStyle> = {
     backgroundColor: colors.background,
@@ -50,7 +72,6 @@ export function Home(): JSX.Element {
   };
 
   const themedInputStyle: StyleProp<TextStyle> = {
-    marginBottom: spaces.m,
     color: colors.text,
   };
 
@@ -78,34 +99,95 @@ export function Home(): JSX.Element {
         </View>
         <View style={{ backgroundColor: colors.primary, flex: 1 }}>
           <View style={[styles.container, themedContainerStyle]}>
-            <KeyboardAvoidingView behavior="padding">
-              <ScrollView>
-                <View style={styles.formFieldContainer}>
-                  <RoundInput
-                    rounds={rounds}
-                    setRounds={setRounds}
-                    labelStyle={[themedLabelStyle]}
-                    style={themedInputStyle}
-                  />
+            {state.matches(timerStates.STOPPED) ? (
+              <KeyboardAvoidingView behavior="padding">
+                <ScrollView>
+                  <View style={styles.formFieldContainer}>
+                    <RoundInput
+                      rounds={rounds}
+                      setRounds={setRounds}
+                      labelStyle={[themedLabelStyle, styles.input]}
+                      style={themedInputStyle}
+                    />
+                    <DurationInput
+                      value={workInterval}
+                      onChange={setWorkInterval}
+                      label="WORK"
+                      labelStyle={[themedLabelStyle]}
+                      style={[themedInputStyle, styles.input]}
+                      testID="work-interval-duration-input"
+                    />
+                    <DurationInput
+                      value={breakInterval}
+                      onChange={setBreakInterval}
+                      label="BREAK"
+                      labelStyle={[themedLabelStyle]}
+                      style={[themedInputStyle, styles.input]}
+                      testID="break-interval-duration-input"
+                    />
+                  </View>
+                </ScrollView>
+              </KeyboardAvoidingView>
+            ) : (
+              <View
+                style={{
+                  width: '70%',
+                  height: '100%',
+                  alignSelf: 'center',
+                }}
+              >
+                <View
+                  style={[
+                    styles.countdownContainer,
+                    {
+                      position: 'relative',
+                      height: '100%',
+                      justifyContent: 'center',
+                    },
+                  ]}
+                >
+                  <svg
+                    viewBox="0 0 304 304"
+                    width="100%"
+                    height="100%"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style={{
+                      transform: 'rotateZ(270deg)',
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                    }}
+                  >
+                    <circle
+                      cx={152}
+                      cy={152}
+                      r={149.5}
+                      stroke={colors.muted}
+                      strokeWidth="4"
+                    />
+                    <circle
+                      cx={152}
+                      cy={152}
+                      r={149.5}
+                      stroke={colors.primary}
+                      strokeWidth="4"
+                      strokeDashoffset={50}
+                      strokeDasharray={939}
+                      strokeLinecap="round"
+                    />
+                  </svg>
                   <DurationInput
-                    value={workInterval}
-                    onChange={setWorkInterval}
-                    label="WORK"
+                    value={timeLeft}
                     labelStyle={[themedLabelStyle]}
                     style={themedInputStyle}
                     testID="work-interval-duration-input"
                   />
-                  <DurationInput
-                    value={breakInterval}
-                    onChange={setBreakInterval}
-                    label="BREAK"
-                    labelStyle={[themedLabelStyle]}
-                    style={themedInputStyle}
-                    testID="break-interval-duration-input"
-                  />
                 </View>
-              </ScrollView>
-            </KeyboardAvoidingView>
+              </View>
+            )}
           </View>
           <View style={{ alignItems: 'center' }}>
             <Button
@@ -154,10 +236,15 @@ const styles = StyleSheet.create({
   formFieldContainer: {
     alignSelf: 'center',
   },
-  input: {},
+  input: {
+    marginBottom: theme.spaces.s,
+  },
   button: {
     marginTop: theme.spaces.xxl,
     marginBottom: theme.spaces.xxl,
   },
   buttonContent: { flexDirection: 'row', alignItems: 'center' },
+  countdownContainer: {
+    transform: [{ translateY: 14 }],
+  },
 });

@@ -14,9 +14,9 @@ import { DoubleDigitInput } from '../DoubleDigitInput/DoubleDigitInput';
 
 type DurationInputProps = {
   value: Date;
-  label: string;
+  label?: string;
   testID?: string;
-  onChange: (date: Date) => void;
+  onChange?: (date: Date) => void;
   readOnly?: boolean;
   style?: StyleProp<ViewStyle>;
   labelStyle?: StyleProp<TextStyle>;
@@ -31,16 +31,20 @@ export function DurationInput({
   labelStyle,
 }: DurationInputProps): JSX.Element {
   const handleMinutesChange = (minutes: string): void => {
-    onChange(setMinutes(new Date(value.valueOf()), Number(minutes)));
+    if (onChange) {
+      onChange(setMinutes(new Date(value.valueOf()), Number(minutes)));
+    }
   };
 
   const handleSecondsChange = (seconds: string): void => {
-    onChange(setSeconds(new Date(value.valueOf()), Number(seconds)));
+    if (onChange) {
+      onChange(setSeconds(new Date(value.valueOf()), Number(seconds)));
+    }
   };
 
   return (
     <View style={[styles.container]}>
-      <Text style={[styles.label, labelStyle]}>{label}</Text>
+      {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
       <View style={styles.input}>
         <DoubleDigitInput
           value={String(getMinutes(value))}

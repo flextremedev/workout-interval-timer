@@ -190,29 +190,55 @@ export function Home(): JSX.Element {
             )}
           </View>
           <View style={{ alignItems: 'center' }}>
-            <Button
-              onPress={toggleTimer}
-              style={[styles.button, themedButtonStyle]}
-            >
-              <View style={styles.buttonContent}>
-                <Ionicons
-                  name="play"
-                  size={24}
-                  color={colors.primary}
-                  suppressHighlighting
-                  style={{ marginRight: theme.spaces.s }}
-                />
-                <Text
-                  style={{
-                    color: colors.primary,
-                    fontWeight: '700',
-                    fontSize: fontSizes.label,
-                  }}
-                >
-                  START
-                </Text>
-              </View>
-            </Button>
+            {state.matches(timerStates.STOPPED) ? (
+              <Button
+                onPress={toggleTimer}
+                style={[styles.button, themedButtonStyle]}
+              >
+                <View style={styles.buttonContent}>
+                  <Ionicons
+                    name="play"
+                    size={24}
+                    color={colors.primary}
+                    suppressHighlighting
+                    style={{ marginRight: theme.spaces.s }}
+                  />
+                  <Text
+                    style={{
+                      color: colors.primary,
+                      fontWeight: '700',
+                      fontSize: fontSizes.label,
+                    }}
+                  >
+                    START
+                  </Text>
+                </View>
+              </Button>
+            ) : (
+              <Button
+                onPress={toggleTimer}
+                style={[styles.button, themedButtonStyle]}
+              >
+                <View style={styles.buttonContent}>
+                  <Ionicons
+                    name="stop"
+                    size={24}
+                    color={colors.primary}
+                    suppressHighlighting
+                    style={{ marginRight: theme.spaces.s }}
+                  />
+                  <Text
+                    style={{
+                      color: colors.primary,
+                      fontWeight: '700',
+                      fontSize: fontSizes.label,
+                    }}
+                  >
+                    STOP
+                  </Text>
+                </View>
+              </Button>
+            )}
           </View>
         </View>
       </SafeAreaView>

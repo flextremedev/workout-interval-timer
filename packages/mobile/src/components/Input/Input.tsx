@@ -13,7 +13,7 @@ import { theme } from '../../theme';
 import { isNumber } from '../../utils/isNumber';
 
 type InputProps = Omit<TextInputProps, 'onBlur'> & {
-  label: string;
+  label?: string;
   labelStyle?: StyleProp<TextStyle>;
   value: string;
   type?: 'text' | 'number';
@@ -92,7 +92,7 @@ export function Input({
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.label, labelStyle]}>{label}</Text>
+      {label ? <Text style={[styles.label, labelStyle]}>{label}</Text> : null}
       <TextInput
         value={value}
         style={[styles.input, style]}

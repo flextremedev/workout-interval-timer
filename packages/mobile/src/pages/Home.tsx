@@ -19,6 +19,7 @@ import Svg, { Circle } from 'react-native-svg';
 
 import { Button } from '../components/Button/Button';
 import { DurationInput } from '../components/DurationInput/DurationInput';
+import { Label } from '../components/Label/Label';
 import { RoundInput } from '../components/RoundInput/RoundInput';
 import { usePrevious } from '../hooks/usePrevious';
 import { useTheme } from '../hooks/useTheme';
@@ -59,7 +60,13 @@ export function Home(): JSX.Element {
 
   const { colors, fontSizes, isDark, toggle } = useTheme();
 
-  const { breakInterval, rounds, workInterval, timeLeft } = state.context;
+  const {
+    breakInterval,
+    rounds,
+    workInterval,
+    timeLeft,
+    roundsLeft,
+  } = state.context;
 
   const initialTimeLeftRef = React.useRef(timeLeft);
   const prevTimeLeft = usePrevious(timeLeft);
@@ -83,6 +90,10 @@ export function Home(): JSX.Element {
   };
 
   const themedInputStyle: StyleProp<TextStyle> = {
+    color: colors.text,
+  };
+
+  const themedHeadingStyle: StyleProp<TextStyle> = {
     color: colors.text,
   };
   const strokeDashoffset =
@@ -145,17 +156,23 @@ export function Home(): JSX.Element {
             ) : (
               <View
                 style={{
-                  width: '70%',
+                  width: '100%',
                   height: '100%',
                   alignSelf: 'center',
+                  justifyContent: 'space-between',
                 }}
               >
+                <View>
+                  <Label style={themedLabelStyle}>ROUND</Label>
+                  <Text style={[styles.roundText, themedHeadingStyle]}>{`${
+                    rounds - roundsLeft
+                  }/${rounds}`}</Text>
+                </View>
                 <View
                   style={[
                     styles.countdownContainer,
                     {
-                      position: 'relative',
-                      height: '100%',
+                      height: '48%',
                       justifyContent: 'center',
                     },
                   ]}
@@ -199,6 +216,8 @@ export function Home(): JSX.Element {
                     testID="work-interval-duration-input"
                   />
                 </View>
+
+                <View style={{ flex: 0.4 }} />
               </View>
             )}
           </View>
@@ -285,5 +304,9 @@ const styles = StyleSheet.create({
   buttonContent: { flexDirection: 'row', alignItems: 'center' },
   countdownContainer: {
     transform: [{ translateY: 14 }],
+  },
+  roundText: {
+    fontSize: theme.fontSizes.heading,
+    textAlign: 'center',
   },
 });

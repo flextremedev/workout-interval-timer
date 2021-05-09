@@ -34,7 +34,7 @@ export const theme = {
   },
   fontSizes: {
     label: 18,
-    heading: 29,
+    heading: 37,
     input: 60,
   },
 };

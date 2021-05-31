@@ -18,7 +18,7 @@
     "web-test": "yarn workspace @interval-timer/web run test"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-env": "^7.14.4",
     "@babel/preset-typescript": "^7.13.0",
     "@flextremedev/eslint-config": "^0.1.1",
     "@flextremedev/prettier-config": "^0.1.0",
